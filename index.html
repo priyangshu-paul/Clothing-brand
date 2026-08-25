@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fashion Brand</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        /* =====================================================
+           THREE DOT MENU
+        ===================================================== */
+
+        .menu-wrapper {
+            position: relative;
+        }
+
+
+        .menu-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .menu-btn:hover {
+            background: #f3f3f3;
+        }
+
+
+        .more-menu {
+            position: absolute;
+            top: 52px;
+            right: 0;
+            width: 270px;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            z-index: 10000;
+            display: none;
+            overflow: hidden;
+        }
+
+
+        .more-menu.active {
+            display: block;
+        }
+
+
+        .more-menu-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #eeeeee;
+            background: #fafafa;
+        }
+
+
+        .more-menu-header p {
+            margin: 0;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #888;
+        }
+
+
+        .more-menu-header h3 {
+            margin: 5px 0 0;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+
+        .more-menu-list {
+            padding: 8px 0;
+        }
+
+
+        .more-menu-item {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 18px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-align: left;
+            cursor: pointer;
+            text-decoration: none;
+            color: #222;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+
+
+        .more-menu-item:hover {
+            background: #f6f6f6;
+        }
+
+
+        .more-menu-icon {
+            width: 25px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+
+        .more-menu-text {
+            flex: 1;
+        }
+
+
+        .more-menu-arrow {
+            font-size: 15px;
+            color: #999;
+        }
+
+
+        .more-menu-divider {
+            height: 1px;
+            background: #eeeeee;
+            margin: 7px 0;
+        }
+
+
+        .more-menu-footer {
+            padding: 14px 18px;
+            border-top: 1px solid #eeeeee;
+            font-size: 10px;
+            color: #999;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        .more-menu-logout {
+            color: #222;
+        }
+
+
+        .more-menu-logout:hover {
+            background: #f6f6f6;
+        }
+
+
+        /* =====================================================
+           MOBILE MENU
+        ===================================================== */
+
+        @media (max-width: 768px) {
+
+            .more-menu {
+                position: fixed;
+                top: 70px;
+                right: 15px;
+                width: min(300px, calc(100vw - 30px));
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+            FASHION
+        </div>
+
+
+        <!-- NAV LINKS -->
+
+        <nav class="nav-links">
+
+
+            <a href="#home">
+                Home
+            </a>
+
+
+            <a href="#shop">
+                Shop
+            </a>
+
+
+            <a href="#collections">
+                Collections
+            </a>
+
+
+            <a href="#about">
+                About
+            </a>
+
+
+            <a href="#contact">
+                Contact
+            </a>
+
+
+            <!-- =================================================
+                 AUTH
+                 DO NOT CHANGE
+            ================================================== -->
+
+            <div
+                class="auth-links"
+                id="authLinks"
+            >
+
+                <a href="login.html">
+                    Login
+                </a>
+
+                <a href="register.html">
+                    Register
+                </a>
+
+            </div>
+
+        </nav>
+
+
+        <!-- =====================================================
+             NAV ICONS
+        ====================================================== -->
+
+        <div class="nav-icons">
+
+
+            <!-- SEARCH -->
+
+            <button
+                id="searchBtn"
+                class="search-btn"
+                type="button"
+                aria-label="Search"
+            >
+
+                <span class="search-icon">
+                    ⌕
+                </span>
+
+                <span class="search-text">
+                    Search
+                </span>
+
+            </button>
+
+
+            <!-- CART -->
+
+            <button
+                id="cartBtn"
+                type="button"
+                aria-label="Shopping Cart"
+            >
+
+                🛒
+
+                <span id="cartCount"></span>
+
+            </button>
+
+
+            <!-- =================================================
+                 THREE DOT MENU
+            ================================================== -->
+
+            <div class="menu-wrapper">
+
+
+                <!-- MENU BUTTON -->
+
+                <button
+                    id="menuBtn"
+                    class="menu-btn"
+                    type="button"
+                    aria-label="More Menu"
+                    aria-expanded="false"
+                >
+
+                    ⋮
+
+                </button>
+
+
+                <!-- =================================================
+                     MORE MENU
+                ================================================== -->
+
+                <div
+                    id="moreMenu"
+                    class="more-menu"
+                >
+
+
+                    <!-- MENU HEADER -->
+
+                    <div class="more-menu-header">
+
+                        <p>
+                            FASHION
+                        </p>
+
+                        <h3>
+                            Quick Menu
+                        </h3>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         MENU LIST
+                    ================================================== -->
+
+                    <div class="more-menu-list">
+
+
+                        <!-- =================================================
+                             MY ACCOUNT
+                             OPENS USER ACCOUNT PAGE
+                        ================================================== -->
+
+                        <a
+                            href="account.html"
+                            class="more-menu-item"
+                        >
+
+                            <span class="more-menu-icon">
+                                👤
+                            </span>
+
+                            <span class="more-menu-text">
+                                My Account
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </a>
+
+
+                        <!-- =================================================
+                             MY ORDERS
+                        ================================================== -->
+
+                        <a
+                            href="orders.html"
+                            class="more-menu-item"
+                        >
+
+                            <span class="more-menu-icon">
+                                📦
+                            </span>
+
+                            <span class="more-menu-text">
+                                My Orders
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </a>
+
+
+                        <!-- =================================================
+                             WISHLIST
+                        ================================================== -->
+
+                        <a
+                            href="wishlist.html"
+                            class="more-menu-item"
+                        >
+
+                            <span class="more-menu-icon">
+                                ♡
+                            </span>
+
+                            <span class="more-menu-text">
+                                Wishlist
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </a>
+
+
+                        <!-- =================================================
+                             HELP CENTRE
+                        ================================================== -->
+
+                        <a
+                            href="#contact"
+                            class="more-menu-item"
+                        >
+
+                            <span class="more-menu-icon">
+                                ❓
+                            </span>
+
+                            <span class="more-menu-text">
+                                Help Centre
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </a>
+
+
+                        <!-- =================================================
+                             DIVIDER
+                        ================================================== -->
+
+                        <div class="more-menu-divider"></div>
+
+
+                        <!-- =================================================
+                             LOGIN
+                        ================================================== -->
+
+                        <a
+                            href="login.html"
+                            class="more-menu-item"
+                        >
+
+                            <span class="more-menu-icon">
+                                ↪
+                            </span>
+
+                            <span class="more-menu-text">
+                                Login
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </a>
+
+
+                        <!-- =================================================
+                             REGISTER
+                        ================================================== -->
+
+                        <a
+                            href="register.html"
+                            class="more-menu-item"
+                        >
+
+                            <span class="more-menu-icon">
+                                ✚
+                            </span>
+
+                            <span class="more-menu-text">
+                                Register
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </a>
+
+
+                        <!-- =================================================
+                             LOGOUT
+                        ================================================== -->
+
+                        <button
+                            type="button"
+                            id="menuLogout"
+                            class="more-menu-item more-menu-logout"
+                        >
+
+                            <span class="more-menu-icon">
+                                ↩
+                            </span>
+
+                            <span class="more-menu-text">
+                                Logout
+                            </span>
+
+                            <span class="more-menu-arrow">
+                                ›
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+
+                    <!-- MENU FOOTER -->
+
+                    <div class="more-menu-footer">
+
+                        MODERN FASHION · 2026
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         SMART SEARCH
+    ====================================================== -->
+
+    <div
+        id="searchOverlay"
+        class="search-overlay"
+    >
+
+        <div class="search-box">
+
+
+            <!-- SEARCH HEADER -->
+
+            <div class="search-header">
+
+                <div>
+
+                    <p class="search-label">
+                        SEARCH
+                    </p>
+
+                    <h2>
+                        Find Your Style
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="closeSearch"
+                    type="button"
+                    aria-label="Close Search"
+                >
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- SEARCH INPUT -->
+
+            <div class="search-input-wrapper">
+
+                <span class="search-input-icon">
+                    ⌕
+                </span>
+
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search shirts, pants, hoodies..."
+                    autocomplete="off"
+                >
+
+
+                <button
+                    id="clearSearch"
+                    type="button"
+                    aria-label="Clear Search"
+                >
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- SEARCH STATUS -->
+
+            <div
+                id="searchStatus"
+                class="search-status"
+            >
+
+                Try searching for a product or category.
+
+            </div>
+
+
+            <!-- SEARCH RESULTS -->
+
+            <div
+                id="searchResults"
+                class="search-results"
+            >
+
+                <div class="search-empty">
+
+                    <div class="search-empty-icon">
+                        🔍
+                    </div>
+
+                    <p>
+                        Search for a product
+                    </p>
+
+                    <span>
+                        Try "shirt", "pants", "hoodie" or "cargo"
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- RELATED SEARCH -->
+
+            <div
+                id="relatedSearch"
+                class="related-search"
+            >
+
+                <p>
+                    POPULAR SEARCHES
+                </p>
+
+
+                <div class="related-search-tags">
+
+
+                    <button
+                        type="button"
+                        data-search="shirt"
+                    >
+                        Shirts
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="t-shirt"
+                    >
+                        T-Shirts
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="hoodie"
+                    >
+                        Hoodies
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="pants"
+                    >
+                        Pants
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="cargo"
+                    >
+                        Cargo
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="jacket"
+                    >
+                        Jackets
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="women"
+                    >
+                        Women
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-search="men"
+                    >
+                        Men
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CART OVERLAY
+    ====================================================== -->
+
+    <div
+        class="cart-overlay"
+        id="cartOverlay"
+    ></div>
+
+
+    <!-- =====================================================
+         CART SIDEBAR
+    ====================================================== -->
+
+    <div
+        class="cart-sidebar"
+        id="cartSidebar"
+    >
+
+
+        <div class="cart-header">
+
+            <h2>
+                Your Cart
+            </h2>
+
+
+            <button
+                id="closeCart"
+                type="button"
+            >
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        >
+
+            <p class="empty-cart">
+                Your cart is empty.
+            </p>
+
+        </div>
+
+
+        <div class="cart-footer">
+
+
+            <div class="cart-total">
+
+                <span>
+                    Total
+                </span>
+
+
+                <strong id="cartTotal">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <button
+                id="homeCheckoutBtn"
+                class="checkout-btn"
+                type="button"
+            >
+
+                CHECKOUT
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section
+            class="hero"
+            id="home"
+        >
+
+
+            <div class="hero-content">
+
+
+                <p class="hero-small-text">
+                    NEW COLLECTION 2026
+                </p>
+
+
+                <h1>
+
+                    WEAR YOUR
+
+                    <span>
+                        CONFIDENCE.
+                    </span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Discover timeless fashion designed for people
+                    who want to stand out.
+
+                </p>
+
+
+                <div class="hero-buttons">
+
+
+                    <a
+                        href="#shop"
+                        class="btn primary-btn"
+                    >
+
+                        SHOP NOW
+
+                    </a>
+
+
+                    <a
+                        href="#collections"
+                        class="btn secondary-btn"
+                    >
+
+                        EXPLORE
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-image">
+
+                <img
+                    src="images/hero.jpg"
+                    alt="Fashion Collection"
+                >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CATEGORIES
+        ================================================== -->
+
+        <section
+            class="categories"
+            id="collections"
+        >
+
+
+            <div class="section-heading">
+
+                <p>
+                    EXPLORE
+                </p>
+
+                <h2>
+                    Shop By Category
+                </h2>
+
+            </div>
+
+
+            <div class="category-container">
+
+
+                <!-- MEN -->
+
+                <div
+                    class="category-card"
+                    data-category="men"
+                >
+
+                    <div class="category-image">
+
+                        <img
+                            src="images/men.jpg"
+                            alt="Men's Collection"
+                        >
+
+                    </div>
+
+                    <h3>
+                        Men
+                    </h3>
+
+                </div>
+
+
+                <!-- WOMEN -->
+
+                <div
+                    class="category-card"
+                    data-category="women"
+                >
+
+                    <div class="category-image">
+
+                        <img
+                            src="images/women.jpg"
+                            alt="Women's Collection"
+                        >
+
+                    </div>
+
+                    <h3>
+                        Women
+                    </h3>
+
+                </div>
+
+
+                <!-- NEW ARRIVALS -->
+
+                <div
+                    class="category-card"
+                    data-category="new"
+                >
+
+                    <div class="category-image">
+
+                        <img
+                            src="images/new-arrivals.jpg"
+                            alt="New Arrivals"
+                        >
+
+                    </div>
+
+                    <h3>
+                        New Arrivals
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
+
+        <section
+            class="products"
+            id="shop"
+        >
+
+
+            <div class="section-heading">
+
+                <p>
+                    SHOP
+                </p>
+
+                <h2>
+                    Latest Products
+                </h2>
+
+            </div>
+
+
+            <!-- SHOP FILTER -->
+
+            <div class="shop-filter">
+
+
+                <div class="filter-buttons">
+
+
+                    <button
+                        type="button"
+                        class="filter-btn active"
+                        data-filter="all"
+                    >
+                        All
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="men"
+                    >
+                        Men
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="women"
+                    >
+                        Women
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="new"
+                    >
+                        New Arrivals
+                    </button>
+
+                </div>
+
+
+                <!-- SORT -->
+
+                <div class="sort-wrapper">
+
+                    <label for="sortProducts">
+                        Sort:
+                    </label>
+
+
+                    <select id="sortProducts">
+
+                        <option value="default">
+                            Latest
+                        </option>
+
+                        <option value="low">
+                            Price: Low to High
+                        </option>
+
+                        <option value="high">
+                            Price: High to Low
+                        </option>
+
+                        <option value="az">
+                            Name: A to Z
+                        </option>
+
+                        <option value="za">
+                            Name: Z to A
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRODUCT GRID -->
+
+            <div
+                class="product-container"
+                id="productGrid"
+            >
+
+                <div class="admin-empty">
+
+                    <h3>
+                        Loading products...
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ABOUT
+        ================================================== -->
+
+        <section
+            class="about"
+            id="about"
+        >
+
+
+            <div class="about-content">
+
+
+                <p>
+                    OUR STORY
+                </p>
+
+
+                <h2>
+
+                    Fashion Made
+
+                    <span>
+                        Different.
+                    </span>
+
+                </h2>
+
+
+                <p>
+
+                    We create modern clothing for people who believe
+                    fashion is more than just what you wear.
+                    It is an expression of who you are.
+
+                </p>
+
+
+                <a
+                    href="#shop"
+                    class="btn primary-btn"
+                >
+
+                    EXPLORE COLLECTION
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NEWSLETTER
+        ================================================== -->
+
+        <section class="newsletter">
+
+
+            <p>
+                STAY UPDATED
+            </p>
+
+
+            <h2>
+                Join Our Fashion Community
+            </h2>
+
+
+            <p>
+                Get updates about new collections and exclusive offers.
+            </p>
+
+
+            <form id="newsletterForm">
+
+
+                <input
+                    type="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+
+                <button type="submit">
+                    SUBSCRIBE
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer id="contact">
+
+
+        <div class="footer-content">
+
+
+            <div>
+
+                <h2>
+                    FASHION
+                </h2>
+
+
+                <p>
+                    Modern fashion. Timeless style.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Quick Links
+                </h3>
+
+
+                <a href="#home">
+                    Home
+                </a>
+
+
+                <a href="#shop">
+                    Shop
+                </a>
+
+
+                <a href="#about">
+                    About
+                </a>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Follow Us
+                </h3>
+
+
+                <a href="#">
+                    Instagram
+                </a>
+
+
+                <a href="#">
+                    Facebook
+                </a>
+
+
+                <a href="#">
+                    Pinterest
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+
+            © 2026 FASHION. All Rights Reserved.
+
+        </div>
+
+    </footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/notification.js"></script>
+
+<script src="js/search.js"></script>
+
+<script src="js/script.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/product-store.js"></script>
+
+<script src="js/product.js"></script>
+
+<script src="js/cart.js"></script>
+
+
+<!-- =====================================================
+     MORE MENU JAVASCRIPT
+====================================================== -->
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const menuBtn =
+                document.getElementById("menuBtn");
+
+            const moreMenu =
+                document.getElementById("moreMenu");
+
+            const menuLogout =
+                document.getElementById("menuLogout");
+
+
+            if (menuBtn && moreMenu) {
+
+                menuBtn.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.stopPropagation();
+
+                        const isOpen =
+                            moreMenu.classList.contains("active");
+
+                        if (isOpen) {
+
+                            moreMenu.classList.remove("active");
+
+                            menuBtn.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        } else {
+
+                            moreMenu.classList.add("active");
+
+                            menuBtn.setAttribute(
+                                "aria-expanded",
+                                "true"
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                document.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            !moreMenu.contains(event.target) &&
+                            !menuBtn.contains(event.target)
+                        ) {
+
+                            moreMenu.classList.remove("active");
+
+                            menuBtn.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            if (moreMenu) {
+
+                moreMenu
+                    .querySelectorAll("a")
+                    .forEach(function (link) {
+
+                        link.addEventListener(
+                            "click",
+                            function () {
+
+                                moreMenu.classList.remove("active");
+
+                                if (menuBtn) {
+
+                                    menuBtn.setAttribute(
+                                        "aria-expanded",
+                                        "false"
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    });
+
+            }
+
+
+            if (menuLogout) {
+
+                menuLogout.addEventListener(
+                    "click",
+                    function () {
+
+                        const authKeys = [
+                            "fashionUser",
+                            "currentUser",
+                            "loggedInUser",
+                            "fashionLoggedInUser",
+                            "user"
+                        ];
+
+
+                        authKeys.forEach(
+                            function (key) {
+
+                                localStorage.removeItem(key);
+
+                            }
+                        );
+
+
+                        sessionStorage.removeItem(
+                            "fashionUser"
+                        );
+
+                        sessionStorage.removeItem(
+                            "currentUser"
+                        );
+
+
+                        if (moreMenu) {
+
+                            moreMenu.classList.remove("active");
+
+                        }
+
+
+                        if (menuBtn) {
+
+                            menuBtn.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+
+
+                        if (
+                            typeof showNotification ===
+                            "function"
+                        ) {
+
+                            showNotification(
+                                "You have been logged out.",
+                                "success"
+                            );
+
+                        }
+
+
+                        setTimeout(
+                            function () {
+
+                                window.location.reload();
+
+                            },
+                            700
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

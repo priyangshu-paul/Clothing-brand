@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkout | FASHION</title>
+
+
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+
+    <!-- Checkout CSS -->
+    <link
+        rel="stylesheet"
+        href="css/checkout.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            FASHION
+        </div>
+
+
+        <nav class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="index.html#shop">
+                Shop
+            </a>
+
+            <a href="index.html#collections">
+                Collections
+            </a>
+
+            <a href="index.html#about">
+                About
+            </a>
+
+            <a href="index.html#contact">
+                Contact
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         CHECKOUT PAGE
+    ====================================================== -->
+
+    <main class="checkout-page">
+
+
+        <!-- =================================================
+             LEFT SIDE
+        ================================================== -->
+
+        <section class="checkout-left">
+
+
+            <h1>
+                Checkout
+            </h1>
+
+
+            <!-- CONTACT INFORMATION -->
+
+            <section class="checkout-section">
+
+                <h2>
+                    Contact Information
+                </h2>
+
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email address"
+                >
+
+            </section>
+
+
+
+            <!-- SHIPPING ADDRESS -->
+
+            <section class="checkout-section">
+
+                <h2>
+                    Shipping Address
+                </h2>
+
+
+                <div class="input-row">
+
+                    <input
+                        type="text"
+                        id="firstName"
+                        placeholder="First name"
+                    >
+
+
+                    <input
+                        type="text"
+                        id="lastName"
+                        placeholder="Last name"
+                    >
+
+                </div>
+
+
+                <input
+                    type="text"
+                    id="address"
+                    placeholder="Address"
+                >
+
+
+                <div class="input-row">
+
+                    <input
+                        type="text"
+                        id="city"
+                        placeholder="City"
+                    >
+
+
+                    <input
+                        type="text"
+                        id="pincode"
+                        placeholder="PIN Code"
+                        maxlength="6"
+                    >
+
+                </div>
+
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Phone number"
+                    maxlength="10"
+                >
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PAYMENT
+            ================================================== -->
+
+            <section class="checkout-section">
+
+                <h2>
+                    Payment
+                </h2>
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="cod"
+                        checked
+                    >
+
+                    <span>
+                        Cash on Delivery
+                    </span>
+
+                </label>
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="online"
+                    >
+
+                    <span>
+                        Online Payment
+                    </span>
+
+                </label>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PLACE ORDER
+            ================================================== -->
+
+            <button
+                type="button"
+                id="placeOrder"
+                class="place-order-btn"
+            >
+                PLACE ORDER
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ORDER SUMMARY
+        ====================================================== -->
+
+        <aside class="order-summary">
+
+
+            <h2>
+                Your Order
+            </h2>
+
+
+            <!-- PRODUCTS -->
+
+            <div id="checkoutItems">
+
+                <!-- checkout.js will load products here -->
+
+            </div>
+
+
+
+            <!-- SUBTOTAL -->
+
+            <div class="summary-line">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong id="checkoutSubtotal">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+
+            <!-- SHIPPING -->
+
+            <div class="summary-line">
+
+                <span>
+                    Shipping
+                </span>
+
+                <strong id="checkoutShipping">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+
+            <!-- TOTAL -->
+
+            <div class="summary-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong id="checkoutTotal">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+        </aside>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/notification.js"></script>
+
+<script src="js/checkout.js"></script>
+</body>
+
+</html>

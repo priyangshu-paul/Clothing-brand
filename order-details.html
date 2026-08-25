@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Order Details | FASHION</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/order-details.css"
+    >
+
+</head>
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            FASHION
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="index.html#shop">
+                Shop
+            </a>
+
+            <a href="index.html#collections">
+                Collections
+            </a>
+
+            <a href="index.html#about">
+                About
+            </a>
+
+            <a href="index.html#contact">
+                Contact
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         ORDER DETAILS PAGE
+    ====================================================== -->
+
+    <main class="order-details-page">
+
+        <div class="order-details-container">
+
+
+            <!-- BACK -->
+
+            <a
+                href="account.html"
+                class="back-orders"
+            >
+                ← Back to My Orders
+            </a>
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <section class="order-main-header">
+
+                <div>
+
+                    <span class="order-header-label">
+                        ORDER DETAILS
+                    </span>
+
+                    <h1 id="orderNumber">
+                        #ORDER
+                    </h1>
+
+                    <p id="orderDate">
+                        -
+                    </p>
+
+                </div>
+
+
+                <span
+                    id="orderStatus"
+                    class="order-status-badge confirmed"
+                >
+                    CONFIRMED
+                </span>
+
+            </section>
+
+
+            <!-- =================================================
+                 TRACKING
+            ================================================== -->
+
+            <section class="details-card">
+
+                <div class="card-title">
+
+                    <div>
+
+                        <span>
+                            DELIVERY
+                        </span>
+
+                        <h2>
+                            Track your order
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="orderTracking"
+                    class="details-tracking"
+                ></div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TWO COLUMN AREA
+            ================================================== -->
+
+            <div class="details-grid">
+
+
+                <!-- =================================================
+                     PRODUCTS
+                ================================================== -->
+
+                <section class="details-card">
+
+                    <div class="card-title">
+
+                        <div>
+
+                            <span>
+                                ORDER ITEMS
+                            </span>
+
+                            <h2>
+                                Items in this order
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="orderProducts">
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     DELIVERY
+                ================================================== -->
+
+                <section class="details-card">
+
+                    <div class="card-title">
+
+                        <div>
+
+                            <span>
+                                DELIVERY
+                            </span>
+
+                            <h2>
+                                Delivery address
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="delivery-info">
+
+                        <div>
+
+                            <span>
+                                CUSTOMER
+                            </span>
+
+                            <strong id="customerName">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                PHONE
+                            </span>
+
+                            <strong id="customerPhone">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                ADDRESS
+                            </span>
+
+                            <strong id="customerAddress">
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =================================================
+                 PAYMENT + PRICE
+            ================================================== -->
+
+            <section class="details-card">
+
+                <div class="card-title">
+
+                    <div>
+
+                        <span>
+                            PAYMENT
+                        </span>
+
+                        <h2>
+                            Payment & Price Details
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="payment-info">
+
+                    <span>
+                        Payment Method
+                    </span>
+
+                    <strong id="paymentMethod">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="price-details">
+
+                    <div>
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong id="orderSubtotal">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Shipping
+                        </span>
+
+                        <strong id="orderShipping">
+                            FREE
+                        </strong>
+
+                    </div>
+
+
+                    <div class="price-total">
+
+                        <span>
+                            Total Amount
+                        </span>
+
+                        <strong id="orderTotal">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CANCEL ORDER
+            ================================================== -->
+
+            <section
+                id="cancelSection"
+                class="cancel-section"
+            >
+
+                <div>
+
+                    <strong>
+                        Need to cancel this order?
+                    </strong>
+
+                    <p>
+                        You can cancel before the order is shipped.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="cancelOrderBtn"
+                    class="cancel-order-btn"
+                >
+                    CANCEL ORDER
+                </button>
+
+            </section>
+
+
+            <!-- =================================================
+                 REVIEW SECTION
+            ================================================== -->
+
+            <section
+                id="reviewSection"
+                class="review-section"
+            >
+
+                <div class="card-title">
+
+                    <div>
+
+                        <span>
+                            YOUR FEEDBACK
+                        </span>
+
+                        <h2>
+                            Rate & Review your products
+                        </h2>
+
+                        <p>
+                            Tell us what you think about your purchase.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="reviewProducts">
+
+                    <!-- Reviews generated by JS -->
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 BOTTOM ACTIONS
+            ================================================== -->
+
+            <div class="details-bottom-actions">
+
+                <a
+                    href="index.html#shop"
+                    class="continue-shopping"
+                >
+                    CONTINUE SHOPPING
+                </a>
+
+                <a
+                    href="account.html"
+                    class="back-orders-btn"
+                >
+                    BACK TO MY ORDERS
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="js/order-details.js"></script>
+
+</body>
+
+</html>

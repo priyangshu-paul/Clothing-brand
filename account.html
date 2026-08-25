@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Account | FASHION</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/account.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            FASHION
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="index.html#shop">
+                Shop
+            </a>
+
+            <a href="index.html#collections">
+                Collections
+            </a>
+
+            <a href="index.html#about">
+                About
+            </a>
+
+            <a href="index.html#contact">
+                Contact
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         ACCOUNT PAGE
+    ====================================================== -->
+
+    <main class="account-page">
+
+        <div class="account-container">
+
+
+            <!-- =================================================
+                 ACCOUNT HEADER
+            ================================================== -->
+
+            <header class="account-header">
+
+                <div class="account-user">
+
+                    <div
+                        class="account-avatar"
+                        id="accountAvatar"
+                    >
+                        U
+                    </div>
+
+                    <div class="account-user-text">
+
+                        <span class="account-welcome">
+                            Welcome
+                        </span>
+
+                        <h1 id="accountName">
+                            User
+                        </h1>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="logout-btn"
+                    id="accountLogout"
+                >
+                    LOGOUT
+                </button>
+
+            </header>
+
+
+            <!-- =================================================
+                 ACCOUNT LAYOUT
+            ================================================== -->
+
+            <div class="account-layout">
+
+
+                <!-- =================================================
+                     SIDEBAR
+                ================================================== -->
+
+                <aside class="account-sidebar">
+
+                    <div class="sidebar-title">
+                        MY ACCOUNT
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="account-menu-item active"
+                        data-section="orders"
+                    >
+
+                        <span class="menu-item-left">
+
+                            <span class="menu-icon">
+                                📦
+                            </span>
+
+                            <span>
+                                My Orders
+                            </span>
+
+                        </span>
+
+                        <span
+                            class="menu-count"
+                            id="orderMenuCount"
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="account-menu-item"
+                        data-section="profile"
+                    >
+
+                        <span class="menu-item-left">
+
+                            <span class="menu-icon">
+                                👤
+                            </span>
+
+                            <span>
+                                Profile
+                            </span>
+
+                        </span>
+
+                    </button>
+
+
+                    <div class="sidebar-divider"></div>
+
+
+                    <a
+                        href="index.html#shop"
+                        class="sidebar-shopping"
+                    >
+                        Continue Shopping
+                    </a>
+
+                </aside>
+
+
+                <!-- =================================================
+                     MAIN CONTENT
+                ================================================== -->
+
+                <section class="account-content">
+
+
+                    <!-- =================================================
+                         ORDERS SECTION
+                    ================================================== -->
+
+                    <section
+                        id="ordersSection"
+                        class="account-section active"
+                    >
+
+
+                        <!-- PAGE HEADING -->
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="section-eyebrow">
+                                    ACCOUNT
+                                </span>
+
+                                <h2>
+                                    My Orders
+                                </h2>
+
+                                <p id="ordersCountText">
+                                    0 Orders
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             ORDER SEARCH / FILTER
+                        ================================================== -->
+
+                        <div class="order-tools">
+
+
+                            <!-- SEARCH -->
+
+                            <div class="order-search">
+
+                                <span
+                                    class="order-search-icon"
+                                    aria-hidden="true"
+                                >
+                                    🔍
+                                </span>
+
+                                <input
+                                    type="search"
+                                    id="orderSearch"
+                                    placeholder="Search by Order ID or Product"
+                                    autocomplete="off"
+                                >
+
+                            </div>
+
+
+                            <!-- FILTER -->
+
+                            <div class="order-filter">
+
+                                <select id="orderFilter">
+
+                                    <option value="all">
+                                        All Orders
+                                    </option>
+
+                                    <option value="Confirmed">
+                                        Confirmed
+                                    </option>
+
+                                    <option value="Processing">
+                                        Processing
+                                    </option>
+
+                                    <option value="Shipped">
+                                        Shipped
+                                    </option>
+
+                                    <option value="Delivered">
+                                        Delivered
+                                    </option>
+
+                                    <option value="Cancelled">
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             ORDER HISTORY
+                        ================================================== -->
+
+                        <div
+                            id="orderHistory"
+                            class="order-history"
+                        >
+
+                            <!--
+                                Orders are generated by account.js
+                            -->
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         PROFILE SECTION
+                    ================================================== -->
+
+                    <section
+                        id="profileSection"
+                        class="account-section"
+                    >
+
+
+                        <!-- PROFILE HEADING -->
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="section-eyebrow">
+                                    ACCOUNT
+                                </span>
+
+                                <h2>
+                                    Personal Information
+                                </h2>
+
+                                <p>
+                                    Manage your account information
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="profile-edit-btn"
+                                id="editProfileBtn"
+                            >
+                                EDIT PROFILE
+                            </button>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             PROFILE VIEW
+                        ================================================== -->
+
+                        <div
+                            id="profileView"
+                            class="profile-card"
+                        >
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Full Name
+                                </span>
+
+                                <strong id="userName">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Email
+                                </span>
+
+                                <strong id="userEmail">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Phone
+                                </span>
+
+                                <strong id="userPhone">
+                                    Not added
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    Address
+                                </span>
+
+                                <strong id="userAddress">
+                                    Not added
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    City
+                                </span>
+
+                                <strong id="userCity">
+                                    Not added
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-row">
+
+                                <span>
+                                    PIN Code
+                                </span>
+
+                                <strong id="userPincode">
+                                    Not added
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             PROFILE FORM
+                        ================================================== -->
+
+                        <form
+                            id="profileForm"
+                            class="profile-form"
+                            style="display:none;"
+                        >
+
+
+                            <div class="profile-form-grid">
+
+
+                                <!-- NAME -->
+
+                                <div class="form-group">
+
+                                    <label for="profileName">
+                                        Full Name
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="profileName"
+                                        autocomplete="name"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <!-- PHONE -->
+
+                                <div class="form-group">
+
+                                    <label for="profilePhone">
+                                        Phone
+                                    </label>
+
+                                    <input
+                                        type="tel"
+                                        id="profilePhone"
+                                        maxlength="10"
+                                        autocomplete="tel"
+                                    >
+
+                                </div>
+
+
+                                <!-- ADDRESS -->
+
+                                <div class="form-group form-full">
+
+                                    <label for="profileAddress">
+                                        Address
+                                    </label>
+
+                                    <textarea
+                                        id="profileAddress"
+                                        rows="3"
+                                        autocomplete="street-address"
+                                    ></textarea>
+
+                                </div>
+
+
+                                <!-- CITY -->
+
+                                <div class="form-group">
+
+                                    <label for="profileCity">
+                                        City
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="profileCity"
+                                        autocomplete="address-level2"
+                                    >
+
+                                </div>
+
+
+                                <!-- PIN -->
+
+                                <div class="form-group">
+
+                                    <label for="profilePincode">
+                                        PIN Code
+                                    </label>
+
+                                    <input
+                                        type="tel"
+                                        id="profilePincode"
+                                        maxlength="6"
+                                        autocomplete="postal-code"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- PROFILE ACTIONS -->
+
+                            <div class="profile-actions">
+
+                                <button
+                                    type="button"
+                                    id="cancelProfileBtn"
+                                    class="profile-cancel-btn"
+                                >
+                                    CANCEL
+                                </button>
+
+
+                                <button
+                                    type="submit"
+                                    class="profile-save-btn"
+                                >
+                                    SAVE CHANGES
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </section>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="js/account.js"></script>
+
+</body>
+
+</html>
