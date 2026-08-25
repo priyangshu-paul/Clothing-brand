@@ -1,24 +1,102 @@
-// =====================================================
-// FASHION ACCOUNT SYSTEM
-// MY ORDERS
-// FLIPKART-STYLE ORDER FLOW
-// =====================================================
+document.addEventListener("DOMContentLoaded", async function () {
 
-document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
 
     // =====================================================
-    // LOGIN
+    // CHECK SUPABASE
     // =====================================================
 
-    const loggedInUser = JSON.parse(
-        localStorage.getItem("fashionLoggedIn")
-    );
+    if (typeof supabaseClient === "undefined") {
 
-    if (!loggedInUser) {
-        window.location.href = "login.html";
+        console.error("supabaseClient is not defined.");
+
+        alert("Supabase is not connected.");
+
         return;
     }
 
+
+    // =====================================================
+    // GET CURRENT USER
+    // =====================================================
+
+    const {
+        data: {
+            session
+        },
+        error
+    } = await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+        console.error(
+            "Error getting session:",
+            error
+        );
+
+        return;
+    }
+
+
+    // =====================================================
+    // NOT LOGGED IN
+    // =====================================================
+
+    if (!session || !session.user) {
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+
+    // =====================================================
+    // SUPABASE USER
+    // =====================================================
+
+    const authUser = session.user;
+
+
+    console.log(
+        "Account user:",
+        authUser
+    );
+
+
+    // =====================================================
+    // USER INFORMATION
+    // =====================================================
+
+    const userMetadata =
+        authUser.user_metadata || {};
+
+
+    const loggedInUser = {
+
+        id: authUser.id,
+
+        email:
+            authUser.email || "",
+
+        name:
+            userMetadata.name ||
+            userMetadata.full_name ||
+            "User",
+
+        phone:
+            userMetadata.phone || "",
+
+        address:
+            userMetadata.address || "",
+
+        city:
+            userMetadata.city || "",
+
+        pincode:
+            userMetadata.pincode || ""
+
+    };
 
     // =====================================================
     // ELEMENTS
@@ -1609,4 +1687,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderOrders();
 
-});hgxgfgfzvfzfxbfxbfxbfx
+});
