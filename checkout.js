@@ -220,20 +220,37 @@ document.addEventListener("DOMContentLoaded", async function () {
     localStorage.setItem(
         "fashionLoggedIn",
         JSON.stringify({
-            id: authUser.id,
-            userId: authUser.id,
-            name: userName,
-            email: userEmail,
-            phone: userPhone,
-            address: userAddress,
-            city: userCity,
-            pincode: userPincode
+
+            id:
+                authUser.id,
+
+            userId:
+                authUser.id,
+
+            name:
+                userName,
+
+            email:
+                userEmail,
+
+            phone:
+                userPhone,
+
+            address:
+                userAddress,
+
+            city:
+                userCity,
+
+            pincode:
+                userPincode
+
         })
     );
 
 
     // =====================================================
-    // HELPERS
+    // PRICE FORMAT
     // =====================================================
 
     function formatPrice(value) {
@@ -247,6 +264,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     }
 
+
+    // =====================================================
+    // ESCAPE HTML
+    // =====================================================
 
     function escapeHTML(value) {
 
@@ -296,8 +317,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
         if (email) {
+
             email.value =
                 userEmail;
+
         }
 
 
@@ -354,7 +377,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     // =====================================================
-    // DISPLAY CART
+    // DISPLAY CHECKOUT CART
     // =====================================================
 
     function displayCheckout() {
@@ -394,26 +417,34 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
             if (checkoutSubtotal) {
+
                 checkoutSubtotal.textContent =
                     "₹0";
+
             }
 
 
             if (checkoutShipping) {
+
                 checkoutShipping.textContent =
                     "₹0";
+
             }
 
 
             if (checkoutTotal) {
+
                 checkoutTotal.textContent =
                     "₹0";
+
             }
 
 
             if (placeOrder) {
+
                 placeOrder.disabled =
                     true;
+
             }
 
 
@@ -421,11 +452,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
 
-        let subtotal = 0;
+        let subtotal =
+            0;
 
 
         // =================================================
-        // CART ITEMS
+        // RENDER CART ITEMS
         // =================================================
 
         cart.forEach(function (item) {
@@ -450,7 +482,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
             const itemElement =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             itemElement.className =
@@ -460,7 +494,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             // IMAGE
 
             const image =
-                document.createElement("img");
+                document.createElement(
+                    "img"
+                );
 
 
             image.className =
@@ -489,10 +525,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                 };
 
 
-            // INFO
+            // PRODUCT INFORMATION
 
             const info =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             info.className =
@@ -515,15 +553,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 ${
                     item.size
-                    ? `
-                        <p>
-                            Size:
-                            ${escapeHTML(
-                                item.size
-                            )}
-                        </p>
-                    `
-                    : ""
+                        ? `
+                            <p>
+                                Size:
+                                ${escapeHTML(
+                                    item.size
+                                )}
+                            </p>
+                        `
+                        : ""
                 }
 
                 <strong>
@@ -570,7 +608,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (checkoutSubtotal) {
 
             checkoutSubtotal.textContent =
-                formatPrice(subtotal);
+                formatPrice(
+                    subtotal
+                );
 
         }
 
@@ -580,7 +620,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             checkoutShipping.textContent =
                 shipping === 0
                     ? "FREE"
-                    : formatPrice(shipping);
+                    : formatPrice(
+                        shipping
+                    );
 
         }
 
@@ -588,7 +630,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (checkoutTotal) {
 
             checkoutTotal.textContent =
-                formatPrice(total);
+                formatPrice(
+                    total
+                );
 
         }
 
@@ -610,25 +654,39 @@ document.addEventListener("DOMContentLoaded", async function () {
     function validateForm() {
 
         const email =
-            document.getElementById("email");
+            document.getElementById(
+                "email"
+            );
 
         const firstName =
-            document.getElementById("firstName");
+            document.getElementById(
+                "firstName"
+            );
 
         const lastName =
-            document.getElementById("lastName");
+            document.getElementById(
+                "lastName"
+            );
 
         const address =
-            document.getElementById("address");
+            document.getElementById(
+                "address"
+            );
 
         const city =
-            document.getElementById("city");
+            document.getElementById(
+                "city"
+            );
 
         const pincode =
-            document.getElementById("pincode");
+            document.getElementById(
+                "pincode"
+            );
 
         const phone =
-            document.getElementById("phone");
+            document.getElementById(
+                "phone"
+            );
 
 
         if (
@@ -758,7 +816,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 if (
                     placeOrder.disabled
                 ) {
+
                     return;
+
                 }
 
 
@@ -779,6 +839,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ) {
 
                     return;
+
                 }
 
 
@@ -793,7 +854,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 try {
 
                     // =====================================
-                    // GET VALUES
+                    // GET CUSTOMER DETAILS
                     // =====================================
 
                     const email =
@@ -859,6 +920,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                             .trim();
 
 
+                    // =====================================
+                    // PAYMENT
+                    // =====================================
+
                     const paymentElement =
                         document.querySelector(
                             'input[name="payment"]:checked'
@@ -872,7 +937,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // CALCULATE TOTAL
+                    // CALCULATE SUBTOTAL
                     // =====================================
 
                     let subtotal =
@@ -905,6 +970,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                     );
 
 
+                    // =====================================
+                    // SHIPPING
+                    // =====================================
+
                     const shipping =
                         subtotal >= 1999
                             ? 0
@@ -917,13 +986,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // CUSTOMER
+                    // CUSTOMER NAME
                     // =====================================
 
                     const customerName =
                         `${firstName} ${lastName}`
                             .trim();
 
+
+                    // =====================================
+                    // SHIPPING ADDRESS
+                    // =====================================
 
                     const shippingAddress =
                         [
@@ -937,6 +1010,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     // =====================================
                     // ORDER DATA
+                    //
+                    // IMPORTANT:
+                    // Only columns already confirmed
+                    // in the current orders table are used.
                     // =====================================
 
                     const orderData = {
@@ -959,17 +1036,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                         items:
                             cart,
 
-                        subtotal:
-                            subtotal,
-
-                        shipping:
-                            shipping,
-
                         total:
                             total,
-
-                        payment_method:
-                            payment,
 
                         status:
                             "Confirmed"
@@ -984,7 +1052,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // SAVE TO SUPABASE
+                    // INSERT ORDER
                     // =====================================
 
                     const {
@@ -1008,11 +1076,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                         );
 
                         throw error;
+
                     }
 
 
                     // =====================================
-                    // ORDER NUMBER
+                    // GENERATE ORDER NUMBER
                     // =====================================
 
                     const orderNumber =
@@ -1027,7 +1096,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const successOrder = {
 
                         id:
-                            data?.id || null,
+                            data?.id ||
+                            null,
 
                         orderId:
                             orderNumber,
@@ -1131,11 +1201,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     );
 
 
-                    cart = [];
+                    cart =
+                        [];
 
 
                     // =====================================
-                    // UPDATE CART
+                    // CART UPDATE EVENT
                     // =====================================
 
                     document.dispatchEvent(
@@ -1151,13 +1222,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // SUCCESS
+                    // SUCCESS MESSAGE
                     // =====================================
 
                     alert(
                         "Order placed successfully!"
                     );
 
+
+                    // =====================================
+                    // REDIRECT
+                    // =====================================
 
                     setTimeout(
                         function () {
