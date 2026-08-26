@@ -7,272 +7,165 @@
 
     <title>FASHION Admin Dashboard</title>
 
-    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <!-- Admin CSS -->
     <link rel="stylesheet" href="admin.css">
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Your Supabase Configuration -->
-    <script src="supabase.js"></script>
 </head>
 
 <body>
 
     <!-- =====================================================
-         MOBILE OVERLAY
+         LOADING SCREEN
     ====================================================== -->
 
-    <div
-        id="sidebarOverlay"
-        class="sidebar-overlay"
-    ></div>
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Loading FASHION Admin...</p>
+    </div>
 
 
     <!-- =====================================================
-         APP
+         MOBILE OVERLAY
     ====================================================== -->
 
-    <div class="admin-app">
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+
+    <!-- =====================================================
+         ADMIN LAYOUT
+    ====================================================== -->
+
+    <div class="admin-layout">
 
 
         <!-- =================================================
              SIDEBAR
         ================================================== -->
 
-        <aside
-            id="adminSidebar"
-            class="admin-sidebar"
-        >
+        <aside id="sidebar" class="sidebar">
 
-            <!-- Brand -->
+            <div class="sidebar-header">
 
-            <div class="sidebar-brand">
+                <a href="index.html" class="admin-logo">
+                    FASHION
+                </a>
 
-                <div class="brand-logo">
-                    F
-                </div>
-
-                <div class="brand-text">
-
-                    <strong>
-                        FASHION
-                    </strong>
-
-                    <span>
-                        ADMIN PANEL
-                    </span>
-
-                </div>
-
-                <button
-                    id="sidebarClose"
-                    class="sidebar-close"
-                    type="button"
-                    aria-label="Close sidebar"
-                >
-                    ×
-                </button>
+                <span class="admin-badge">
+                    ADMIN
+                </span>
 
             </div>
 
 
-            <!-- Admin User -->
-
-            <div class="sidebar-user">
-
-                <div class="user-avatar">
-                    A
-                </div>
-
-                <div class="sidebar-user-info">
-
-                    <strong>
-                        Administrator
-                    </strong>
-
-                    <span id="adminUserInfo">
-                        Checking session...
-                    </span>
-
-                </div>
-
-                <span class="online-dot"></span>
-
-            </div>
-
-
-            <!-- Navigation -->
+            <!-- NAVIGATION -->
 
             <nav class="sidebar-nav">
-
-                <div class="nav-section-title">
-                    MAIN
-                </div>
 
                 <button
                     type="button"
                     class="nav-item active"
-                    data-section="dashboard"
-                >
+                    data-section-target="dashboard">
+
                     <span class="nav-icon">⌂</span>
                     <span>Dashboard</span>
+
                 </button>
 
-
-                <div class="nav-section-title">
-                    STORE
-                </div>
 
                 <button
                     type="button"
                     class="nav-item"
-                    data-section="products"
-                >
+                    data-section-target="products">
+
                     <span class="nav-icon">▣</span>
                     <span>Products</span>
-                    <span
-                        id="sidebarProductBadge"
-                        class="nav-badge"
-                    >
-                        0
-                    </span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="nav-item"
-                    data-section="orders"
-                >
+                    data-section-target="orders">
+
                     <span class="nav-icon">▤</span>
                     <span>Orders</span>
-                    <span
-                        id="sidebarOrderBadge"
-                        class="nav-badge"
-                    >
-                        0
-                    </span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="nav-item"
-                    data-section="customers"
-                >
+                    data-section-target="customers">
+
                     <span class="nav-icon">♙</span>
                     <span>Customers</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="nav-item"
-                    data-section="inventory"
-                >
-                    <span class="nav-icon">▦</span>
+                    data-section-target="inventory">
+
+                    <span class="nav-icon">▥</span>
                     <span>Inventory</span>
+
                 </button>
 
-
-                <div class="nav-section-title">
-                    BUSINESS
-                </div>
 
                 <button
                     type="button"
                     class="nav-item"
-                    data-section="payments"
-                >
+                    data-section-target="payments">
+
                     <span class="nav-icon">₹</span>
                     <span>Payments</span>
+
                 </button>
+
 
                 <button
                     type="button"
                     class="nav-item"
-                    data-section="marketing"
-                >
-                    <span class="nav-icon">%</span>
+                    data-section-target="marketing">
+
+                    <span class="nav-icon">◈</span>
                     <span>Marketing</span>
-                </button>
 
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="reviews"
-                >
-                    <span class="nav-icon">★</span>
-                    <span>Reviews</span>
-                </button>
-
-
-                <div class="nav-section-title">
-                    INSIGHTS
-                </div>
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="analytics"
-                >
-                    <span class="nav-icon">◩</span>
-                    <span>Analytics</span>
-                </button>
-
-
-                <div class="nav-section-title">
-                    SYSTEM
-                </div>
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="settings"
-                >
-                    <span class="nav-icon">⚙</span>
-                    <span>Settings</span>
                 </button>
 
             </nav>
 
 
-            <!-- Sidebar Bottom -->
+            <!-- SIDEBAR FOOTER -->
 
-            <div class="sidebar-bottom">
+            <div class="sidebar-footer">
 
-                <button
-                    id="themeToggle"
-                    class="sidebar-action"
-                    type="button"
-                >
-                    <span id="themeIcon">
-                        ☾
-                    </span>
+                <a
+                    href="index.html"
+                    class="sidebar-link">
 
-                    <span id="themeText">
-                        Dark Mode
-                    </span>
-                </button>
+                    ← View Store
+
+                </a>
+
 
                 <button
-                    id="adminLogout"
-                    class="sidebar-action logout-action"
                     type="button"
-                >
-                    <span>
-                        ⇥
-                    </span>
+                    id="logoutBtn"
+                    class="logout-btn">
 
-                    <span>
-                        Logout
-                    </span>
+                    <span>↪</span>
+                    Logout
+
                 </button>
 
             </div>
@@ -280,8 +173,9 @@
         </aside>
 
 
+
         <!-- =================================================
-             MAIN AREA
+             MAIN CONTENT
         ================================================== -->
 
         <main class="admin-main">
@@ -296,25 +190,24 @@
                 <div class="header-left">
 
                     <button
-                        id="sidebarOpen"
-                        class="mobile-menu-btn"
                         type="button"
-                        aria-label="Open menu"
-                    >
+                        id="mobileMenuBtn"
+                        class="mobile-menu-btn"
+                        aria-label="Open menu">
+
                         ☰
+
                     </button>
+
 
                     <div>
 
-                        <p
-                            id="pageBreadcrumb"
-                            class="breadcrumb"
-                        >
-                            FASHION / DASHBOARD
+                        <p class="header-eyebrow">
+                            FASHION ADMIN
                         </p>
 
-                        <h1 id="pageTitle">
-                            Dashboard Overview
+                        <h1>
+                            Store Management
                         </h1>
 
                     </div>
@@ -324,41 +217,20 @@
 
                 <div class="header-right">
 
-                    <button
-                        id="headerSearchBtn"
-                        class="header-icon-btn"
-                        type="button"
-                        title="Search"
-                    >
-                        ⌕
-                    </button>
+                    <div class="admin-profile">
 
-                    <button
-                        id="notificationBtn"
-                        class="header-icon-btn notification-btn"
-                        type="button"
-                        title="Notifications"
-                    >
-                        ♧
-                        <span class="notification-dot"></span>
-                    </button>
-
-                    <div class="header-divider"></div>
-
-                    <div class="header-admin">
-
-                        <div class="header-avatar">
+                        <div class="profile-avatar">
                             A
                         </div>
 
-                        <div class="header-admin-info">
+                        <div class="profile-info">
 
                             <strong>
-                                Admin
+                                Administrator
                             </strong>
 
                             <span>
-                                Super Admin
+                                admin@fashion.com
                             </span>
 
                         </div>
@@ -370,826 +242,183 @@
             </header>
 
 
+
             <!-- =================================================
-                 GLOBAL SEARCH
+                 DASHBOARD
             ================================================== -->
 
-            <div
-                id="globalSearch"
-                class="global-search"
-            >
+            <section
+                id="dashboard"
+                class="admin-section active"
+                data-section="dashboard">
 
-                <div class="global-search-inner">
+                <div class="section-heading">
 
-                    <span>
-                        ⌕
-                    </span>
+                    <div>
 
-                    <input
-                        id="globalSearchInput"
-                        type="search"
-                        placeholder="Search products, orders, customers..."
-                        autocomplete="off"
-                    >
+                        <p class="section-kicker">
+                            OVERVIEW
+                        </p>
 
-                    <button
-                        id="closeGlobalSearch"
-                        type="button"
-                    >
-                        ×
-                    </button>
+                        <h2>
+                            Dashboard
+                        </h2>
+
+                        <p>
+                            Monitor your FASHION store performance.
+                        </p>
+
+                    </div>
 
                 </div>
 
-            </div>
+
+                <!-- STAT CARDS -->
+
+                <div class="stats-grid">
 
 
-            <!-- =================================================
-                 PAGE CONTENT
-            ================================================== -->
+                    <article class="stat-card">
 
-            <div class="admin-content">
+                        <div class="stat-icon">
+                            ₹
+                        </div>
 
+                        <div class="stat-content">
 
-                <!-- =================================================
-                     DASHBOARD
-                ================================================== -->
+                            <span>
+                                Total Revenue
+                            </span>
 
-                <section
-                    id="section-dashboard"
-                    class="admin-section active"
-                >
+                            <strong id="totalRevenue">
+                                ₹0
+                            </strong>
 
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Overview
-                            </h2>
-
-                            <p>
-                                Welcome back. Here's what's happening with your store today.
-                            </p>
+                            <small id="revenueChange">
+                                Store revenue
+                            </small>
 
                         </div>
 
-                        <div class="heading-actions">
+                    </article>
 
-                            <button
-                                id="refreshDashboard"
-                                class="secondary-btn"
-                                type="button"
-                            >
-                                ↻ Refresh
-                            </button>
 
-                            <button
-                                id="dashboardAddProduct"
-                                class="primary-btn"
-                                type="button"
-                            >
-                                + Add Product
-                            </button>
+                    <article class="stat-card">
 
+                        <div class="stat-icon">
+                            #
                         </div>
 
-                    </div>
+                        <div class="stat-content">
 
-
-                    <!-- Metrics -->
-
-                    <div class="metrics-grid">
-
-                        <div class="metric-card">
-
-                            <div class="metric-top">
-
-                                <div class="metric-icon sales-icon">
-                                    ₹
-                                </div>
-
-                                <span class="metric-trend positive">
-                                    ↑ Revenue
-                                </span>
-
-                            </div>
-
-                            <div class="metric-value">
-                                <span id="salesCount">
-                                    ₹0
-                                </span>
-                            </div>
-
-                            <div class="metric-label">
-                                Total Sales
-                            </div>
-
-                            <div class="metric-footer">
-                                Based on available orders
-                            </div>
-
-                        </div>
-
-
-                        <div class="metric-card">
-
-                            <div class="metric-top">
-
-                                <div class="metric-icon orders-icon">
-                                    ▤
-                                </div>
-
-                                <span
-                                    id="orderMetricTrend"
-                                    class="metric-trend neutral"
-                                >
-                                    Orders
-                                </span>
-
-                            </div>
-
-                            <div
-                                id="orderCount"
-                                class="metric-value"
-                            >
-                                0
-                            </div>
-
-                            <div class="metric-label">
+                            <span>
                                 Total Orders
-                            </div>
+                            </span>
 
-                            <div class="metric-footer">
-                                All recorded orders
-                            </div>
-
-                        </div>
-
-
-                        <div class="metric-card">
-
-                            <div class="metric-top">
-
-                                <div class="metric-icon customer-icon">
-                                    ♙
-                                </div>
-
-                                <span class="metric-trend neutral">
-                                    Users
-                                </span>
-
-                            </div>
-
-                            <div
-                                id="customerCount"
-                                class="metric-value"
-                            >
+                            <strong id="totalOrders">
                                 0
-                            </div>
+                            </strong>
 
-                            <div class="metric-label">
-                                Total Customers
-                            </div>
-
-                            <div class="metric-footer">
-                                Registered customer profiles
-                            </div>
+                            <small id="ordersChange">
+                                All orders
+                            </small>
 
                         </div>
 
+                    </article>
 
-                        <div class="metric-card">
 
-                            <div class="metric-top">
+                    <article class="stat-card">
 
-                                <div class="metric-icon product-icon">
-                                    ▣
-                                </div>
-
-                                <span class="metric-trend neutral">
-                                    Store
-                                </span>
-
-                            </div>
-
-                            <div
-                                id="productCount"
-                                class="metric-value"
-                            >
-                                0
-                            </div>
-
-                            <div class="metric-label">
-                                Total Products
-                            </div>
-
-                            <div class="metric-footer">
-                                Products currently listed
-                            </div>
-
+                        <div class="stat-icon">
+                            ♙
                         </div>
 
-                    </div>
+                        <div class="stat-content">
 
-
-                    <!-- Charts Row -->
-
-                    <div class="dashboard-grid">
-
-
-                        <!-- Sales Chart -->
-
-                        <div class="panel sales-panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Sales Overview
-                                    </h3>
-
-                                    <p>
-                                        Revenue performance
-                                    </p>
-
-                                </div>
-
-                                <select
-                                    id="salesPeriod"
-                                    class="select-control"
-                                >
-                                    <option value="7">
-                                        Last 7 days
-                                    </option>
-
-                                    <option value="30">
-                                        Last 30 days
-                                    </option>
-
-                                    <option value="90">
-                                        Last 90 days
-                                    </option>
-                                </select>
-
-                            </div>
-
-                            <div
-                                id="salesChart"
-                                class="chart-container"
-                            >
-
-                                <div class="chart-empty">
-                                    Loading sales data...
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Order Status -->
-
-                        <div class="panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Order Status
-                                    </h3>
-
-                                    <p>
-                                        Current order distribution
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div
-                                id="orderStatusChart"
-                                class="donut-chart-container"
-                            >
-
-                                <div class="chart-empty">
-                                    Loading...
-                                </div>
-
-                            </div>
-
-                            <div
-                                id="orderStatusLegend"
-                                class="chart-legend"
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Recent Orders + Top Products -->
-
-                    <div class="dashboard-grid two-columns">
-
-
-                        <div class="panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Recent Orders
-                                    </h3>
-
-                                    <p>
-                                        Latest customer orders
-                                    </p>
-
-                                </div>
-
-                                <button
-                                    type="button"
-                                    class="text-btn"
-                                    data-section="orders"
-                                >
-                                    View All →
-                                </button>
-
-                            </div>
-
-                            <div
-                                id="recentOrders"
-                                class="recent-orders"
-                            >
-                                <div class="loading">
-                                    Loading recent orders...
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Top Products
-                                    </h3>
-
-                                    <p>
-                                        Best performing products
-                                    </p>
-
-                                </div>
-
-                                <button
-                                    type="button"
-                                    class="text-btn"
-                                    data-section="products"
-                                >
-                                    View All →
-                                </button>
-
-                            </div>
-
-                            <div
-                                id="topProducts"
-                                class="top-products"
-                            >
-                                <div class="loading">
-                                    Loading products...
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     PRODUCTS
-                ================================================== -->
-
-                <section
-                    id="section-products"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Products
-                            </h2>
-
-                            <p>
-                                Manage your store catalog, pricing and stock.
-                            </p>
-
-                        </div>
-
-                        <div class="heading-actions">
-
-                            <button
-                                id="bulkUploadBtn"
-                                class="secondary-btn"
-                                type="button"
-                            >
-                                ⇧ Bulk Upload
-                            </button>
-
-                            <button
-                                id="addProductBtn"
-                                class="primary-btn"
-                                type="button"
-                            >
-                                + Add Product
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Product Summary -->
-
-                    <div class="mini-stat-grid">
-
-                        <div class="mini-stat">
-                            <span>Products</span>
-                            <strong id="productsTotalMini">0</strong>
-                        </div>
-
-                        <div class="mini-stat">
-                            <span>In Stock</span>
-                            <strong id="productsInStockMini">0</strong>
-                        </div>
-
-                        <div class="mini-stat warning-stat">
-                            <span>Low Stock</span>
-                            <strong id="productsLowStockMini">0</strong>
-                        </div>
-
-                        <div class="mini-stat danger-stat">
-                            <span>Out of Stock</span>
-                            <strong id="productsOutStockMini">0</strong>
-                        </div>
-
-                    </div>
-
-
-                    <!-- Product Toolbar -->
-
-                    <div class="panel table-panel">
-
-                        <div class="table-toolbar">
-
-                            <div class="toolbar-search">
-
-                                <span>
-                                    ⌕
-                                </span>
-
-                                <input
-                                    id="productSearch"
-                                    type="search"
-                                    placeholder="Search products..."
-                                >
-
-                            </div>
-
-
-                            <div class="toolbar-filters">
-
-                                <select
-                                    id="productCategoryFilter"
-                                    class="select-control"
-                                >
-                                    <option value="all">
-                                        All Categories
-                                    </option>
-
-                                    <option value="men">
-                                        Men
-                                    </option>
-
-                                    <option value="women">
-                                        Women
-                                    </option>
-
-                                    <option value="accessories">
-                                        Accessories
-                                    </option>
-
-                                    <option value="new">
-                                        New
-                                    </option>
-                                </select>
-
-
-                                <select
-                                    id="productSort"
-                                    class="select-control"
-                                >
-                                    <option value="newest">
-                                        Newest
-                                    </option>
-
-                                    <option value="oldest">
-                                        Oldest
-                                    </option>
-
-                                    <option value="name_asc">
-                                        Name A-Z
-                                    </option>
-
-                                    <option value="name_desc">
-                                        Name Z-A
-                                    </option>
-
-                                    <option value="price_low">
-                                        Price Low-High
-                                    </option>
-
-                                    <option value="price_high">
-                                        Price High-Low
-                                    </option>
-
-                                    <option value="stock_low">
-                                        Stock Low-High
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="adminProductList"
-                            class="product-admin-list"
-                        >
-
-                            <div class="loading">
-                                Loading products...
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="productPagination"
-                            class="pagination"
-                        ></div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     ORDERS
-                ================================================== -->
-
-                <section
-                    id="section-orders"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Orders
-                            </h2>
-
-                            <p>
-                                Track, manage and update customer orders.
-                            </p>
-
-                        </div>
-
-                        <button
-                            id="refreshOrders"
-                            class="secondary-btn"
-                            type="button"
-                        >
-                            ↻ Refresh
-                        </button>
-
-                    </div>
-
-
-                    <div class="mini-stat-grid order-mini-grid">
-
-                        <div class="mini-stat">
-                            <span>Total</span>
-                            <strong id="ordersTotalMini">0</strong>
-                        </div>
-
-                        <div class="mini-stat">
-                            <span>Confirmed</span>
-                            <strong id="ordersConfirmedMini">0</strong>
-                        </div>
-
-                        <div class="mini-stat">
-                            <span>Processing</span>
-                            <strong id="ordersProcessingMini">0</strong>
-                        </div>
-
-                        <div class="mini-stat">
-                            <span>Delivered</span>
-                            <strong id="ordersDeliveredMini">0</strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="panel table-panel">
-
-                        <div class="table-toolbar">
-
-                            <div class="toolbar-search">
-
-                                <span>
-                                    ⌕
-                                </span>
-
-                                <input
-                                    id="orderSearch"
-                                    type="search"
-                                    placeholder="Search order, customer, email or phone..."
-                                >
-
-                            </div>
-
-
-                            <div class="toolbar-filters">
-
-                                <select
-                                    id="orderStatusFilter"
-                                    class="select-control"
-                                >
-
-                                    <option value="all">
-                                        All Status
-                                    </option>
-
-                                    <option value="Confirmed">
-                                        Confirmed
-                                    </option>
-
-                                    <option value="Processing">
-                                        Processing
-                                    </option>
-
-                                    <option value="Shipped">
-                                        Shipped
-                                    </option>
-
-                                    <option value="Delivered">
-                                        Delivered
-                                    </option>
-
-                                    <option value="Cancelled">
-                                        Cancelled
-                                    </option>
-
-                                    <option value="Returned">
-                                        Returned
-                                    </option>
-
-                                </select>
-
-                                <select
-                                    id="orderSort"
-                                    class="select-control"
-                                >
-
-                                    <option value="newest">
-                                        Newest
-                                    </option>
-
-                                    <option value="oldest">
-                                        Oldest
-                                    </option>
-
-                                    <option value="amount_high">
-                                        Amount High-Low
-                                    </option>
-
-                                    <option value="amount_low">
-                                        Amount Low-High
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="adminOrders"
-                            class="orders-container"
-                        >
-
-                            <div class="loading">
-                                Loading orders...
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="orderPagination"
-                            class="pagination"
-                        ></div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     CUSTOMERS
-                ================================================== -->
-
-                <section
-                    id="section-customers"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
+                            <span>
                                 Customers
-                            </h2>
+                            </span>
 
-                            <p>
-                                View customer profiles and order activity.
-                            </p>
+                            <strong id="totalCustomers">
+                                0
+                            </strong>
+
+                            <small>
+                                Registered customers
+                            </small>
 
                         </div>
 
-                        <button
-                            id="refreshCustomers"
-                            class="secondary-btn"
-                            type="button"
-                        >
-                            ↻ Refresh
-                        </button>
-
-                    </div>
+                    </article>
 
 
-                    <div class="panel table-panel">
+                    <article class="stat-card">
 
-                        <div class="table-toolbar">
+                        <div class="stat-icon">
+                            ▣
+                        </div>
 
-                            <div class="toolbar-search">
+                        <div class="stat-content">
 
-                                <span>
-                                    ⌕
-                                </span>
+                            <span>
+                                Products
+                            </span>
 
-                                <input
-                                    id="customerSearch"
-                                    type="search"
-                                    placeholder="Search customer by name, email or phone..."
-                                >
+                            <strong id="totalProducts">
+                                0
+                            </strong>
+
+                            <small id="lowStockSummary">
+                                Inventory
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+
+                <!-- DASHBOARD CONTENT -->
+
+                <div class="dashboard-grid">
+
+
+                    <!-- SALES -->
+
+                    <article class="dashboard-card sales-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <p class="section-kicker">
+                                    PERFORMANCE
+                                </p>
+
+                                <h3>
+                                    Sales Overview
+                                </h3>
 
                             </div>
+
 
                             <select
-                                id="customerSort"
-                                class="select-control"
-                            >
+                                id="salesPeriod"
+                                class="select-control">
 
-                                <option value="newest">
-                                    Newest
+                                <option value="7">
+                                    Last 7 Days
                                 </option>
 
-                                <option value="name_asc">
-                                    Name A-Z
+                                <option value="30">
+                                    Last 30 Days
                                 </option>
 
-                                <option value="name_desc">
-                                    Name Z-A
+                                <option value="90">
+                                    Last 90 Days
                                 </option>
 
                             </select>
@@ -1198,1080 +427,884 @@
 
 
                         <div
-                            id="customersContainer"
-                            class="customers-container"
-                        >
+                            id="salesChart"
+                            class="sales-chart">
 
-                            <div class="loading">
-                                Loading customers...
+                            <div class="empty">
+                                Sales data will appear here.
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+
+                    <!-- RECENT ORDERS -->
+
+                    <article class="dashboard-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <p class="section-kicker">
+                                    ORDERS
+                                </p>
+
+                                <h3>
+                                    Recent Orders
+                                </h3>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="text-btn"
+                                data-section-target="orders">
+
+                                View All
+
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="recentOrders"
+                            class="mini-list">
+
+                            <div class="empty">
+                                No recent orders.
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+
+                    <!-- LOW STOCK -->
+
+                    <article class="dashboard-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <p class="section-kicker">
+                                    INVENTORY
+                                </p>
+
+                                <h3>
+                                    Low Stock
+                                </h3>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="text-btn"
+                                data-section-target="inventory">
+
+                                View Inventory
+
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="lowStockProducts"
+                            class="mini-list">
+
+                            <div class="empty">
+                                No low-stock products.
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- TOP PRODUCTS -->
+
+                    <article class="dashboard-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <p class="section-kicker">
+                                    PRODUCTS
+                                </p>
+
+                                <h3>
+                                    Product Summary
+                                </h3>
+
                             </div>
 
                         </div>
 
 
                         <div
-                            id="customerPagination"
-                            class="pagination"
-                        ></div>
+                            id="productSummary"
+                            class="summary-list">
 
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     INVENTORY
-                ================================================== -->
-
-                <section
-                    id="section-inventory"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Inventory
-                            </h2>
-
-                            <p>
-                                Monitor stock levels and identify products that need attention.
-                            </p>
-
-                        </div>
-
-                        <button
-                            id="inventoryRefresh"
-                            class="secondary-btn"
-                            type="button"
-                        >
-                            ↻ Refresh
-                        </button>
-
-                    </div>
-
-
-                    <div class="inventory-alert-grid">
-
-                        <div class="inventory-alert-card">
-                            <span class="alert-card-icon">
-                                ✓
-                            </span>
-
-                            <div>
-                                <strong id="inventoryHealthy">
-                                    0
-                                </strong>
+                            <div class="summary-row">
 
                                 <span>
-                                    Healthy Stock
+                                    Total Products
                                 </span>
-                            </div>
-                        </div>
 
-
-                        <div class="inventory-alert-card warning">
-                            <span class="alert-card-icon">
-                                !
-                            </span>
-
-                            <div>
-                                <strong id="inventoryLow">
+                                <strong id="summaryProducts">
                                     0
                                 </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    In Stock
+                                </span>
+
+                                <strong id="summaryInStock">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
 
                                 <span>
                                     Low Stock
                                 </span>
-                            </div>
-                        </div>
 
-
-                        <div class="inventory-alert-card danger">
-                            <span class="alert-card-icon">
-                                ×
-                            </span>
-
-                            <div>
-                                <strong id="inventoryOut">
+                                <strong id="summaryLowStock">
                                     0
                                 </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
 
                                 <span>
                                     Out of Stock
                                 </span>
-                            </div>
-                        </div>
 
-                    </div>
-
-
-                    <div class="panel table-panel">
-
-                        <div class="table-toolbar">
-
-                            <div>
-
-                                <h3>
-                                    Stock Management
-                                </h3>
-
-                            </div>
-
-                            <div class="toolbar-filters">
-
-                                <select
-                                    id="inventoryFilter"
-                                    class="select-control"
-                                >
-
-                                    <option value="all">
-                                        All Products
-                                    </option>
-
-                                    <option value="healthy">
-                                        Healthy
-                                    </option>
-
-                                    <option value="low">
-                                        Low Stock
-                                    </option>
-
-                                    <option value="out">
-                                        Out of Stock
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="inventoryContainer"
-                            class="inventory-container"
-                        >
-
-                            <div class="loading">
-                                Loading inventory...
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     PAYMENTS
-                ================================================== -->
-
-                <section
-                    id="section-payments"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Payments
-                            </h2>
-
-                            <p>
-                                Payment and transaction overview.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="metrics-grid small-metrics">
-
-                        <div class="metric-card">
-                            <div class="metric-top">
-                                <div class="metric-icon sales-icon">
-                                    ₹
-                                </div>
-                            </div>
-
-                            <div
-                                id="paymentRevenue"
-                                class="metric-value"
-                            >
-                                ₹0
-                            </div>
-
-                            <div class="metric-label">
-                                Total Revenue
-                            </div>
-                        </div>
-
-
-                        <div class="metric-card">
-                            <div class="metric-top">
-                                <div class="metric-icon orders-icon">
-                                    ✓
-                                </div>
-                            </div>
-
-                            <div
-                                id="paymentSuccessful"
-                                class="metric-value"
-                            >
-                                0
-                            </div>
-
-                            <div class="metric-label">
-                                Successful Orders
-                            </div>
-                        </div>
-
-
-                        <div class="metric-card">
-                            <div class="metric-top">
-                                <div class="metric-icon customer-icon">
-                                    ↩
-                                </div>
-                            </div>
-
-                            <div
-                                id="paymentRefunds"
-                                class="metric-value"
-                            >
-                                ₹0
-                            </div>
-
-                            <div class="metric-label">
-                                Refunds
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="panel table-panel">
-
-                        <div class="panel-header">
-
-                            <div>
-
-                                <h3>
-                                    Transaction History
-                                </h3>
-
-                                <p>
-                                    Payment information available from your current order data.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <div
-                            id="paymentsContainer"
-                            class="payments-container"
-                        >
-
-                            <div class="loading">
-                                Loading transactions...
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     MARKETING
-                ================================================== -->
-
-                <section
-                    id="section-marketing"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Marketing
-                            </h2>
-
-                            <p>
-                                Manage discounts, offers and promotional campaigns.
-                            </p>
-
-                        </div>
-
-                        <button
-                            id="createCouponBtn"
-                            class="primary-btn"
-                            type="button"
-                        >
-                            + Create Coupon
-                        </button>
-
-                    </div>
-
-
-                    <div class="marketing-grid">
-
-                        <div class="marketing-card">
-
-                            <div class="marketing-card-icon">
-                                %
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Coupons & Discounts
-                                </h3>
-
-                                <p>
-                                    Create promotional discount codes for your customers.
-                                </p>
-
-                            </div>
-
-                            <button
-                                type="button"
-                                class="secondary-btn"
-                                id="marketingCouponAction"
-                            >
-                                Manage Coupons
-                            </button>
-
-                        </div>
-
-
-                        <div class="marketing-card">
-
-                            <div class="marketing-card-icon">
-                                ▣
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Banner Management
-                                </h3>
-
-                                <p>
-                                    Promotional banners can be connected to your storefront.
-                                </p>
-
-                            </div>
-
-                            <button
-                                type="button"
-                                class="secondary-btn"
-                                id="bannerManagementBtn"
-                            >
-                                Manage Banners
-                            </button>
-
-                        </div>
-
-
-                        <div class="marketing-card">
-
-                            <div class="marketing-card-icon">
-                                ♧
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Notifications
-                                </h3>
-
-                                <p>
-                                    Plan customer offers and promotional notifications.
-                                </p>
-
-                            </div>
-
-                            <button
-                                type="button"
-                                class="secondary-btn"
-                                id="marketingNotificationBtn"
-                            >
-                                Notification Settings
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="panel">
-
-                        <div class="panel-header">
-
-                            <div>
-
-                                <h3>
-                                    Active Offers
-                                </h3>
-
-                                <p>
-                                    Your promotional campaigns will appear here.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <div
-                            id="couponsContainer"
-                            class="coupons-container"
-                        >
-
-                            <div class="empty">
-                                <strong>
-                                    No coupons configured
+                                <strong id="summaryOutStock">
+                                    0
                                 </strong>
 
-                                <p>
-                                    Create your first discount campaign to get started.
-                                </p>
                             </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PRODUCTS
+            ================================================== -->
+
+            <section
+                id="productsSection"
+                class="admin-section"
+                data-section="products">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-kicker">
+                            CATALOG
+                        </p>
+
+                        <h2>
+                            Products
+                        </h2>
+
+                        <p>
+                            Add, edit and manage your products.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="addProductBtn"
+                        class="primary-btn">
+
+                        + ADD PRODUCT
+
+                    </button>
+
+                </div>
+
+
+                <!-- FILTER BAR -->
+
+                <div class="filter-bar">
+
+                    <div class="search-box">
+
+                        <span>
+                            ⌕
+                        </span>
+
+                        <input
+                            type="search"
+                            id="productSearch"
+                            placeholder="Search products...">
+
+                    </div>
+
+
+                    <select
+                        id="productCategoryFilter"
+                        class="select-control">
+
+                        <option value="all">
+                            All Categories
+                        </option>
+
+                        <option value="T-Shirts">
+                            T-Shirts
+                        </option>
+
+                        <option value="Hoodies">
+                            Hoodies
+                        </option>
+
+                        <option value="Pants">
+                            Pants
+                        </option>
+
+                        <option value="Shirts">
+                            Shirts
+                        </option>
+
+                        <option value="Accessories">
+                            Accessories
+                        </option>
+
+                    </select>
+
+
+                    <select
+                        id="productSort"
+                        class="select-control">
+
+                        <option value="newest">
+                            Newest
+                        </option>
+
+                        <option value="name_asc">
+                            Name A-Z
+                        </option>
+
+                        <option value="name_desc">
+                            Name Z-A
+                        </option>
+
+                        <option value="price_low">
+                            Price Low-High
+                        </option>
+
+                        <option value="price_high">
+                            Price High-Low
+                        </option>
+
+                        <option value="stock_low">
+                            Stock Low-High
+                        </option>
+
+                        <option value="stock_high">
+                            Stock High-Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="productsContainer"
+                    class="products-admin-list">
+
+                    <div class="loading">
+                        Loading products...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ORDERS
+            ================================================== -->
+
+            <section
+                id="ordersSection"
+                class="admin-section"
+                data-section="orders">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-kicker">
+                            SALES
+                        </p>
+
+                        <h2>
+                            Orders
+                        </h2>
+
+                        <p>
+                            Manage customer orders and statuses.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-bar">
+
+                    <div class="search-box">
+
+                        <span>
+                            ⌕
+                        </span>
+
+                        <input
+                            type="search"
+                            id="orderSearch"
+                            placeholder="Search orders, customer or email...">
+
+                    </div>
+
+
+                    <select
+                        id="orderStatusFilter"
+                        class="select-control">
+
+                        <option value="all">
+                            All Statuses
+                        </option>
+
+                        <option value="confirmed">
+                            Confirmed
+                        </option>
+
+                        <option value="processing">
+                            Processing
+                        </option>
+
+                        <option value="shipped">
+                            Shipped
+                        </option>
+
+                        <option value="delivered">
+                            Delivered
+                        </option>
+
+                        <option value="cancelled">
+                            Cancelled
+                        </option>
+
+                        <option value="returned">
+                            Returned
+                        </option>
+
+                    </select>
+
+
+                    <select
+                        id="orderSort"
+                        class="select-control">
+
+                        <option value="newest">
+                            Newest
+                        </option>
+
+                        <option value="oldest">
+                            Oldest
+                        </option>
+
+                        <option value="amount_high">
+                            Amount High-Low
+                        </option>
+
+                        <option value="amount_low">
+                            Amount Low-High
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="orders-table-wrapper">
+
+                    <div class="orders-table-head">
+
+                        <span>
+                            ORDER
+                        </span>
+
+                        <span>
+                            CUSTOMER
+                        </span>
+
+                        <span>
+                            AMOUNT
+                        </span>
+
+                        <span>
+                            STATUS
+                        </span>
+
+                        <span>
+                            ACTION
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="ordersContainer"
+                        class="orders-list">
+
+                        <div class="loading">
+                            Loading orders...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CUSTOMERS
+            ================================================== -->
+
+            <section
+                id="customersSection"
+                class="admin-section"
+                data-section="customers">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-kicker">
+                            USERS
+                        </p>
+
+                        <h2>
+                            Customers
+                        </h2>
+
+                        <p>
+                            View your customer information and activity.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="customersContainer"
+                    class="customers-grid">
+
+                    <div class="loading">
+                        Loading customers...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 INVENTORY
+            ================================================== -->
+
+            <section
+                id="inventorySection"
+                class="admin-section"
+                data-section="inventory">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-kicker">
+                            STOCK CONTROL
+                        </p>
+
+                        <h2>
+                            Inventory
+                        </h2>
+
+                        <p>
+                            Monitor product stock levels.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="inventory-summary">
+
+                    <article class="inventory-stat">
+
+                        <span>
+                            Total Units
+                        </span>
+
+                        <strong id="inventoryTotalUnits">
+                            0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="inventory-stat">
+
+                        <span>
+                            Healthy Stock
+                        </span>
+
+                        <strong id="inventoryHealthy">
+                            0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="inventory-stat warning">
+
+                        <span>
+                            Low Stock
+                        </span>
+
+                        <strong id="inventoryLow">
+                            0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="inventory-stat danger">
+
+                        <span>
+                            Out of Stock
+                        </span>
+
+                        <strong id="inventoryOut">
+                            0
+                        </strong>
+
+                    </article>
+
+                </div>
+
+
+                <div
+                    id="inventoryContainer"
+                    class="inventory-list">
+
+                    <div class="loading">
+                        Loading inventory...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PAYMENTS
+            ================================================== -->
+
+            <section
+                id="paymentsSection"
+                class="admin-section"
+                data-section="payments">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-kicker">
+                            FINANCE
+                        </p>
+
+                        <h2>
+                            Payments
+                        </h2>
+
+                        <p>
+                            Track payment and order revenue.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="payment-stats">
+
+                    <article class="payment-card">
+
+                        <span>
+                            Total Revenue
+                        </span>
+
+                        <strong id="paymentTotalRevenue">
+                            ₹0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="payment-card">
+
+                        <span>
+                            Confirmed
+                        </span>
+
+                        <strong id="paymentConfirmed">
+                            ₹0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="payment-card">
+
+                        <span>
+                            Processing
+                        </span>
+
+                        <strong id="paymentProcessing">
+                            ₹0
+                        </strong>
+
+                    </article>
+
+
+                    <article class="payment-card">
+
+                        <span>
+                            Returned
+                        </span>
+
+                        <strong id="paymentReturned">
+                            ₹0
+                        </strong>
+
+                    </article>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <p class="section-kicker">
+                                TRANSACTIONS
+                            </p>
+
+                            <h3>
+                                Payment History
+                            </h3>
 
                         </div>
 
                     </div>
 
-                </section>
+
+                    <div
+                        id="paymentsContainer"
+                        class="payments-list">
+
+                        <div class="loading">
+                            Loading payments...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
 
 
-                <!-- =================================================
-                     REVIEWS
-                ================================================== -->
 
-                <section
-                    id="section-reviews"
-                    class="admin-section"
-                >
+            <!-- =================================================
+                 MARKETING
+            ================================================== -->
 
-                    <div class="section-heading">
+            <section
+                id="marketingSection"
+                class="admin-section"
+                data-section="marketing">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-kicker">
+                            GROWTH
+                        </p>
+
+                        <h2>
+                            Marketing
+                        </h2>
+
+                        <p>
+                            Manage promotional tools and campaigns.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="marketing-grid">
+
+
+                    <article class="marketing-card">
+
+                        <div class="marketing-icon">
+                            %
+                        </div>
 
                         <div>
 
-                            <h2>
-                                Reviews & Ratings
-                            </h2>
+                            <h3>
+                                Discount Codes
+                            </h3>
 
                             <p>
-                                Review moderation and customer feedback.
+                                Create promotional discount codes
+                                for your customers.
                             </p>
 
                         </div>
 
-                    </div>
-
-
-                    <div class="review-summary-grid">
-
-                        <div class="review-summary-card">
-
-                            <span>
-                                Average Rating
-                            </span>
-
-                            <strong id="averageRating">
-                                5.0
-                            </strong>
-
-                            <div class="stars">
-                                ★★★★★
-                            </div>
-
-                        </div>
-
-
-                        <div class="review-summary-card">
-
-                            <span>
-                                Total Reviews
-                            </span>
-
-                            <strong id="reviewCount">
-                                0
-                            </strong>
-
-                        </div>
-
-
-                        <div class="review-summary-card">
-
-                            <span>
-                                Pending Moderation
-                            </span>
-
-                            <strong id="pendingReviews">
-                                0
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="panel">
-
-                        <div
-                            id="reviewsContainer"
-                            class="reviews-container"
-                        >
-
-                            <div class="empty">
-
-                                <strong>
-                                    Reviews module ready
-                                </strong>
-
-                                <p>
-                                    Connect a reviews table in Supabase to enable live moderation.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     ANALYTICS
-                ================================================== -->
-
-                <section
-                    id="section-analytics"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h2>
-                                Analytics & Reports
-                            </h2>
-
-                            <p>
-                                Understand sales, products and customer performance.
-                            </p>
-
-                        </div>
 
                         <button
-                            id="exportReportBtn"
-                            class="primary-btn"
                             type="button"
-                        >
-                            ⇩ Export CSV
+                            class="secondary-btn"
+                            id="createDiscountBtn">
+
+                            CREATE CODE
+
                         </button>
 
-                    </div>
+                    </article>
 
 
-                    <div class="analytics-grid">
 
-                        <div class="panel analytics-large">
+                    <article class="marketing-card">
 
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Revenue Analytics
-                                    </h3>
-
-                                    <p>
-                                        Order revenue over time
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div
-                                id="analyticsRevenueChart"
-                                class="chart-container"
-                            >
-
-                                <div class="chart-empty">
-                                    Loading analytics...
-                                </div>
-
-                            </div>
-
+                        <div class="marketing-icon">
+                            ✉
                         </div>
-
-
-                        <div class="panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Category Performance
-                                    </h3>
-
-                                    <p>
-                                        Products by category
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div
-                                id="categoryChart"
-                                class="category-chart"
-                            >
-
-                                <div class="chart-empty">
-                                    Loading...
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="panel">
-
-                        <div class="panel-header">
-
-                            <div>
-
-                                <h3>
-                                    Business Summary
-                                </h3>
-
-                                <p>
-                                    Key store performance numbers.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <div
-                            id="analyticsSummary"
-                            class="analytics-summary"
-                        ></div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     SETTINGS
-                ================================================== -->
-
-                <section
-                    id="section-settings"
-                    class="admin-section"
-                >
-
-                    <div class="section-heading">
 
                         <div>
 
-                            <h2>
-                                Settings
-                            </h2>
+                            <h3>
+                                Customer Campaigns
+                            </h3>
 
                             <p>
-                                Manage your administrator preferences.
+                                Prepare promotional campaigns
+                                for your customer base.
                             </p>
 
                         </div>
 
-                    </div>
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            id="campaignBtn">
+
+                            CREATE CAMPAIGN
+
+                        </button>
+
+                    </article>
 
 
-                    <div class="settings-grid">
 
+                    <article class="marketing-card">
 
-                        <!-- Admin Profile -->
+                        <div class="marketing-icon">
+                            ★
+                        </div>
 
-                        <div class="panel settings-panel">
+                        <div>
 
-                            <div class="panel-header">
+                            <h3>
+                                New Arrivals
+                            </h3>
 
-                                <div>
-
-                                    <h3>
-                                        Admin Profile
-                                    </h3>
-
-                                    <p>
-                                        Current administrator account.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div class="settings-form">
-
-                                <label>
-                                    Admin Name
-
-                                    <input
-                                        id="settingsAdminName"
-                                        type="text"
-                                        value="Administrator"
-                                    >
-                                </label>
-
-                                <label>
-                                    Admin Email
-
-                                    <input
-                                        id="settingsAdminEmail"
-                                        type="email"
-                                        value="admin@fashion.com"
-                                        readonly
-                                    >
-                                </label>
-
-                                <label>
-                                    Role
-
-                                    <input
-                                        type="text"
-                                        value="Super Admin"
-                                        readonly
-                                    >
-                                </label>
-
-                                <button
-                                    id="saveSettingsBtn"
-                                    type="button"
-                                    class="primary-btn"
-                                >
-                                    Save Settings
-                                </button>
-
-                            </div>
+                            <p>
+                                Highlight products marked as
+                                new arrivals.
+                            </p>
 
                         </div>
 
 
-                        <!-- Appearance -->
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            data-section-target="products">
 
-                        <div class="panel settings-panel">
+                            VIEW PRODUCTS
 
-                            <div class="panel-header">
+                        </button>
 
-                                <div>
+                    </article>
 
-                                    <h3>
-                                        Appearance
-                                    </h3>
+                </div>
 
-                                    <p>
-                                        Customize your dashboard experience.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div class="settings-options">
-
-                                <button
-                                    id="settingsThemeToggle"
-                                    type="button"
-                                    class="settings-option"
-                                >
-
-                                    <span class="settings-option-icon">
-                                        ◐
-                                    </span>
-
-                                    <span>
-
-                                        <strong>
-                                            Dark / Light Mode
-                                        </strong>
-
-                                        <small>
-                                            Switch dashboard appearance
-                                        </small>
-
-                                    </span>
-
-                                    <span class="settings-arrow">
-                                        →
-                                    </span>
-
-                                </button>
-
-
-                                <button
-                                    id="settingsCompactToggle"
-                                    type="button"
-                                    class="settings-option"
-                                >
-
-                                    <span class="settings-option-icon">
-                                        ≡
-                                    </span>
-
-                                    <span>
-
-                                        <strong>
-                                            Compact Sidebar
-                                        </strong>
-
-                                        <small>
-                                            Save more workspace
-                                        </small>
-
-                                    </span>
-
-                                    <span class="settings-arrow">
-                                        →
-                                    </span>
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Roles -->
-
-                        <div class="panel settings-panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Roles & Permissions
-                                    </h3>
-
-                                    <p>
-                                        Admin access configuration.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div class="role-list">
-
-                                <div class="role-row">
-
-                                    <div class="role-icon">
-                                        SA
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Super Admin
-                                        </strong>
-
-                                        <span>
-                                            Full dashboard access
-                                        </span>
-
-                                    </div>
-
-                                    <span class="role-status">
-                                        Active
-                                    </span>
-
-                                </div>
-
-
-                                <div class="role-row">
-
-                                    <div class="role-icon">
-                                        M
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Manager
-                                        </strong>
-
-                                        <span>
-                                            Products and orders
-                                        </span>
-
-                                    </div>
-
-                                    <span class="role-status inactive">
-                                        Available
-                                    </span>
-
-                                </div>
-
-
-                                <div class="role-row">
-
-                                    <div class="role-icon">
-                                        S
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Staff
-                                        </strong>
-
-                                        <span>
-                                            Limited operations
-                                        </span>
-
-                                    </div>
-
-                                    <span class="role-status inactive">
-                                        Available
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Notifications -->
-
-                        <div class="panel settings-panel">
-
-                            <div class="panel-header">
-
-                                <div>
-
-                                    <h3>
-                                        Notifications
-                                    </h3>
-
-                                    <p>
-                                        Dashboard notification preferences.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div class="notification-settings">
-
-                                <label class="switch-row">
-
-                                    <span>
-
-                                        <strong>
-                                            New Order Alerts
-                                        </strong>
-
-                                        <small>
-                                            Notify when a new order arrives
-                                        </small>
-
-                                    </span>
-
-                                    <input
-                                        id="newOrderNotifications"
-                                        type="checkbox"
-                                        checked
-                                    >
-
-                                    <span class="switch"></span>
-
-                                </label>
-
-
-                                <label class="switch-row">
-
-                                    <span>
-
-                                        <strong>
-                                            Low Stock Alerts
-                                        </strong>
-
-                                        <small>
-                                            Notify when stock is running low
-                                        </small>
-
-                                    </span>
-
-                                    <input
-                                        id="lowStockNotifications"
-                                        type="checkbox"
-                                        checked
-                                    >
-
-                                    <span class="switch"></span>
-
-                                </label>
-
-
-                                <label class="switch-row">
-
-                                    <span>
-
-                                        <strong>
-                                            Marketing Notifications
-                                        </strong>
-
-                                        <small>
-                                            Promotional campaign reminders
-                                        </small>
-
-                                    </span>
-
-                                    <input
-                                        id="marketingNotifications"
-                                        type="checkbox"
-                                    >
-
-                                    <span class="switch"></span>
-
-                                </label>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-            </div>
+            </section>
 
         </main>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -2280,267 +1313,7 @@
 
     <div
         id="productModal"
-        class="modal-overlay"
-    >
-
-        <div class="modal product-modal">
-
-            <div class="modal-header">
-
-                <div>
-
-                    <span class="modal-eyebrow">
-                        STORE CATALOG
-                    </span>
-
-                    <h2 id="productModalTitle">
-                        Add Product
-                    </h2>
-
-                </div>
-
-                <button
-                    id="closeProductModal"
-                    type="button"
-                    class="modal-close"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <form
-                id="productForm"
-                class="product-form"
-            >
-
-                <input
-                    id="productId"
-                    type="hidden"
-                >
-
-
-                <div class="form-grid">
-
-
-                    <div class="form-group full">
-
-                        <label for="productName">
-                            Product Name
-                        </label>
-
-                        <input
-                            id="productName"
-                            type="text"
-                            placeholder="Enter product name"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="productPrice">
-                            Price (₹)
-                        </label>
-
-                        <input
-                            id="productPrice"
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            placeholder="0.00"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="productStock">
-                            Stock
-                        </label>
-
-                        <input
-                            id="productStock"
-                            type="number"
-                            min="0"
-                            step="1"
-                            placeholder="0"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label for="productImage">
-                            Image URL
-                        </label>
-
-                        <input
-                            id="productImage"
-                            type="url"
-                            placeholder="https://example.com/product-image.jpg"
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="productCategory">
-                            Category
-                        </label>
-
-                        <select
-                            id="productCategory"
-                            required
-                        >
-
-                            <option value="">
-                                Select category
-                            </option>
-
-                            <option value="men">
-                                Men
-                            </option>
-
-                            <option value="women">
-                                Women
-                            </option>
-
-                            <option value="accessories">
-                                Accessories
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="productGender">
-                            Gender
-                        </label>
-
-                        <select id="productGender">
-
-                            <option value="">
-                                Select gender
-                            </option>
-
-                            <option value="Men">
-                                Men
-                            </option>
-
-                            <option value="Women">
-                                Women
-                            </option>
-
-                            <option value="Unisex">
-                                Unisex
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label for="productSizes">
-                            Available Sizes
-                        </label>
-
-                        <input
-                            id="productSizes"
-                            type="text"
-                            placeholder="S, M, L, XL, XXL"
-                        >
-
-                        <small class="field-help">
-                            Example: S, M, L, XL
-                        </small>
-
-                    </div>
-
-
-                    <div class="form-group full">
-
-                        <label for="productDescription">
-                            Description
-                        </label>
-
-                        <textarea
-                            id="productDescription"
-                            rows="5"
-                            placeholder="Write a short product description..."
-                        ></textarea>
-
-                    </div>
-
-
-                    <div class="form-checkbox full">
-
-                        <label>
-
-                            <input
-                                id="productIsNew"
-                                type="checkbox"
-                            >
-
-                            <span>
-                                Mark this product as New
-                            </span>
-
-                        </label>
-
-                    </div>
-
-                </div>
-
-
-                <div class="modal-footer">
-
-                    <button
-                        id="cancelProductBtn"
-                        type="button"
-                        class="secondary-btn"
-                    >
-                        Cancel
-                    </button>
-
-                    <button
-                        id="saveProductBtn"
-                        type="submit"
-                        class="primary-btn"
-                    >
-                        SAVE PRODUCT
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         BULK UPLOAD MODAL
-    ====================================================== -->
-
-    <div
-        id="bulkUploadModal"
-        class="modal-overlay"
-    >
+        class="modal-overlay">
 
         <div class="modal">
 
@@ -2548,70 +1321,32 @@
 
                 <div>
 
-                    <span class="modal-eyebrow">
-                        PRODUCT MANAGEMENT
-                    </span>
+                    <p class="section-kicker">
+                        CATALOG
+                    </p>
 
                     <h2>
-                        Bulk Upload
+                        Product
                     </h2>
 
                 </div>
 
                 <button
-                    id="closeBulkUploadModal"
                     type="button"
+                    id="closeProductModal"
                     class="modal-close"
-                >
+                    aria-label="Close">
+
                     ×
+
                 </button>
 
             </div>
 
 
-            <div class="bulk-upload-content">
-
-                <div class="upload-dropzone">
-
-                    <div class="upload-icon">
-                        ⇧
-                    </div>
-
-                    <h3>
-                        Upload Product CSV
-                    </h3>
-
-                    <p>
-                        Import multiple products at once using a CSV file.
-                    </p>
-
-                    <input
-                        id="bulkProductFile"
-                        type="file"
-                        accept=".csv"
-                    >
-
-                    <label
-                        for="bulkProductFile"
-                        class="secondary-btn upload-label"
-                    >
-                        Choose CSV File
-                    </label>
-
-                </div>
-
-
-                <div class="bulk-format-info">
-
-                    <strong>
-                        CSV columns
-                    </strong>
-
-                    <code>
-                        name, price, image, category, description, sizes, stock, gender, is_new
-                    </code>
-
-                </div>
+            <div
+                id="productModalContent"
+                class="modal-content">
 
             </div>
 
@@ -2619,19 +1354,12 @@
             <div class="modal-footer">
 
                 <button
-                    id="cancelBulkUpload"
                     type="button"
-                    class="secondary-btn"
-                >
-                    Cancel
-                </button>
+                    id="closeProductModalBottom"
+                    class="secondary-btn">
 
-                <button
-                    id="processBulkUpload"
-                    type="button"
-                    class="primary-btn"
-                >
-                    Import Products
+                    CLOSE
+
                 </button>
 
             </div>
@@ -2641,14 +1369,14 @@
     </div>
 
 
+
     <!-- =====================================================
-         ORDER DETAILS MODAL
+         ORDER MODAL
     ====================================================== -->
 
     <div
         id="orderModal"
-        class="modal-overlay"
-    >
+        class="modal-overlay">
 
         <div class="modal order-modal">
 
@@ -2656,9 +1384,9 @@
 
                 <div>
 
-                    <span class="modal-eyebrow">
+                    <p class="section-kicker">
                         ORDER MANAGEMENT
-                    </span>
+                    </p>
 
                     <h2>
                         Order Details
@@ -2667,11 +1395,13 @@
                 </div>
 
                 <button
-                    id="closeOrderModal"
                     type="button"
+                    id="closeOrderModal"
                     class="modal-close"
-                >
+                    aria-label="Close">
+
                     ×
+
                 </button>
 
             </div>
@@ -2679,26 +1409,30 @@
 
             <div
                 id="orderModalContent"
-                class="order-modal-content"
-            ></div>
+                class="modal-content">
+
+            </div>
 
 
             <div class="modal-footer">
 
                 <button
+                    type="button"
                     id="printInvoiceBtn"
-                    type="button"
-                    class="secondary-btn"
-                >
-                    Print Invoice
+                    class="secondary-btn">
+
+                    PRINT INVOICE
+
                 </button>
 
+
                 <button
+                    type="button"
                     id="closeOrderModalBottom"
-                    type="button"
-                    class="primary-btn"
-                >
-                    Close
+                    class="primary-btn">
+
+                    CLOSE
+
                 </button>
 
             </div>
@@ -2707,98 +1441,30 @@
 
     </div>
 
-
-    <!-- =====================================================
-         CUSTOMER MODAL
-    ====================================================== -->
-
-    <div
-        id="customerModal"
-        class="modal-overlay"
-    >
-
-        <div class="modal customer-modal">
-
-            <div class="modal-header">
-
-                <div>
-
-                    <span class="modal-eyebrow">
-                        CUSTOMER
-                    </span>
-
-                    <h2>
-                        Customer Profile
-                    </h2>
-
-                </div>
-
-                <button
-                    id="closeCustomerModal"
-                    type="button"
-                    class="modal-close"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <div
-                id="customerModalContent"
-                class="customer-modal-content"
-            ></div>
-
-
-            <div class="modal-footer">
-
-                <button
-                    id="closeCustomerModalBottom"
-                    type="button"
-                    class="primary-btn"
-                >
-                    Close
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
 
 
     <!-- =====================================================
          TOAST
     ====================================================== -->
 
-    <div
-        id="toast"
-        class="toast"
-        role="status"
-        aria-live="polite"
-    ></div>
+    <div id="adminToast"></div>
+
 
 
     <!-- =====================================================
-         LOADING SCREEN
+         SUPABASE
     ====================================================== -->
 
-    <div
-        id="adminLoading"
-        class="admin-loading-screen"
-    >
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        <div class="loading-brand">
-            FASHION
-        </div>
 
-        <div class="loading-spinner"></div>
+    <!-- =====================================================
+         SUPABASE CONFIG
+         IMPORTANT:
+         Keep your existing config file/path if different.
+    ====================================================== -->
 
-        <p>
-            Loading admin dashboard...
-        </p>
-
-    </div>
+    <script src="supabase.js"></script>
 
 
     <!-- =====================================================

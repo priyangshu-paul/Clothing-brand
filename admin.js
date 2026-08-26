@@ -1,23 +1,25 @@
 // ============================================================
 // FASHION ADMIN DASHBOARD
-// PROFESSIONAL + STABLE SUPABASE ADMIN.JS
-// COMPLETE REPLACEMENT
+// COMPLETE + STABLE SUPABASE ADMIN.JS
 // ============================================================
-
 "use strict";
+
+console.log("ADMIN.JS FILE LOADED");
 
 document.addEventListener("DOMContentLoaded", async () => {
 
+    console.log("DOM LOADED");
     // ============================================================
     // CONFIGURATION
     // ============================================================
 
     const ADMIN_EMAIL = "admin@fashion.com";
+
     const LOW_STOCK_LIMIT = 5;
 
     const PRODUCT_TABLE = "products";
     const ORDER_TABLE = "orders";
-    const CUSTOMER_TABLE = "customers";
+    const CUSTOMER_TABLE = "profiles";
     const REVIEW_TABLE = "reviews";
 
     let products = [];
@@ -32,13 +34,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     let salesPeriod = 7;
 
     // ============================================================
-    // BASIC HELPERS
+    // HELPERS
     // ============================================================
 
     const $ = id => document.getElementById(id);
 
     function safeNumber(value) {
-        if (value === null || value === undefined || value === "") {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
             return 0;
         }
 
@@ -52,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function escapeHTML(value) {
+
         return String(value ?? "")
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -61,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function formatPrice(value) {
+
         return "₹" + safeNumber(value).toLocaleString("en-IN", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2
@@ -68,6 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function formatDate(value) {
+
         if (!value) return "-";
 
         const date = new Date(value);
@@ -84,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getOrderDate(order) {
+
         return (
             order.created_at ||
             order.createdAt ||
@@ -96,6 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getOrderAmount(order) {
+
         return safeNumber(
             order.total ??
             order.amount ??
@@ -108,17 +120,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getOrderStatus(order) {
+
         const raw =
             order.status ||
             order.order_status ||
             order.payment_status ||
             "Confirmed";
 
-        const normalized = String(raw)
-            .trim()
-            .toLowerCase();
+        const normalized =
+            String(raw)
+                .trim()
+                .toLowerCase();
 
         const map = {
+
             confirmed: "Confirmed",
             pending: "Confirmed",
             processing: "Processing",
@@ -128,12 +143,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             canceled: "Cancelled",
             returned: "Returned",
             refunded: "Returned"
+
         };
 
         return map[normalized] || raw || "Confirmed";
     }
 
     function getCustomerName(customer) {
+
         return (
             customer.name ||
             customer.customer_name ||
@@ -144,6 +161,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getCustomerEmail(customer) {
+
         return (
             customer.email ||
             customer.customer_email ||
@@ -152,6 +170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getCustomerPhone(customer) {
+
         return (
             customer.phone ||
             customer.customer_phone ||
@@ -161,10 +180,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getProductName(product) {
-        return product.name || product.product_name || "Product";
+
+        return (
+            product.name ||
+            product.product_name ||
+            "Product"
+        );
     }
 
     function getProductImage(product) {
+
         return (
             product.image ||
             product.image_url ||
@@ -174,6 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getProductStock(product) {
+
         return safeNumber(
             product.stock ??
             product.quantity ??
@@ -183,6 +209,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function getProductPrice(product) {
+
         return safeNumber(
             product.price ??
             product.sale_price ??
@@ -190,15 +217,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     }
 
+    function setText(id, value) {
+
+        const element = $(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
     function showToast(message, type = "success") {
 
         let toast = $("adminToast");
 
         if (!toast) {
+
             toast = document.createElement("div");
+
             toast.id = "adminToast";
 
             Object.assign(toast.style, {
+
                 position: "fixed",
                 right: "24px",
                 bottom: "24px",
@@ -214,6 +253,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 opacity: "0",
                 transform: "translateY(15px)",
                 transition: "all .25s ease"
+
             });
 
             document.body.appendChild(toast);
@@ -222,32 +262,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         toast.textContent = message;
 
         if (type === "error") {
+
             toast.style.background = "#b42318";
+
         } else if (type === "warning") {
+
             toast.style.background = "#b54708";
+
         } else {
+
             toast.style.background = "#111";
         }
 
         requestAnimationFrame(() => {
+
             toast.style.opacity = "1";
             toast.style.transform = "translateY(0)";
+
         });
 
         clearTimeout(toast._timer);
 
         toast._timer = setTimeout(() => {
+
             toast.style.opacity = "0";
             toast.style.transform = "translateY(15px)";
+
         }, 3000);
-    }
-
-    function setText(id, value) {
-        const element = $(id);
-
-        if (element) {
-            element.textContent = value;
-        }
     }
 
     // ============================================================
@@ -258,7 +299,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         typeof supabaseClient === "undefined" ||
         !supabaseClient
     ) {
-        console.error("supabaseClient is not defined.");
+
+        console.error(
+            "supabaseClient is not defined."
+        );
 
         showToast(
             "Supabase is not connected. Check your Supabase configuration.",
@@ -274,17 +318,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function hideLoadingScreen() {
 
-        const loaders = [
+        [
             $("loadingScreen"),
             $("adminLoading"),
             $("dashboardLoading")
-        ];
+        ].forEach(loader => {
 
-        loaders.forEach(loader => {
             if (!loader) return;
 
             loader.classList.add("hidden");
             loader.style.display = "none";
+
         });
     }
 
@@ -356,78 +400,75 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function setupLogout() {
 
-        const logoutButtons =
-            document.querySelectorAll(
+        document
+            .querySelectorAll(
                 "#logoutBtn, .logout-btn, [data-action='logout']"
-            );
+            )
+            .forEach(button => {
 
-        logoutButtons.forEach(button => {
+                if (button.dataset.bound) return;
 
-            if (button.dataset.bound) return;
+                button.dataset.bound = "true";
 
-            button.dataset.bound = "true";
+                button.addEventListener(
+                    "click",
+                    async event => {
 
-            button.addEventListener(
-                "click",
-                async event => {
+                        event.preventDefault();
 
-                    event.preventDefault();
+                        try {
 
-                    try {
+                            await supabaseClient.auth.signOut();
 
-                        await supabaseClient.auth.signOut();
+                        } catch (error) {
 
-                    } catch (error) {
+                            console.error(
+                                "Logout error:",
+                                error
+                            );
+                        }
 
-                        console.error(
-                            "Logout error:",
-                            error
+                        window.location.replace(
+                            "admin-login.html"
                         );
-
                     }
-
-                    window.location.replace(
-                        "admin-login.html"
-                    );
-                }
-            );
-        });
+                );
+            });
     }
 
     // ============================================================
-    // SIDEBAR / NAVIGATION
+    // NAVIGATION
     // ============================================================
 
     function openSection(sectionName) {
 
-        const sections =
-            document.querySelectorAll(
+        document
+            .querySelectorAll(
                 "[data-section], .admin-section"
-            );
+            )
+            .forEach(section => {
 
-        sections.forEach(section => {
+                const sectionId =
+                    section.dataset.section ||
+                    section.id;
 
-            const sectionId =
-                section.dataset.section ||
-                section.id;
+                if (
+                    sectionId === sectionName ||
+                    sectionId ===
+                    `${sectionName}Section`
+                ) {
 
-            if (
-                sectionId === sectionName ||
-                sectionId ===
-                `${sectionName}Section`
-            ) {
+                    section.classList.add("active");
+                    section.style.display = "";
 
-                section.classList.add("active");
-                section.style.display = "";
+                } else if (
+                    section.classList.contains("admin-section")
+                ) {
 
-            } else if (
-                section.classList.contains("admin-section")
-            ) {
-
-                section.classList.remove("active");
-                section.style.display = "none";
-            }
-        });
+                    section.classList.remove("active");
+                    section.style.display = "none";
+                }
+            });
 
         document
             .querySelectorAll(
@@ -488,6 +529,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
     }
 
+    // ============================================================
+    // MOBILE SIDEBAR
+    // ============================================================
+
     function closeMobileSidebar() {
 
         const sidebar =
@@ -521,16 +566,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!toggle || !sidebar) return;
 
-        toggle.addEventListener(
-            "click",
-            () => {
+        if (!toggle.dataset.bound) {
 
-                sidebar.classList.toggle("open");
-                overlay?.classList.toggle(
-                    "show"
-                );
-            }
-        );
+            toggle.dataset.bound = "true";
+
+            toggle.addEventListener(
+                "click",
+                () => {
+
+                    sidebar.classList.toggle("open");
+
+                    overlay?.classList.toggle(
+                        "show"
+                    );
+                }
+            );
+        }
 
         overlay?.addEventListener(
             "click",
@@ -539,7 +590,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ============================================================
-    // LOAD PRODUCTS
+    // PRODUCTS
     // ============================================================
 
     async function loadProducts() {
@@ -548,6 +599,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             $("productsContainer");
 
         if (container) {
+
             container.innerHTML =
                 `<div class="loading">Loading products...</div>`;
         }
@@ -594,7 +646,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 container.innerHTML =
                     `<div class="empty">
                         <strong>Unable to load products</strong>
-                        <p>${escapeHTML(error.message || "Supabase products error.")}</p>
+                        <p>${escapeHTML(
+                            error.message ||
+                            "Supabase products error."
+                        )}</p>
                     </div>`;
             }
 
@@ -604,10 +659,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
     }
-
-    // ============================================================
-    // PRODUCT FILTER / SORT
-    // ============================================================
 
     function getFilteredProducts() {
 
@@ -635,14 +686,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const productCategory =
                     String(
                         product.category || ""
-                    )
-                        .toLowerCase();
+                    ).toLowerCase();
 
                 const gender =
                     String(
                         product.gender || ""
-                    )
-                        .toLowerCase();
+                    ).toLowerCase();
 
                 const matchesSearch =
                     !search ||
@@ -681,26 +730,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (sort === "price_low") {
 
-                return getProductPrice(a) -
-                    getProductPrice(b);
+                return (
+                    getProductPrice(a) -
+                    getProductPrice(b)
+                );
             }
 
             if (sort === "price_high") {
 
-                return getProductPrice(b) -
-                    getProductPrice(a);
+                return (
+                    getProductPrice(b) -
+                    getProductPrice(a)
+                );
             }
 
             if (sort === "stock_low") {
 
-                return getProductStock(a) -
-                    getProductStock(b);
+                return (
+                    getProductStock(a) -
+                    getProductStock(b)
+                );
             }
 
             if (sort === "stock_high") {
 
-                return getProductStock(b) -
-                    getProductStock(a);
+                return (
+                    getProductStock(b) -
+                    getProductStock(a)
+                );
             }
 
             return (
@@ -715,10 +772,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         return result;
     }
-
-    // ============================================================
-    // RENDER PRODUCTS
-    // ============================================================
 
     function renderProducts() {
 
@@ -747,11 +800,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const stock =
                     getProductStock(product);
 
-                let stockClass =
-                    "healthy";
-
-                let stockText =
-                    "In Stock";
+                let stockClass = "healthy";
+                let stockText = "In Stock";
 
                 if (stock <= 0) {
 
@@ -765,9 +815,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     stockClass = "low";
                     stockText = "Low Stock";
                 }
-
-                const image =
-                    getProductImage(product);
 
                 const sizes =
                     Array.isArray(product.sizes)
@@ -783,31 +830,48 @@ document.addEventListener("DOMContentLoaded", async () => {
                     >
 
                         <div class="product-admin-image">
+
                             <img
-                                src="${escapeHTML(image)}"
-                                alt="${escapeHTML(getProductName(product))}"
+                                src="${escapeHTML(
+                                    getProductImage(product)
+                                )}"
+                                alt="${escapeHTML(
+                                    getProductName(product)
+                                )}"
                                 loading="lazy"
                                 onerror="this.src='images/product1.jpg'"
                             >
+
                         </div>
 
                         <div class="product-admin-info">
 
                             <span class="product-category">
-                                ${escapeHTML(product.category || "Fashion")}
+                                ${escapeHTML(
+                                    product.category ||
+                                    "Fashion"
+                                )}
                             </span>
 
                             <h3>
-                                ${escapeHTML(getProductName(product))}
+                                ${escapeHTML(
+                                    getProductName(product)
+                                )}
                             </h3>
 
                             <p>
-                                ${formatPrice(getProductPrice(product))}
+                                ${formatPrice(
+                                    getProductPrice(product)
+                                )}
                             </p>
 
                             <small>
-                                ${escapeHTML(product.gender || "Unisex")}
-                                · Sizes: ${escapeHTML(sizes)}
+                                ${escapeHTML(
+                                    product.gender ||
+                                    "Unisex"
+                                )}
+                                · Sizes:
+                                ${escapeHTML(sizes)}
                             </small>
 
                         </div>
@@ -897,12 +961,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const productModalContent =
         $("productModalContent");
 
-    const closeProductModal =
-        $("closeProductModal");
-
-    const closeProductModalBottom =
-        $("closeProductModalBottom");
-
     function getProductFormHTML(product = null) {
 
         const editing =
@@ -912,7 +970,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             Array.isArray(product?.sizes)
                 ? product.sizes.join(", ")
                 : String(
-                    product?.sizes || "S, M, L, XL, XXL"
+                    product?.sizes ||
+                    "S, M, L, XL, XXL"
                 );
 
         return `
@@ -921,19 +980,26 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="form-grid">
 
                     <label>
+
                         <span>Product Name</span>
+
                         <input
                             id="adminProductName"
                             name="name"
                             type="text"
                             required
-                            value="${escapeHTML(product?.name || "")}"
+                            value="${escapeHTML(
+                                product?.name || ""
+                            )}"
                             placeholder="Classic Oversized Tee"
                         >
+
                     </label>
 
                     <label>
+
                         <span>Price</span>
+
                         <input
                             id="adminProductPrice"
                             name="price"
@@ -941,64 +1007,95 @@ document.addEventListener("DOMContentLoaded", async () => {
                             min="0"
                             step="0.01"
                             required
-                            value="${escapeHTML(product?.price ?? "")}"
+                            value="${escapeHTML(
+                                product?.price ?? ""
+                            )}"
                             placeholder="1499"
                         >
+
                     </label>
 
                     <label>
+
                         <span>Category</span>
+
                         <input
                             id="adminProductCategory"
                             name="category"
                             type="text"
-                            value="${escapeHTML(product?.category || "")}"
+                            value="${escapeHTML(
+                                product?.category || ""
+                            )}"
                             placeholder="T-Shirts"
                         >
+
                     </label>
 
                     <label>
+
                         <span>Gender</span>
+
                         <select
                             id="adminProductGender"
                             name="gender"
                         >
-                            <option value="">Unisex</option>
-                            <option
-                                value="Men"
-                                ${product?.gender === "Men" ? "selected" : ""}
-                            >
-                                Men
-                            </option>
-                            <option
-                                value="Women"
-                                ${product?.gender === "Women" ? "selected" : ""}
-                            >
-                                Women
-                            </option>
-                            <option
-                                value="Unisex"
-                                ${product?.gender === "Unisex" ? "selected" : ""}
+
+                            <option value="Unisex"
+                                ${
+                                    !product?.gender ||
+                                    product?.gender === "Unisex"
+                                        ? "selected"
+                                        : ""
+                                }
                             >
                                 Unisex
                             </option>
+
+                            <option value="Men"
+                                ${
+                                    product?.gender === "Men"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                Men
+                            </option>
+
+                            <option value="Women"
+                                ${
+                                    product?.gender === "Women"
+                                        ? "selected"
+                                        : ""
+                                }
+                            >
+                                Women
+                            </option>
+
                         </select>
+
                     </label>
 
                     <label>
+
                         <span>Stock</span>
+
                         <input
                             id="adminProductStock"
                             name="stock"
                             type="number"
                             min="0"
                             step="1"
-                            value="${escapeHTML(product?.stock ?? 0)}"
+                            value="${escapeHTML(
+                                product?.stock ?? 0
+                            )}"
                         >
+
                     </label>
 
                     <label>
+
                         <span>Sizes</span>
+
                         <input
                             id="adminProductSizes"
                             name="sizes"
@@ -1006,27 +1103,40 @@ document.addEventListener("DOMContentLoaded", async () => {
                             value="${escapeHTML(sizes)}"
                             placeholder="S, M, L, XL"
                         >
+
                     </label>
 
                     <label class="full">
+
                         <span>Image URL</span>
+
                         <input
                             id="adminProductImage"
                             name="image"
                             type="url"
-                            value="${escapeHTML(getProductImage(product || {}))}"
+                            value="${escapeHTML(
+                                product
+                                    ? getProductImage(product)
+                                    : ""
+                            )}"
                             placeholder="https://..."
                         >
+
                     </label>
 
                     <label class="full">
+
                         <span>Description</span>
+
                         <textarea
                             id="adminProductDescription"
                             name="description"
                             rows="5"
                             placeholder="Product description..."
-                        >${escapeHTML(product?.description || "")}</textarea>
+                        >${escapeHTML(
+                            product?.description || ""
+                        )}</textarea>
+
                     </label>
 
                     <label class="checkbox-field">
@@ -1065,7 +1175,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                         type="submit"
                         class="primary-btn"
                     >
-                        ${editing ? "UPDATE PRODUCT" : "ADD PRODUCT"}
+                        ${
+                            editing
+                                ? "UPDATE PRODUCT"
+                                : "ADD PRODUCT"
+                        }
                     </button>
 
                 </div>
@@ -1084,33 +1198,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         productModalContent.innerHTML =
             getProductFormHTML(product);
 
-        productModal?.classList.add("show");
-
         if (productModal) {
+
+            productModal.classList.add("show");
             productModal.style.display = "flex";
         }
 
-        const form =
-            $("adminProductForm");
+        $("adminProductForm")
+            ?.addEventListener(
+                "submit",
+                async event => {
 
-        form?.addEventListener(
-            "submit",
-            async event => {
+                    event.preventDefault();
 
-                event.preventDefault();
-
-                await saveProduct();
-            }
-        );
+                    await saveProduct();
+                }
+            );
 
         $("cancelProductForm")
             ?.addEventListener(
                 "click",
-                closeProductModalFunction
+                closeProductModal
             );
     }
 
     function openAddProduct() {
+
         openProductModal(null);
     }
 
@@ -1151,12 +1264,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const category =
             $("adminProductCategory")
                 ?.value
-                ?.trim() || "Fashion";
+                ?.trim() ||
+            "Fashion";
 
         const gender =
             $("adminProductGender")
                 ?.value
-                ?.trim() || "Unisex";
+                ?.trim() ||
+            "Unisex";
 
         const stock =
             safeNumber(
@@ -1168,7 +1283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ?.value
                 ?.split(",")
                 .map(value => value.trim())
-                .filter(Boolean);
+                .filter(Boolean) || [];
 
         const image =
             $("adminProductImage")
@@ -1197,6 +1312,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const payload = {
+
             name,
             price,
             category,
@@ -1207,6 +1323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             description,
             is_new: isNew,
             isNew
+
         };
 
         try {
@@ -1236,17 +1353,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                 throw result.error;
             }
 
-            closeProductModalFunction();
+            const wasEditing =
+                Boolean(selectedProduct);
+
+            closeProductModal();
 
             await loadProducts();
 
             showToast(
-                selectedProduct
+                wasEditing
                     ? "Product updated successfully."
                     : "Product added successfully."
             );
-
-            selectedProduct = null;
 
         } catch (error) {
 
@@ -1324,7 +1442,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    function closeProductModalFunction() {
+    function closeProductModal() {
 
         productModal?.classList.remove(
             "show"
@@ -1337,31 +1455,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         selectedProduct = null;
     }
 
-    closeProductModal?.addEventListener(
-        "click",
-        closeProductModalFunction
-    );
-
-    closeProductModalBottom?.addEventListener(
-        "click",
-        closeProductModalFunction
-    );
-
-    productModal?.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target ===
-                productModal
-            ) {
-                closeProductModalFunction();
-            }
-        }
-    );
-
     // ============================================================
-    // ADD PRODUCT BUTTONS
+    // PRODUCT BUTTONS
     // ============================================================
 
     function setupProductButtons() {
@@ -1389,7 +1484,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ============================================================
-    // LOAD ORDERS
+    // PRODUCT FILTER EVENTS
+    // ============================================================
+
+    function setupProductFilters() {
+
+        [
+            "productSearch",
+            "productCategoryFilter",
+            "productSort"
+        ].forEach(id => {
+
+            $(id)?.addEventListener(
+                "input",
+                renderProducts
+            );
+
+            $(id)?.addEventListener(
+                "change",
+                renderProducts
+            );
+        });
+    }
+
+    // ============================================================
+    // ORDERS
     // ============================================================
 
     async function loadOrders() {
@@ -1398,6 +1517,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             $("ordersContainer");
 
         if (container) {
+
             container.innerHTML =
                 `<div class="loading">Loading orders...</div>`;
         }
@@ -1444,7 +1564,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 container.innerHTML =
                     `<div class="empty">
                         <strong>Unable to load orders</strong>
-                        <p>${escapeHTML(error.message || "")}</p>
+                        <p>${escapeHTML(
+                            error.message || ""
+                        )}</p>
                     </div>`;
             }
 
@@ -1455,26 +1577,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // ============================================================
-    // SORT ORDERS
-    // ============================================================
-
     function sortOrders(list) {
 
         const sort =
             $("orderSort")
                 ?.value || "newest";
 
-        const result =
-            [...list];
+        const result = [...list];
 
         result.sort((a, b) => {
 
             if (sort === "oldest") {
 
                 return (
-                    new Date(getOrderDate(a) || 0) -
-                    new Date(getOrderDate(b) || 0)
+                    new Date(
+                        getOrderDate(a) || 0
+                    ) -
+                    new Date(
+                        getOrderDate(b) || 0
+                    )
                 );
             }
 
@@ -1495,17 +1616,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             return (
-                new Date(getOrderDate(b) || 0) -
-                new Date(getOrderDate(a) || 0)
+                new Date(
+                    getOrderDate(b) || 0
+                ) -
+                new Date(
+                    getOrderDate(a) || 0
+                )
             );
         });
 
         return result;
     }
-
-    // ============================================================
-    // RENDER ORDERS
-    // ============================================================
 
     function renderOrders() {
 
@@ -1528,7 +1649,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             orders.filter(order => {
 
                 const customer =
-                    (
+                    String(
                         order.customer_name ||
                         order.name ||
                         order.full_name ||
@@ -1536,7 +1657,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     ).toLowerCase();
 
                 const email =
-                    (
+                    String(
                         order.customer_email ||
                         order.email ||
                         ""
@@ -1594,16 +1715,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                     >
 
                         <div>
+
                             <strong>
                                 #${escapeHTML(order.id)}
                             </strong>
 
                             <span>
-                                ${formatDate(getOrderDate(order))}
+                                ${formatDate(
+                                    getOrderDate(order)
+                                )}
                             </span>
+
                         </div>
 
                         <div>
+
                             <strong>
                                 ${escapeHTML(
                                     order.customer_name ||
@@ -1620,25 +1746,33 @@ document.addEventListener("DOMContentLoaded", async () => {
                                     "-"
                                 )}
                             </span>
+
                         </div>
 
                         <div>
+
                             <strong>
                                 ${formatPrice(
                                     getOrderAmount(order)
                                 )}
                             </strong>
+
                         </div>
 
                         <div>
-                            <span class="status ${status
-                                .toLowerCase()
-                                .replace(/\s+/g, "-")}">
+
+                            <span
+                                class="status ${status
+                                    .toLowerCase()
+                                    .replace(/\s+/g, "-")}"
+                            >
                                 ${escapeHTML(status)}
                             </span>
+
                         </div>
 
                         <div>
+
                             <button
                                 type="button"
                                 class="primary-btn view-order"
@@ -1646,6 +1780,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             >
                                 VIEW
                             </button>
+
                         </div>
 
                     </article>
@@ -1668,10 +1803,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
             });
     }
-
-    // ============================================================
-    // UPDATE ORDER STATUS
-    // ============================================================
 
     async function updateOrderStatus(
         order,
@@ -1731,12 +1862,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const orderModalContent =
         $("orderModalContent");
 
-    const closeOrderModal =
-        $("closeOrderModal");
-
-    const closeOrderModalBottom =
-        $("closeOrderModalBottom");
-
     function openOrderModal(id) {
 
         const order =
@@ -1782,8 +1907,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (typeof items === "string") {
 
             try {
+
                 items = JSON.parse(items);
+
             } catch {
+
                 // Keep string.
             }
         }
@@ -1850,111 +1978,124 @@ document.addEventListener("DOMContentLoaded", async () => {
         const status =
             getOrderStatus(order);
 
-        orderModalContent.innerHTML = `
+        if (orderModalContent) {
 
-            <div class="order-detail-grid">
+            orderModalContent.innerHTML = `
 
-                <div>
-                    <strong>Order ID</strong>
-                    <span>
-                        #${escapeHTML(order.id)}
-                    </span>
+                <div class="order-detail-grid">
+
+                    <div>
+                        <strong>Order ID</strong>
+                        <span>
+                            #${escapeHTML(order.id)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong>Date</strong>
+                        <span>
+                            ${formatDate(
+                                getOrderDate(order)
+                            )}
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong>Customer</strong>
+                        <span>
+                            ${escapeHTML(customerName)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong>Email</strong>
+                        <span>
+                            ${escapeHTML(email)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong>Phone</strong>
+                        <span>
+                            ${escapeHTML(phone)}
+                        </span>
+                    </div>
+
+                    <div>
+
+                        <strong>Status</strong>
+
+                        <select
+                            id="orderStatusUpdate"
+                        >
+
+                            ${
+                                [
+                                    "Confirmed",
+                                    "Processing",
+                                    "Shipped",
+                                    "Delivered",
+                                    "Cancelled",
+                                    "Returned"
+                                ]
+                                .map(value => `
+                                    <option
+                                        value="${value}"
+                                        ${
+                                            value === status
+                                                ? "selected"
+                                                : ""
+                                        }
+                                    >
+                                        ${value}
+                                    </option>
+                                `)
+                                .join("")
+                            }
+
+                        </select>
+
+                    </div>
+
                 </div>
 
-                <div>
-                    <strong>Date</strong>
+                <div class="order-address">
+
+                    <strong>
+                        Shipping Address
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(address)}
+                    </p>
+
+                </div>
+
+                <div class="order-items">
+
+                    <h3>
+                        Order Items
+                    </h3>
+
+                    ${itemsHTML}
+
+                </div>
+
+                <div class="order-total">
+
                     <span>
-                        ${formatDate(
-                            getOrderDate(order)
+                        Total
+                    </span>
+
+                    <strong>
+                        ${formatPrice(
+                            getOrderAmount(order)
                         )}
-                    </span>
+                    </strong>
+
                 </div>
-
-                <div>
-                    <strong>Customer</strong>
-                    <span>
-                        ${escapeHTML(customerName)}
-                    </span>
-                </div>
-
-                <div>
-                    <strong>Email</strong>
-                    <span>
-                        ${escapeHTML(email)}
-                    </span>
-                </div>
-
-                <div>
-                    <strong>Phone</strong>
-                    <span>
-                        ${escapeHTML(phone)}
-                    </span>
-                </div>
-
-                <div>
-                    <strong>Status</strong>
-
-                    <select
-                        id="orderStatusUpdate"
-                    >
-
-                        ${[
-                            "Confirmed",
-                            "Processing",
-                            "Shipped",
-                            "Delivered",
-                            "Cancelled",
-                            "Returned"
-                        ].map(value => `
-                            <option
-                                value="${value}"
-                                ${value === status ? "selected" : ""}
-                            >
-                                ${value}
-                            </option>
-                        `).join("")}
-
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="order-address">
-
-                <strong>
-                    Shipping Address
-                </strong>
-
-                <p>
-                    ${escapeHTML(address)}
-                </p>
-
-            </div>
-
-            <div class="order-items">
-
-                <h3>
-                    Order Items
-                </h3>
-
-                ${itemsHTML}
-
-            </div>
-
-            <div class="order-total">
-
-                <span>
-                    Total
-                </span>
-
-                <strong>
-                    ${formatPrice(
-                        getOrderAmount(order)
-                    )}
-                </strong>
-
-            </div>
-        `;
+            `;
+        }
 
         $("orderStatusUpdate")
             ?.addEventListener(
@@ -1968,14 +2109,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             );
 
-        orderModal?.classList.add("show");
-
         if (orderModal) {
+
+            orderModal.classList.add("show");
             orderModal.style.display = "flex";
         }
     }
 
-    function closeOrderModalFunction() {
+    function closeOrderModal() {
 
         orderModal?.classList.remove(
             "show"
@@ -1988,348 +2129,372 @@ document.addEventListener("DOMContentLoaded", async () => {
         selectedOrder = null;
     }
 
-    closeOrderModal?.addEventListener(
-        "click",
-        closeOrderModalFunction
-    );
+    // ============================================================
+    // ORDER FILTER EVENTS
+    // ============================================================
 
-    closeOrderModalBottom?.addEventListener(
-        "click",
-        closeOrderModalFunction
-    );
+    function setupOrderFilters() {
 
-    orderModal?.addEventListener(
-        "click",
-        event => {
+        [
+            "orderSearch",
+            "orderStatusFilter",
+            "orderSort"
+        ].forEach(id => {
 
-            if (
-                event.target ===
-                orderModal
-            ) {
-                closeOrderModalFunction();
-            }
-        }
-    );
+            $(id)?.addEventListener(
+                "input",
+                renderOrders
+            );
+
+            $(id)?.addEventListener(
+                "change",
+                renderOrders
+            );
+        });
+    }
 
     // ============================================================
     // PRINT INVOICE
     // ============================================================
 
-    $("printInvoiceBtn")
-        ?.addEventListener(
-            "click",
-            () => {
+    function setupPrintInvoice() {
 
-                if (!selectedOrder) {
+        $("printInvoiceBtn")
+            ?.addEventListener(
+                "click",
+                () => {
 
-                    showToast(
-                        "Open an order first.",
-                        "warning"
-                    );
+                    if (!selectedOrder) {
 
-                    return;
-                }
+                        showToast(
+                            "Open an order first.",
+                            "warning"
+                        );
 
-                const order =
-                    selectedOrder;
+                        return;
+                    }
 
-                const customerName =
-                    order.customer_name ||
-                    order.name ||
-                    order.full_name ||
-                    "Customer";
+                    const order =
+                        selectedOrder;
 
-                const items =
-                    Array.isArray(order.items)
-                        ? order.items
-                        : [];
+                    let items =
+                        order.items ||
+                        order.products ||
+                        order.order_items ||
+                        [];
 
-                const rows =
-                    items.map(item => {
+                    if (typeof items === "string") {
 
-                        const quantity =
-                            safeNumber(
-                                item.quantity ||
-                                item.qty ||
-                                1
-                            );
+                        try {
+                            items = JSON.parse(items);
+                        } catch {
+                            items = [];
+                        }
+                    }
 
-                        const price =
-                            safeNumber(
-                                item.price ||
-                                item.unit_price ||
-                                0
-                            );
+                    if (!Array.isArray(items)) {
+                        items = [];
+                    }
 
-                        return `
-                            <tr>
-                                <td>
-                                    ${escapeHTML(
-                                        item.name ||
-                                        item.product_name ||
-                                        "Product"
-                                    )}
-                                </td>
-                                <td>
-                                    ${quantity}
-                                </td>
-                                <td>
-                                    ${formatPrice(price)}
-                                </td>
-                                <td>
-                                    ${formatPrice(
-                                        price * quantity
-                                    )}
-                                </td>
-                            </tr>
-                        `;
-                    }).join("");
+                    const rows =
+                        items.map(item => {
 
-                const invoiceWindow =
-                    window.open(
-                        "",
-                        "_blank",
-                        "width=900,height=800"
-                    );
+                            const quantity =
+                                safeNumber(
+                                    item.quantity ||
+                                    item.qty ||
+                                    1
+                                );
 
-                if (!invoiceWindow) {
+                            const price =
+                                safeNumber(
+                                    item.price ||
+                                    item.unit_price ||
+                                    0
+                                );
 
-                    showToast(
-                        "Please allow popups to print invoice.",
-                        "error"
-                    );
+                            return `
+                                <tr>
 
-                    return;
-                }
+                                    <td>
+                                        ${escapeHTML(
+                                            item.name ||
+                                            item.product_name ||
+                                            "Product"
+                                        )}
+                                    </td>
 
-                invoiceWindow.document.write(`
-                    <!DOCTYPE html>
+                                    <td>
+                                        ${quantity}
+                                    </td>
 
-                    <html>
+                                    <td>
+                                        ${formatPrice(price)}
+                                    </td>
 
-                    <head>
+                                    <td>
+                                        ${formatPrice(
+                                            price * quantity
+                                        )}
+                                    </td>
 
-                        <meta charset="UTF-8">
+                                </tr>
+                            `;
 
-                        <title>
-                            FASHION Invoice #${escapeHTML(order.id)}
-                        </title>
+                        }).join("");
 
-                        <style>
+                    const invoiceWindow =
+                        window.open(
+                            "",
+                            "_blank",
+                            "width=900,height=800"
+                        );
 
-                            * {
-                                box-sizing: border-box;
-                            }
+                    if (!invoiceWindow) {
 
-                            body {
-                                margin: 0;
-                                padding: 40px;
-                                font-family: Arial, sans-serif;
-                                color: #111;
-                            }
+                        showToast(
+                            "Please allow popups to print invoice.",
+                            "error"
+                        );
 
-                            .invoice {
-                                max-width: 850px;
-                                margin: auto;
-                            }
+                        return;
+                    }
 
-                            .header {
-                                display: flex;
-                                justify-content: space-between;
-                                gap: 30px;
-                                padding-bottom: 25px;
-                                border-bottom: 2px solid #111;
-                            }
+                    invoiceWindow.document.write(`
 
-                            h1 {
-                                margin: 0 0 5px;
-                                font-size: 32px;
-                                letter-spacing: 2px;
-                            }
+                        <!DOCTYPE html>
 
-                            .muted {
-                                color: #666;
-                            }
+                        <html>
 
-                            .box {
-                                margin-top: 25px;
-                                padding: 20px;
-                                border: 1px solid #ddd;
-                                border-radius: 8px;
-                            }
+                        <head>
 
-                            table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                margin-top: 20px;
-                            }
+                            <meta charset="UTF-8">
 
-                            th,
-                            td {
-                                padding: 12px;
-                                border-bottom: 1px solid #ddd;
-                                text-align: left;
-                            }
+                            <title>
+                                FASHION Invoice #${escapeHTML(order.id)}
+                            </title>
 
-                            th {
-                                background: #f5f5f5;
-                            }
+                            <style>
 
-                            .total {
-                                margin-top: 30px;
-                                text-align: right;
-                                font-size: 24px;
-                                font-weight: bold;
-                            }
+                                * {
+                                    box-sizing: border-box;
+                                }
 
-                            .footer {
-                                margin-top: 60px;
-                                padding-top: 20px;
-                                border-top: 1px solid #ddd;
-                                text-align: center;
-                                color: #777;
-                                font-size: 13px;
-                            }
+                                body {
+                                    margin: 0;
+                                    padding: 40px;
+                                    font-family: Arial, sans-serif;
+                                    color: #111;
+                                }
 
-                        </style>
+                                .invoice {
+                                    max-width: 850px;
+                                    margin: auto;
+                                }
 
-                    </head>
+                                .header {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    gap: 30px;
+                                    padding-bottom: 25px;
+                                    border-bottom: 2px solid #111;
+                                }
 
-                    <body>
+                                h1 {
+                                    margin: 0 0 5px;
+                                    font-size: 32px;
+                                    letter-spacing: 2px;
+                                }
 
-                        <div class="invoice">
+                                .muted {
+                                    color: #666;
+                                }
 
-                            <div class="header">
+                                .box {
+                                    margin-top: 25px;
+                                    padding: 20px;
+                                    border: 1px solid #ddd;
+                                    border-radius: 8px;
+                                }
 
-                                <div>
+                                table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                    margin-top: 20px;
+                                }
 
-                                    <h1>
-                                        FASHION
-                                    </h1>
+                                th,
+                                td {
+                                    padding: 12px;
+                                    border-bottom: 1px solid #ddd;
+                                    text-align: left;
+                                }
 
-                                    <div class="muted">
-                                        Official Invoice
+                                th {
+                                    background: #f5f5f5;
+                                }
+
+                                .total {
+                                    margin-top: 30px;
+                                    text-align: right;
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                }
+
+                                .footer {
+                                    margin-top: 60px;
+                                    padding-top: 20px;
+                                    border-top: 1px solid #ddd;
+                                    text-align: center;
+                                    color: #777;
+                                    font-size: 13px;
+                                }
+
+                            </style>
+
+                        </head>
+
+                        <body>
+
+                            <div class="invoice">
+
+                                <div class="header">
+
+                                    <div>
+
+                                        <h1>
+                                            FASHION
+                                        </h1>
+
+                                        <div class="muted">
+                                            Official Invoice
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Order #${escapeHTML(order.id)}
+                                        </strong>
+
+                                        <div class="muted">
+                                            ${formatDate(
+                                                getOrderDate(order)
+                                            )}
+                                        </div>
+
                                     </div>
 
                                 </div>
 
-                                <div>
+                                <div class="box">
 
                                     <strong>
-                                        Order #${escapeHTML(order.id)}
+                                        Customer
                                     </strong>
 
-                                    <div class="muted">
-                                        ${formatDate(
-                                            getOrderDate(order)
+                                    <p>
+                                        ${escapeHTML(
+                                            order.customer_name ||
+                                            order.name ||
+                                            order.full_name ||
+                                            "Customer"
                                         )}
-                                    </div>
+                                    </p>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            order.customer_email ||
+                                            order.email ||
+                                            "-"
+                                        )}
+                                    </p>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            order.customer_phone ||
+                                            order.phone ||
+                                            "-"
+                                        )}
+                                    </p>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            order.address ||
+                                            order.shipping_address ||
+                                            "-"
+                                        )}
+                                    </p>
+
+                                </div>
+
+                                <div class="box">
+
+                                    <strong>
+                                        Status:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        getOrderStatus(order)
+                                    )}
+
+                                </div>
+
+                                <table>
+
+                                    <thead>
+
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>Total</th>
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        ${rows}
+
+                                    </tbody>
+
+                                </table>
+
+                                <div class="total">
+
+                                    Total:
+                                    ${formatPrice(
+                                        getOrderAmount(order)
+                                    )}
+
+                                </div>
+
+                                <div class="footer">
+
+                                    Thank you for shopping with FASHION.
 
                                 </div>
 
                             </div>
 
-                            <div class="box">
+                        </body>
 
-                                <strong>
-                                    Customer
-                                </strong>
+                        </html>
+                    `);
 
-                                <p>
-                                    ${escapeHTML(customerName)}
-                                </p>
+                    invoiceWindow.document.close();
 
-                                <p>
-                                    ${escapeHTML(
-                                        order.customer_email ||
-                                        order.email ||
-                                        "-"
-                                    )}
-                                </p>
+                    invoiceWindow.focus();
 
-                                <p>
-                                    ${escapeHTML(
-                                        order.customer_phone ||
-                                        order.phone ||
-                                        "-"
-                                    )}
-                                </p>
-
-                                <p>
-                                    ${escapeHTML(
-                                        order.address ||
-                                        order.shipping_address ||
-                                        "-"
-                                    )}
-                                </p>
-
-                            </div>
-
-                            <div class="box">
-
-                                <strong>
-                                    Status:
-                                </strong>
-
-                                ${escapeHTML(
-                                    getOrderStatus(order)
-                                )}
-
-                            </div>
-
-                            <table>
-
-                                <thead>
-
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Qty</th>
-                                        <th>Price</th>
-                                        <th>Total</th>
-                                    </tr>
-
-                                </thead>
-
-                                <tbody>
-
-                                    ${rows}
-
-                                </tbody>
-
-                            </table>
-
-                            <div class="total">
-
-                                Total:
-                                ${formatPrice(
-                                    getOrderAmount(order)
-                                )}
-
-                            </div>
-
-                            <div class="footer">
-
-                                Thank you for shopping with FASHION.
-
-                            </div>
-
-                        </div>
-
-                    </body>
-
-                    </html>
-                `);
-
-                invoiceWindow.document.close();
-
-                invoiceWindow.focus();
-
-                setTimeout(
-                    () => invoiceWindow.print(),
-                    300
-                );
-            }
-        );
+                    setTimeout(
+                        () => invoiceWindow.print(),
+                        300
+                    );
+                }
+            );
+    }
 
     // ============================================================
     // CUSTOMERS
@@ -2420,6 +2585,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 map.set(
                     key,
                     {
+
                         id: key,
 
                         name:
@@ -2444,6 +2610,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         order_count: 0,
 
                         total_spent: 0
+
                     }
                 );
             }
@@ -2462,10 +2629,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     }
 
-    // ============================================================
-    // RENDER CUSTOMERS
-    // ============================================================
-
     function renderCustomers() {
 
         const container =
@@ -2473,17 +2636,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!container) return;
 
+        if (!customers.length) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    <strong>No customers found</strong>
+                    <p>Customers will appear here after orders are placed.</p>
+                </div>`;
+
+            return;
+        }
+
         const search =
             $("customerSearch")
                 ?.value
                 ?.trim()
                 ?.toLowerCase() || "";
 
-        const sort =
-            $("customerSort")
-                ?.value || "newest";
-
-        let filtered =
+        const filtered =
             customers.filter(customer => {
 
                 const name =
@@ -2506,36 +2676,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
             });
 
-        filtered.sort((a, b) => {
-
-            if (sort === "name_asc") {
-
-                return getCustomerName(a)
-                    .localeCompare(
-                        getCustomerName(b)
-                    );
-            }
-
-            if (sort === "name_desc") {
-
-                return getCustomerName(b)
-                    .localeCompare(
-                        getCustomerName(a)
-                    );
-            }
-
-            return (
-                new Date(b.created_at || 0) -
-                new Date(a.created_at || 0)
-            );
-        });
-
         if (!filtered.length) {
 
             container.innerHTML =
                 `<div class="empty">
-                    <strong>No customers found</strong>
-                    <p>Customer information will appear here.</p>
+                    <strong>No matching customers</strong>
                 </div>`;
 
             return;
@@ -2545,113 +2690,89 @@ document.addEventListener("DOMContentLoaded", async () => {
             filtered.map(customer => {
 
                 const orderCount =
-                    customer.order_count ??
-                    orders.filter(
-                        order =>
-                            String(
-                                order.customer_email ||
-                                order.email ||
-                                ""
-                            )
-                                .toLowerCase() ===
-                            String(
-                                customer.email ||
-                                ""
-                            )
-                                .toLowerCase()
-                    ).length;
+                    safeNumber(
+                        customer.order_count ??
+                        customer.orders_count ??
+                        customer.total_orders ??
+                        0
+                    );
 
-                const totalSpent =
-                    customer.total_spent ??
-                    orders
-                        .filter(
-                            order =>
-                                String(
-                                    order.customer_email ||
-                                    order.email ||
-                                    ""
-                                )
-                                    .toLowerCase() ===
-                                String(
-                                    customer.email ||
-                                    ""
-                                )
-                                    .toLowerCase()
-                        )
-                        .reduce(
-                            (
-                                total,
-                                order
-                            ) =>
-                                total +
-                                getOrderAmount(order),
-                            0
-                        );
+                const spent =
+                    safeNumber(
+                        customer.total_spent ??
+                        customer.totalSpent ??
+                        customer.spent ??
+                        0
+                    );
 
                 return `
-                    <article class="customer-card">
 
-                        <div class="customer-avatar">
-                            ${escapeHTML(
-                                getCustomerName(customer)
-                                    .charAt(0)
-                                    .toUpperCase()
-                            )}
-                        </div>
+                    <article
+                        class="customer-row"
+                        data-customer-id="${escapeHTML(customer.id)}"
+                    >
 
-                        <div class="customer-info">
+                        <div>
 
-                            <h3>
+                            <strong>
                                 ${escapeHTML(
                                     getCustomerName(customer)
                                 )}
-                            </h3>
+                            </strong>
 
-                            <p>
+                            <span>
                                 ${escapeHTML(
                                     getCustomerEmail(customer)
                                 )}
-                            </p>
-
-                            <p>
-                                ${escapeHTML(
-                                    getCustomerPhone(customer)
-                                )}
-                            </p>
+                            </span>
 
                         </div>
 
-                        <div class="customer-stats">
+                        <div>
 
                             <span>
-                                Orders
+                                ${escapeHTML(
+                                    getCustomerPhone(customer)
+                                )}
                             </span>
+
+                        </div>
+
+                        <div>
 
                             <strong>
                                 ${orderCount}
                             </strong>
 
+                            <span>
+                                Orders
+                            </span>
+
                         </div>
 
-                        <div class="customer-stats">
+                        <div>
+
+                            <strong>
+                                ${formatPrice(spent)}
+                            </strong>
 
                             <span>
                                 Spent
                             </span>
 
-                            <strong>
-                                ${formatPrice(totalSpent)}
-                            </strong>
-
                         </div>
 
-                        <button
-                            type="button"
-                            class="primary-btn view-customer"
-                            data-id="${escapeHTML(customer.id)}"
-                        >
-                            VIEW
-                        </button>
+                        <div>
+
+                            <button
+                                type="button"
+                                class="secondary-btn view-customer"
+                                data-id="${escapeHTML(customer.id)}"
+                            >
+                                VIEW
+                            </button>
+
+                        </div>
 
                     </article>
                 `;
@@ -2659,9 +2780,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }).join("");
 
         document
-            .querySelectorAll(
-                ".view-customer"
-            )
+            .querySelectorAll(".view-customer")
             .forEach(button => {
 
                 button.addEventListener(
@@ -2675,22 +2794,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
             });
     }
-
-    // ============================================================
-    // CUSTOMER MODAL
-    // ============================================================
-
-    const customerModal =
-        $("customerModal");
-
-    const customerModalContent =
-        $("customerModalContent");
-
-    const closeCustomerModal =
-        $("closeCustomerModal");
-
-    const closeCustomerModalBottom =
-        $("closeCustomerModalBottom");
 
     function openCustomerModal(id) {
 
@@ -2706,51 +2809,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         selectedCustomer =
             customer;
 
-        const email =
-            getCustomerEmail(customer);
-
-        const customerOrders =
-            orders.filter(order => {
-
-                const orderEmail =
-                    String(
-                        order.customer_email ||
-                        order.email ||
-                        ""
-                    )
-                        .trim()
-                        .toLowerCase();
-
-                return (
-                    email !== "-" &&
-                    email !== "" &&
-                    orderEmail ===
-                    email.toLowerCase()
-                );
-            });
-
-        const totalSpent =
-            customerOrders.reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    getOrderAmount(order),
+        const orderCount =
+            safeNumber(
+                customer.order_count ??
+                customer.orders_count ??
+                customer.total_orders ??
                 0
             );
 
-        customerModalContent.innerHTML = `
+        const spent =
+            safeNumber(
+                customer.total_spent ??
+                customer.totalSpent ??
+                customer.spent ??
+                0
+            );
 
-            <div class="customer-profile">
+        const modal =
+            $("customerModal");
 
-                <div class="customer-large-avatar">
-                    ${escapeHTML(
-                        getCustomerName(customer)
-                            .charAt(0)
-                            .toUpperCase()
-                    )}
-                </div>
+        const content =
+            $("customerModalContent");
+
+        if (!content) {
+
+            showToast(
+                `${getCustomerName(customer)} has ${orderCount} order(s) worth ${formatPrice(spent)}.`,
+                "success"
+            );
+
+            return;
+        }
+
+        content.innerHTML = `
+
+            <div class="customer-detail">
 
                 <h3>
                     ${escapeHTML(
@@ -2759,135 +2852,91 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </h3>
 
                 <p>
-                    ${escapeHTML(email)}
+                    Email:
+                    ${escapeHTML(
+                        getCustomerEmail(customer)
+                    )}
                 </p>
 
-            </div>
+                <p>
+                    Phone:
+                    ${escapeHTML(
+                        getCustomerPhone(customer)
+                    )}
+                </p>
 
-            <div class="customer-detail-grid">
+                <p>
+                    Orders:
+                    <strong>
+                        ${orderCount}
+                    </strong>
+                </p>
 
-                <div>
-                    <strong>Email</strong>
-                    <span>
-                        ${escapeHTML(email)}
-                    </span>
-                </div>
-
-                <div>
-                    <strong>Phone</strong>
-                    <span>
-                        ${escapeHTML(
-                            getCustomerPhone(customer)
-                        )}
-                    </span>
-                </div>
-
-                <div>
-                    <strong>Orders</strong>
-                    <span>
-                        ${customerOrders.length}
-                    </span>
-                </div>
-
-                <div>
-                    <strong>Total Spent</strong>
-                    <span>
-                        ${formatPrice(totalSpent)}
-                    </span>
-                </div>
-
-            </div>
-
-            <div>
-
-                <h3>
-                    Recent Orders
-                </h3>
-
-                ${
-                    customerOrders.length
-                        ? sortOrders(customerOrders)
-                            .slice(0, 10)
-                            .map(
-                                order => `
-                                    <div class="customer-order-row">
-
-                                        <span>
-                                            #${escapeHTML(
-                                                order.id
-                                            )}
-                                        </span>
-
-                                        <span>
-                                            ${formatPrice(
-                                                getOrderAmount(order)
-                                            )}
-                                        </span>
-
-                                        <span>
-                                            ${escapeHTML(
-                                                getOrderStatus(order)
-                                            )}
-                                        </span>
-
-                                    </div>
-                                `
-                            )
-                            .join("")
-                        : `
-                            <p>
-                                No orders found.
-                            </p>
-                        `
-                }
+                <p>
+                    Total Spent:
+                    <strong>
+                        ${formatPrice(spent)}
+                    </strong>
+                </p>
 
             </div>
         `;
 
-        customerModal?.classList.add(
-            "show"
-        );
+        modal?.classList.add("show");
 
-        if (customerModal) {
-            customerModal.style.display = "flex";
+        if (modal) {
+            modal.style.display = "flex";
         }
     }
 
-    function closeCustomerModalFunction() {
+    function closeCustomerModal() {
 
-        customerModal?.classList.remove(
-            "show"
-        );
+        const modal =
+            $("customerModal");
 
-        if (customerModal) {
-            customerModal.style.display = "";
+        modal?.classList.remove("show");
+
+        if (modal) {
+            modal.style.display = "";
         }
 
         selectedCustomer = null;
     }
 
-    closeCustomerModal?.addEventListener(
-        "click",
-        closeCustomerModalFunction
-    );
+    function setupCustomerEvents() {
 
-    closeCustomerModalBottom?.addEventListener(
-        "click",
-        closeCustomerModalFunction
-    );
+        $("customerSearch")
+            ?.addEventListener(
+                "input",
+                renderCustomers
+            );
 
-    customerModal?.addEventListener(
-        "click",
-        event => {
+        $("closeCustomerModal")
+            ?.addEventListener(
+                "click",
+                closeCustomerModal
+            );
 
-            if (
-                event.target ===
-                customerModal
-            ) {
-                closeCustomerModalFunction();
-            }
-        }
-    );
+        $("closeCustomerModalBottom")
+            ?.addEventListener(
+                "click",
+                closeCustomerModal
+            );
+
+        $("customerModal")
+            ?.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target ===
+                        $("customerModal")
+                    ) {
+                        closeCustomerModal();
+                    }
+                }
+            );
+    }
 
     // ============================================================
     // INVENTORY
@@ -2900,92 +2949,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!container) return;
 
-        const filter =
-            $("inventoryFilter")
-                ?.value || "all";
-
-        const healthy =
-            products.filter(
-                product =>
-                    getProductStock(product) >
-                    LOW_STOCK_LIMIT
+        const sorted =
+            [...products].sort(
+                (a, b) =>
+                    getProductStock(a) -
+                    getProductStock(b)
             );
 
-        const low =
-            products.filter(
-                product => {
-
-                    const stock =
-                        getProductStock(product);
-
-                    return (
-                        stock > 0 &&
-                        stock <=
-                        LOW_STOCK_LIMIT
-                    );
-                }
-            );
-
-        const out =
-            products.filter(
-                product =>
-                    getProductStock(product) <= 0
-            );
-
-        setText(
-            "inventoryHealthy",
-            healthy.length
-        );
-
-        setText(
-            "inventoryLow",
-            low.length
-        );
-
-        setText(
-            "inventoryOut",
-            out.length
-        );
-
-        let filtered =
-            products.filter(product => {
-
-                const stock =
-                    getProductStock(product);
-
-                if (filter === "healthy") {
-                    return stock >
-                        LOW_STOCK_LIMIT;
-                }
-
-                if (filter === "low") {
-                    return (
-                        stock > 0 &&
-                        stock <=
-                        LOW_STOCK_LIMIT
-                    );
-                }
-
-                if (filter === "out") {
-                    return stock <= 0;
-                }
-
-                return true;
-            });
-
-        if (!filtered.length) {
+        if (!sorted.length) {
 
             container.innerHTML =
                 `<div class="empty">
-                    <strong>No inventory items</strong>
-                    <p>Products will appear here.</p>
+                    <strong>No inventory data</strong>
                 </div>`;
 
             return;
         }
 
         container.innerHTML =
-            filtered.map(product => {
+            sorted.map(product => {
 
                 const stock =
                     getProductStock(product);
@@ -3005,8 +2987,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "out";
 
                 } else if (
-                    stock <=
-                    LOW_STOCK_LIMIT
+                    stock <= LOW_STOCK_LIMIT
                 ) {
 
                     status =
@@ -3017,7 +2998,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
                 return `
-                    <div class="inventory-row">
+
+                    <article
+                        class="inventory-row"
+                    >
 
                         <div>
 
@@ -3030,7 +3014,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             <span>
                                 ${escapeHTML(
                                     product.category ||
-                                    "-"
+                                    "Fashion"
                                 )}
                             </span>
 
@@ -3043,53 +3027,64 @@ document.addEventListener("DOMContentLoaded", async () => {
                             </strong>
 
                             <span>
-                                units
+                                Units
                             </span>
 
                         </div>
 
                         <div>
 
-                            <span class="inventory-status ${statusClass}">
+                            <span
+                                class="${statusClass}"
+                            >
                                 ${status}
                             </span>
 
                         </div>
 
-                        <button
-                            type="button"
-                            class="secondary-btn inventory-edit"
-                            data-id="${escapeHTML(product.id)}"
-                        >
-                            EDIT
-                        </button>
-
-                    </div>
+                    </article>
                 `;
 
             }).join("");
-
-        document
-            .querySelectorAll(
-                ".inventory-edit"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openEditProduct(
-                            button.dataset.id
-                        );
-                    }
-                );
-            });
     }
 
     // ============================================================
     // PAYMENTS
     // ============================================================
+
+    function getPaymentStatus(order) {
+
+        const value =
+            order.payment_status ||
+            order.paymentStatus ||
+            order.status ||
+            "Confirmed";
+
+        const normalized =
+            String(value)
+                .toLowerCase();
+
+        if (
+            normalized.includes("refund") ||
+            normalized.includes("return")
+        ) {
+            return "Refunded";
+        }
+
+        if (
+            normalized.includes("cancel")
+        ) {
+            return "Cancelled";
+        }
+
+        if (
+            normalized.includes("pending")
+        ) {
+            return "Pending";
+        }
+
+        return "Paid";
+    }
 
     function renderPayments() {
 
@@ -3098,69 +3093,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!container) return;
 
-        const revenue =
-            orders.reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    getOrderAmount(order),
-                0
-            );
-
-        const successfulOrders =
-            orders.filter(order => {
-
-                const status =
-                    getOrderStatus(order);
-
-                return [
-                    "Confirmed",
-                    "Processing",
-                    "Shipped",
-                    "Delivered"
-                ].includes(status);
-            });
-
-        const refunds =
-            orders
-                .filter(
-                    order =>
-                        getOrderStatus(order) ===
-                        "Returned"
-                )
-                .reduce(
-                    (
-                        total,
-                        order
-                    ) =>
-                        total +
-                        getOrderAmount(order),
-                    0
-                );
-
-        setText(
-            "paymentRevenue",
-            formatPrice(revenue)
-        );
-
-        setText(
-            "paymentSuccessful",
-            successfulOrders.length
-        );
-
-        setText(
-            "paymentRefunds",
-            formatPrice(refunds)
-        );
-
         if (!orders.length) {
 
             container.innerHTML =
                 `<div class="empty">
-                    <strong>No transactions</strong>
-                    <p>Payment information will appear after orders are created.</p>
+                    <strong>No payment records</strong>
+                    <p>Payment information will appear here after orders are placed.</p>
                 </div>`;
 
             return;
@@ -3168,11 +3106,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         container.innerHTML =
             sortOrders(orders)
-                .slice(0, 50)
                 .map(order => {
 
+                    const paymentStatus =
+                        getPaymentStatus(order);
+
                     return `
-                        <div class="payment-row">
+
+                        <article
+                            class="payment-row"
+                        >
 
                             <div>
 
@@ -3191,6 +3134,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                             <div>
 
                                 <strong>
+                                    ${escapeHTML(
+                                        order.customer_name ||
+                                        order.name ||
+                                        order.full_name ||
+                                        "Customer"
+                                    )}
+                                </strong>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
                                     ${formatPrice(
                                         getOrderAmount(order)
                                     )}
@@ -3200,825 +3156,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                             <div>
 
-                                <span>
-                                    ${escapeHTML(
-                                        getOrderStatus(order)
-                                    )}
+                                <span class="status ${
+                                    paymentStatus
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "-")
+                                }">
+                                    ${paymentStatus}
                                 </span>
 
                             </div>
 
-                        </div>
+                        </article>
                     `;
 
-                }).join("");
-    }
-
-    // ============================================================
-    // DASHBOARD
-    // ============================================================
-
-    function updateDashboard() {
-
-        const totalRevenue =
-            orders.reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    getOrderAmount(order),
-                0
-            );
-
-        setText(
-            "productCount",
-            products.length
-        );
-
-        setText(
-            "orderCount",
-            orders.length
-        );
-
-        setText(
-            "customerCount",
-            customers.length
-        );
-
-        setText(
-            "salesCount",
-            formatPrice(totalRevenue)
-        );
-
-        setText(
-            "sidebarProductBadge",
-            products.length
-        );
-
-        setText(
-            "sidebarOrderBadge",
-            orders.length
-        );
-
-        renderRecentOrders();
-        renderTopProducts();
-        renderOrderStatusChart();
-        renderSalesChart();
-    }
-
-    // ============================================================
-    // RECENT ORDERS
-    // ============================================================
-
-    function renderRecentOrders() {
-
-        const container =
-            $("recentOrders");
-
-        if (!container) return;
-
-        const recent =
-            sortOrders(orders)
-                .slice(0, 5);
-
-        if (!recent.length) {
-
-            container.innerHTML =
-                `<div class="empty">
-                    <strong>No orders yet</strong>
-                    <p>New orders will appear here.</p>
-                </div>`;
-
-            return;
-        }
-
-        container.innerHTML =
-            recent.map(order => {
-
-                const name =
-                    order.customer_name ||
-                    order.name ||
-                    order.full_name ||
-                    "Customer";
-
-                return `
-                    <div class="recent-order-row">
-
-                        <div>
-
-                            <strong>
-                                #${escapeHTML(order.id)}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(name)}
-                            </span>
-
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                ${formatPrice(
-                                    getOrderAmount(order)
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(
-                                    getOrderStatus(order)
-                                )}
-                            </span>
-
-                        </div>
-
-                    </div>
-                `;
-
-            }).join("");
-    }
-
-    // ============================================================
-    // TOP PRODUCTS
-    // ============================================================
-
-    function renderTopProducts() {
-
-        const container =
-            $("topProducts");
-
-        if (!container) return;
-
-        if (!products.length) {
-
-            container.innerHTML =
-                `<div class="empty">
-                    <strong>No products</strong>
-                    <p>Add products to see them here.</p>
-                </div>`;
-
-            return;
-        }
-
-        const topProducts =
-            products
-                .slice()
-                .sort(
-                    (a, b) =>
-                        getProductStock(b) -
-                        getProductStock(a)
-                )
-                .slice(0, 5);
-
-        container.innerHTML =
-            topProducts.map(product => {
-
-                return `
-                    <div class="top-product-row">
-
-                        <div>
-
-                            <strong>
-                                ${escapeHTML(
-                                    getProductName(product)
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(
-                                    product.category ||
-                                    "-"
-                                )}
-                            </span>
-
-                        </div>
-
-                        <strong>
-                            ${formatPrice(
-                                getProductPrice(product)
-                            )}
-                        </strong>
-
-                    </div>
-                `;
-
-            }).join("");
-    }
-
-    // ============================================================
-    // ORDER STATUS CHART
-    // ============================================================
-
-    function renderOrderStatusChart() {
-
-        const chart =
-            $("orderStatusChart");
-
-        const legend =
-            $("orderStatusLegend");
-
-        if (!chart) return;
-
-        const statuses = [
-            "Confirmed",
-            "Processing",
-            "Shipped",
-            "Delivered",
-            "Cancelled",
-            "Returned"
-        ];
-
-        const values =
-            statuses.map(
-                status =>
-                    orders.filter(
-                        order =>
-                            getOrderStatus(order) ===
-                            status
-                    ).length
-            );
-
-        const total =
-            values.reduce(
-                (a, b) =>
-                    a + b,
-                0
-            );
-
-        if (!total) {
-
-            chart.innerHTML =
-                `<div class="chart-empty">
-                    No order data
-                </div>`;
-
-            if (legend) {
-                legend.innerHTML = "";
-            }
-
-            return;
-        }
-
-        const radius = 45;
-
-        const circumference =
-            2 *
-            Math.PI *
-            radius;
-
-        let offset = 0;
-
-        const segments =
-            values.map(
-                (
-                    value,
-                    index
-                ) => {
-
-                    if (!value) {
-                        return "";
-                    }
-
-                    const length =
-                        (
-                            value /
-                            total
-                        ) *
-                        circumference;
-
-                    const segment = `
-                        <circle
-                            cx="60"
-                            cy="60"
-                            r="${radius}"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="18"
-                            stroke-dasharray="${length} ${circumference - length}"
-                            stroke-dashoffset="${-offset}"
-                        ></circle>
-                    `;
-
-                    offset += length;
-
-                    return segment;
-                }
-            ).join("");
-
-        chart.innerHTML = `
-
-            <div
-                class="donut-visual"
-                style="
-                    position:relative;
-                    display:flex;
-                    justify-content:center;
-                    align-items:center;
-                "
-            >
-
-                <svg
-                    width="150"
-                    height="150"
-                    viewBox="0 0 120 120"
-                    style="transform:rotate(-90deg);"
-                >
-
-                    <circle
-                        cx="60"
-                        cy="60"
-                        r="${radius}"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-opacity=".12"
-                        stroke-width="18"
-                    ></circle>
-
-                    ${segments}
-
-                </svg>
-
-                <div
-                    style="
-                        position:absolute;
-                        text-align:center;
-                    "
-                >
-
-                    <strong>
-                        ${total}
-                    </strong>
-
-                    <small>
-                        Orders
-                    </small>
-
-                </div>
-
-            </div>
-        `;
-
-        if (legend) {
-
-            legend.innerHTML =
-                statuses.map(
-                    (
-                        status,
-                        index
-                    ) => {
-
-                        return `
-                            <div class="legend-item">
-
-                                <span>
-                                    ${escapeHTML(status)}
-                                </span>
-
-                                <strong>
-                                    ${values[index]}
-                                </strong>
-
-                            </div>
-                        `;
-                    }
-                ).join("");
-        }
-    }
-
-    // ============================================================
-    // SALES CHART
-    // ============================================================
-
-    function renderSalesChart() {
-
-        const container =
-            $("salesChart");
-
-        if (!container) return;
-
-        const days =
-            Number(salesPeriod) ||
-            7;
-
-        const data = [];
-
-        for (
-            let i = days - 1;
-            i >= 0;
-            i--
-        ) {
-
-            const date =
-                new Date();
-
-            date.setHours(
-                0,
-                0,
-                0,
-                0
-            );
-
-            date.setDate(
-                date.getDate() - i
-            );
-
-            const next =
-                new Date(date);
-
-            next.setDate(
-                next.getDate() + 1
-            );
-
-            const revenue =
-                orders
-                    .filter(order => {
-
-                        const orderDate =
-                            new Date(
-                                getOrderDate(order)
-                            );
-
-                        return (
-                            orderDate >= date &&
-                            orderDate < next
-                        );
-                    })
-                    .reduce(
-                        (
-                            total,
-                            order
-                        ) =>
-                            total +
-                            getOrderAmount(order),
-                        0
-                    );
-
-            data.push({
-                date,
-                revenue
-            });
-        }
-
-        const max =
-            Math.max(
-                ...data.map(
-                    item =>
-                        item.revenue
-                ),
-                1
-            );
-
-        const width = 700;
-        const height = 260;
-        const padding = 35;
-
-        const graphWidth =
-            width -
-            padding * 2;
-
-        const graphHeight =
-            height -
-            padding * 2;
-
-        const points =
-            data.map(
-                (
-                    item,
-                    index
-                ) => {
-
-                    const x =
-                        padding +
-                        (
-                            index /
-                            Math.max(
-                                data.length - 1,
-                                1
-                            )
-                        ) *
-                        graphWidth;
-
-                    const y =
-                        height -
-                        padding -
-                        (
-                            item.revenue /
-                            max
-                        ) *
-                        graphHeight;
-
-                    return {
-                        x,
-                        y,
-                        item
-                    };
-                }
-            );
-
-        const path =
-            points.map(
-                (
-                    point,
-                    index
-                ) =>
-                    (
-                        index === 0
-                            ? "M"
-                            : "L"
-                    ) +
-                    `${point.x} ${point.y}`
-            ).join(" ");
-
-        container.innerHTML = `
-
-            <div
-                style="
-                    width:100%;
-                    overflow-x:auto;
-                "
-            >
-
-                <svg
-                    viewBox="0 0 ${width} ${height}"
-                    width="100%"
-                    height="260"
-                    preserveAspectRatio="none"
-                >
-
-                    <line
-                        x1="${padding}"
-                        y1="${height - padding}"
-                        x2="${width - padding}"
-                        y2="${height - padding}"
-                        stroke="currentColor"
-                        opacity=".2"
-                    ></line>
-
-                    <line
-                        x1="${padding}"
-                        y1="${padding}"
-                        x2="${padding}"
-                        y2="${height - padding}"
-                        stroke="currentColor"
-                        opacity=".2"
-                    ></line>
-
-                    <path
-                        d="${path}"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="3"
-                    ></path>
-
-                    ${points.map(
-                        point => `
-                            <circle
-                                cx="${point.x}"
-                                cy="${point.y}"
-                                r="4"
-                                fill="currentColor"
-                            ></circle>
-                        `
-                    ).join("")}
-
-                </svg>
-
-            </div>
-
-            <div
-                style="
-                    display:flex;
-                    justify-content:space-between;
-                    gap:10px;
-                    overflow:hidden;
-                    font-size:12px;
-                "
-            >
-
-                ${data.map(
-                    item => `
-                        <span>
-                            ${item.date.toLocaleDateString(
-                                "en-IN",
-                                {
-                                    day: "2-digit",
-                                    month: "short"
-                                }
-                            )}
-                        </span>
-                    `
-                ).join("")}
-
-            </div>
-        `;
-    }
-
-    // ============================================================
-    // ANALYTICS
-    // ============================================================
-
-    function renderAnalytics() {
-
-        const revenueChart =
-            $("analyticsRevenueChart");
-
-        const categoryChart =
-            $("categoryChart");
-
-        const analyticsSummary =
-            $("analyticsSummary");
-
-        const revenue =
-            orders.reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    getOrderAmount(order),
-                0
-            );
-
-        const averageOrder =
-            orders.length
-                ? revenue /
-                  orders.length
-                : 0;
-
-        const categoryMap = {};
-
-        products.forEach(product => {
-
-            const category =
-                product.category ||
-                "Other";
-
-            categoryMap[category] =
-                (
-                    categoryMap[category] ||
-                    0
-                ) + 1;
-        });
-
-        if (revenueChart) {
-
-            revenueChart.innerHTML =
-                `<div class="chart-empty">
-                    Total Revenue:
-                    <strong>
-                        ${formatPrice(revenue)}
-                    </strong>
-                </div>`;
-        }
-
-        if (categoryChart) {
-
-            const entries =
-                Object.entries(
-                    categoryMap
-                );
-
-            if (!entries.length) {
-
-                categoryChart.innerHTML =
-                    `<div class="chart-empty">
-                        No category data
-                    </div>`;
-
-            } else {
-
-                categoryChart.innerHTML =
-                    entries.map(
-                        (
-                            [category, count]
-                        ) => {
-
-                            const percentage =
-                                products.length
-                                    ? (
-                                        count /
-                                        products.length
-                                    ) *
-                                    100
-                                    : 0;
-
-                            return `
-                                <div
-                                    style="
-                                        margin-bottom:14px;
-                                    "
-                                >
-
-                                    <div
-                                        style="
-                                            display:flex;
-                                            justify-content:space-between;
-                                            margin-bottom:5px;
-                                        "
-                                    >
-
-                                        <span>
-                                            ${escapeHTML(category)}
-                                        </span>
-
-                                        <strong>
-                                            ${count}
-                                        </strong>
-
-                                    </div>
-
-                                    <div
-                                        style="
-                                            height:8px;
-                                            background:rgba(127,127,127,.15);
-                                            border-radius:10px;
-                                            overflow:hidden;
-                                        "
-                                    >
-
-                                        <div
-                                            style="
-                                                width:${percentage}%;
-                                                height:100%;
-                                                background:currentColor;
-                                            "
-                                        ></div>
-
-                                    </div>
-
-                                </div>
-                            `;
-                        }
-                    ).join("");
-            }
-        }
-
-        if (analyticsSummary) {
-
-            analyticsSummary.innerHTML = `
-
-                <div class="analytics-summary-card">
-
-                    <span>
-                        Total Revenue
-                    </span>
-
-                    <strong>
-                        ${formatPrice(revenue)}
-                    </strong>
-
-                </div>
-
-                <div class="analytics-summary-card">
-
-                    <span>
-                        Total Orders
-                    </span>
-
-                    <strong>
-                        ${orders.length}
-                    </strong>
-
-                </div>
-
-                <div class="analytics-summary-card">
-
-                    <span>
-                        Average Order
-                    </span>
-
-                    <strong>
-                        ${formatPrice(averageOrder)}
-                    </strong>
-
-                </div>
-
-                <div class="analytics-summary-card">
-
-                    <span>
-                        Products
-                    </span>
-
-                    <strong>
-                        ${products.length}
-                    </strong>
-
-                </div>
-
-                <div class="analytics-summary-card">
-
-                    <span>
-                        Customers
-                    </span>
-
-                    <strong>
-                        ${customers.length}
-                    </strong>
-
-                </div>
-            `;
-        }
+                })
+                .join("");
     }
 
     // ============================================================
@@ -4029,8 +3181,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const container =
             $("reviewsContainer");
-
-        if (!container) return;
 
         try {
 
@@ -4048,16 +3198,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
 
             if (error) {
-
-                reviews = [];
-
-                container.innerHTML =
-                    `<div class="empty">
-                        <strong>Reviews module ready</strong>
-                        <p>Connect the reviews table to enable live reviews.</p>
-                    </div>`;
-
-                return;
+                throw error;
             }
 
             reviews =
@@ -4067,12 +3208,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             renderReviews();
 
+            updateDashboard();
+
         } catch (error) {
 
             console.error(
-                "Reviews error:",
+                "Reviews loading error:",
                 error
             );
+
+            reviews = [];
+
+            if (container) {
+
+                container.innerHTML =
+                    `<div class="empty">
+                        <strong>Reviews unavailable</strong>
+                        <p>${escapeHTML(
+                            error.message || ""
+                        )}</p>
+                    </div>`;
+            }
         }
     }
 
@@ -4083,65 +3239,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (!container) return;
 
-        setText(
-            "reviewCount",
-            reviews.length
-        );
-
-        const ratings =
-            reviews
-                .map(
-                    review =>
-                        safeNumber(
-                            review.rating
-                        )
-                )
-                .filter(
-                    rating =>
-                        rating > 0
-                );
-
-        const average =
-            ratings.length
-                ? ratings.reduce(
-                    (
-                        a,
-                        b
-                    ) =>
-                        a + b,
-                    0
-                ) /
-                  ratings.length
-                : 0;
-
-        setText(
-            "averageRating",
-            average
-                ? average.toFixed(1)
-                : "0.0"
-        );
-
-        const pending =
-            reviews.filter(
-                review =>
-                    String(
-                        review.status ||
-                        ""
-                    )
-                        .toLowerCase() ===
-                    "pending"
-            ).length;
-
-        setText(
-            "pendingReviews",
-            pending
-        );
-
         if (!reviews.length) {
 
             container.innerHTML =
                 `<div class="empty">
-                    <strong>No reviews yet</strong>
+                    <strong>No reviews found</strong>
                     <p>Customer reviews will appear here.</p>
                 </div>`;
 
@@ -4157,22 +3259,22 @@ document.addEventListener("DOMContentLoaded", async () => {
                         Math.min(
                             5,
                             safeNumber(
-                                review.rating
+                                review.rating ??
+                                review.stars ??
+                                0
                             )
                         )
                     );
 
                 const stars =
-                    "★".repeat(
-                        Math.round(rating)
-                    ) +
-                    "☆".repeat(
-                        5 -
-                        Math.round(rating)
-                    );
+                    "★".repeat(rating) +
+                    "☆".repeat(5 - rating);
 
                 return `
-                    <div class="review-row">
+
+                    <article
+                        class="review-row"
+                    >
 
                         <div>
 
@@ -4180,14 +3282,32 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 ${escapeHTML(
                                     review.name ||
                                     review.customer_name ||
+                                    review.customer ||
                                     "Customer"
                                 )}
                             </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    review.email ||
+                                    review.customer_email ||
+                                    ""
+                                )}
+                            </span>
+
+                        </div>
+
+                        <div class="review-rating">
+                            ${stars}
+                        </div>
+
+                        <div>
 
                             <p>
                                 ${escapeHTML(
                                     review.comment ||
                                     review.review ||
+                                    review.message ||
                                     ""
                                 )}
                             </p>
@@ -4195,7 +3315,315 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </div>
 
                         <div>
-                            ${stars}
+
+                            <span>
+                                ${formatDate(
+                                    review.created_at ||
+                                    review.date
+                                )}
+                            </span>
+
+                        </div>
+
+                    </article>
+                `;
+
+            }).join("");
+    }
+
+    // ============================================================
+    // MARKETING
+    // ============================================================
+
+    function setupMarketing() {
+
+        const buttons =
+            document.querySelectorAll(
+                "[data-marketing-action], .marketing-btn"
+            );
+
+        buttons.forEach(button => {
+
+            if (button.dataset.marketingBound) {
+                return;
+            }
+
+            button.dataset.marketingBound = "true";
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    const action =
+                        button.dataset.marketingAction ||
+                        button.textContent.trim();
+
+                    showToast(
+                        `${action} feature is ready to connect with your marketing workflow.`,
+                        "success"
+                    );
+                }
+            );
+        });
+    }
+
+    // ============================================================
+    // DASHBOARD STATISTICS
+    // ============================================================
+
+    function calculateSales(period) {
+
+        const now =
+            new Date();
+
+        const start =
+            new Date(now);
+
+        start.setDate(
+            now.getDate() - period
+        );
+
+        return orders.filter(order => {
+
+            const date =
+                new Date(
+                    getOrderDate(order)
+                );
+
+            return (
+                !Number.isNaN(date.getTime()) &&
+                date >= start &&
+                date <= now
+            );
+
+        });
+    }
+
+    function updateDashboard() {
+
+        const totalProducts =
+            products.length;
+
+        const totalOrders =
+            orders.length;
+
+        const totalCustomers =
+            customers.length;
+
+        const totalRevenue =
+            orders.reduce(
+                (sum, order) =>
+                    sum +
+                    getOrderAmount(order),
+                0
+            );
+
+        const lowStock =
+            products.filter(
+                product =>
+                    getProductStock(product) <=
+                    LOW_STOCK_LIMIT
+            ).length;
+
+        const pendingOrders =
+            orders.filter(order => {
+
+                const status =
+                    getOrderStatus(order)
+                        .toLowerCase();
+
+                return (
+                    status === "confirmed" ||
+                    status === "processing"
+                );
+
+            }).length;
+
+        const sales =
+            calculateSales(salesPeriod);
+
+        const periodRevenue =
+            sales.reduce(
+                (sum, order) =>
+                    sum +
+                    getOrderAmount(order),
+                0
+            );
+
+        // Common IDs
+
+        setText(
+            "totalProducts",
+            totalProducts
+        );
+
+        setText(
+            "productsCount",
+            totalProducts
+        );
+
+        setText(
+            "totalOrders",
+            totalOrders
+        );
+
+        setText(
+            "ordersCount",
+            totalOrders
+        );
+
+        setText(
+            "totalCustomers",
+            totalCustomers
+        );
+
+        setText(
+            "customersCount",
+            totalCustomers
+        );
+
+        setText(
+            "totalRevenue",
+            formatPrice(totalRevenue)
+        );
+
+        setText(
+            "revenue",
+            formatPrice(totalRevenue)
+        );
+
+        setText(
+            "totalSales",
+            formatPrice(periodRevenue)
+        );
+
+        setText(
+            "lowStockCount",
+            lowStock
+        );
+
+        setText(
+            "pendingOrders",
+            pendingOrders
+        );
+
+        setText(
+            "reviewCount",
+            reviews.length
+        );
+
+        setText(
+            "totalReviews",
+            reviews.length
+        );
+
+        // Additional common stat IDs
+
+        setText(
+            "dashboardProducts",
+            totalProducts
+        );
+
+        setText(
+            "dashboardOrders",
+            totalOrders
+        );
+
+        setText(
+            "dashboardCustomers",
+            totalCustomers
+        );
+
+        setText(
+            "dashboardRevenue",
+            formatPrice(totalRevenue)
+        );
+
+        setText(
+            "dashboardLowStock",
+            lowStock
+        );
+
+        setText(
+            "dashboardPendingOrders",
+            pendingOrders
+        );
+
+        renderRecentOrders();
+        renderLowStockProducts();
+        renderTopProducts();
+    }
+
+    // ============================================================
+    // RECENT ORDERS
+    // ============================================================
+
+    function renderRecentOrders() {
+
+        const container =
+            $("recentOrdersContainer") ||
+            $("recentOrders");
+
+        if (!container) return;
+
+        const recent =
+            sortOrders(orders).slice(0, 5);
+
+        if (!recent.length) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    No recent orders.
+                </div>`;
+
+            return;
+        }
+
+        container.innerHTML =
+            recent.map(order => {
+
+                const status =
+                    getOrderStatus(order);
+
+                return `
+
+                    <div class="recent-order">
+
+                        <div>
+
+                            <strong>
+                                #${escapeHTML(order.id)}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    order.customer_name ||
+                                    order.name ||
+                                    order.full_name ||
+                                    "Customer"
+                                )}
+                            </span>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ${formatPrice(
+                                    getOrderAmount(order)
+                                )}
+                            </strong>
+
+                            <span class="status ${
+                                status
+                                    .toLowerCase()
+                                    .replace(/\s+/g, "-")
+                            }">
+                                ${escapeHTML(status)}
+                            </span>
+
                         </div>
 
                     </div>
@@ -4205,786 +3633,353 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // ============================================================
-    // SETTINGS
+    // LOW STOCK DASHBOARD
     // ============================================================
 
-    function loadSettings() {
-
-        const savedName =
-            localStorage.getItem(
-                "fashionAdminName"
-            );
-
-        const input =
-            $("settingsAdminName");
-
-        if (
-            savedName &&
-            input
-        ) {
-            input.value =
-                savedName;
-        }
-
-        const savedNotifications =
-            localStorage.getItem(
-                "fashionAdminNotifications"
-            );
-
-        if (!savedNotifications) return;
-
-        try {
-
-            const settings =
-                JSON.parse(
-                    savedNotifications
-                );
-
-            if (
-                typeof settings.newOrders ===
-                "boolean"
-            ) {
-
-                $("newOrderNotifications")
-                    ?.setAttribute(
-                        "checked",
-                        settings.newOrders
-                    );
-
-                if ($("newOrderNotifications")) {
-                    $("newOrderNotifications").checked =
-                        settings.newOrders;
-                }
-            }
-
-            if (
-                typeof settings.lowStock ===
-                "boolean"
-            ) {
-
-                if ($("lowStockNotifications")) {
-                    $("lowStockNotifications").checked =
-                        settings.lowStock;
-                }
-            }
-
-            if (
-                typeof settings.marketing ===
-                "boolean"
-            ) {
-
-                if ($("marketingNotifications")) {
-                    $("marketingNotifications").checked =
-                        settings.marketing;
-                }
-            }
-
-        } catch {
-            // Ignore invalid settings.
-        }
-    }
-
-    function saveSettings() {
-
-        const name =
-            $("settingsAdminName")
-                ?.value
-                ?.trim() ||
-            "Administrator";
-
-        localStorage.setItem(
-            "fashionAdminName",
-            name
-        );
-
-        localStorage.setItem(
-            "fashionAdminNotifications",
-            JSON.stringify({
-
-                newOrders:
-                    $("newOrderNotifications")
-                        ?.checked ??
-                    true,
-
-                lowStock:
-                    $("lowStockNotifications")
-                        ?.checked ??
-                    true,
-
-                marketing:
-                    $("marketingNotifications")
-                        ?.checked ??
-                    false
-
-            })
-        );
-
-        showToast(
-            "Settings saved successfully."
-        );
-    }
-
-    // ============================================================
-    // SEARCH EVENTS
-    // ============================================================
-
-    function setupSearchEvents() {
-
-        $("productSearch")
-            ?.addEventListener(
-                "input",
-                renderProducts
-            );
-
-        $("productCategoryFilter")
-            ?.addEventListener(
-                "change",
-                renderProducts
-            );
-
-        $("productSort")
-            ?.addEventListener(
-                "change",
-                renderProducts
-            );
-
-        $("orderSearch")
-            ?.addEventListener(
-                "input",
-                renderOrders
-            );
-
-        $("orderStatusFilter")
-            ?.addEventListener(
-                "change",
-                renderOrders
-            );
-
-        $("orderSort")
-            ?.addEventListener(
-                "change",
-                renderOrders
-            );
-
-        $("customerSearch")
-            ?.addEventListener(
-                "input",
-                renderCustomers
-            );
-
-        $("customerSort")
-            ?.addEventListener(
-                "change",
-                renderCustomers
-            );
-
-        $("inventoryFilter")
-            ?.addEventListener(
-                "change",
-                renderInventory
-            );
-
-        $("salesPeriod")
-            ?.addEventListener(
-                "change",
-                event => {
-
-                    salesPeriod =
-                        Number(
-                            event.target.value
-                        ) || 7;
-
-                    renderSalesChart();
-                }
-            );
-    }
-
-    // ============================================================
-    // REFRESH BUTTONS
-    // ============================================================
-
-    function setupRefreshButtons() {
-
-        $("refreshDashboard")
-            ?.addEventListener(
-                "click",
-                async () => {
-
-                    showToast(
-                        "Refreshing dashboard..."
-                    );
-
-                    await Promise.all([
-                        loadProducts(),
-                        loadOrders()
-                    ]);
-
-                    await loadCustomers();
-                    await loadReviews();
-
-                    renderAnalytics();
-
-                    showToast(
-                        "Dashboard refreshed."
-                    );
-                }
-            );
-
-        $("refreshOrders")
-            ?.addEventListener(
-                "click",
-                async () => {
-
-                    await loadOrders();
-
-                    showToast(
-                        "Orders refreshed."
-                    );
-                }
-            );
-
-        $("refreshCustomers")
-            ?.addEventListener(
-                "click",
-                async () => {
-
-                    await loadCustomers();
-
-                    showToast(
-                        "Customers refreshed."
-                    );
-                }
-            );
-
-        $("inventoryRefresh")
-            ?.addEventListener(
-                "click",
-                async () => {
-
-                    await loadProducts();
-
-                    showToast(
-                        "Inventory refreshed."
-                    );
-                }
-            );
-    }
-
-    // ============================================================
-    // GLOBAL SEARCH
-    // ============================================================
-
-    function setupGlobalSearch() {
-
-        const button =
-            $("headerSearchBtn");
-
-        const modal =
-            $("globalSearch");
-
-        const input =
-            $("globalSearchInput");
-
-        const close =
-            $("closeGlobalSearch");
-
-        button?.addEventListener(
-            "click",
-            () => {
-
-                modal?.classList.add(
-                    "show"
-                );
-
-                input?.focus();
-            }
-        );
-
-        close?.addEventListener(
-            "click",
-            () => {
-
-                modal?.classList.remove(
-                    "show"
-                );
-            }
-        );
-
-        input?.addEventListener(
-            "input",
-            () => {
-
-                const query =
-                    input.value
-                        .trim()
-                        .toLowerCase();
-
-                if (!query) return;
-
-                const product =
-                    products.find(
-                        item =>
-                            getProductName(item)
-                                .toLowerCase()
-                                .includes(query)
-                    );
-
-                if (product) {
-
-                    openSection(
-                        "products"
-                    );
-
-                    if ($("productSearch")) {
-
-                        $("productSearch").value =
-                            query;
-
-                        renderProducts();
-                    }
-
-                    return;
-                }
-
-                const order =
-                    orders.find(
-                        item => {
-
-                            const id =
-                                String(
-                                    item.id ||
-                                    ""
-                                )
-                                    .toLowerCase();
-
-                            const name =
-                                String(
-                                    item.customer_name ||
-                                    item.name ||
-                                    ""
-                                )
-                                    .toLowerCase();
-
-                            return (
-                                id.includes(query) ||
-                                name.includes(query)
-                            );
-                        }
-                    );
-
-                if (order) {
-
-                    openSection(
-                        "orders"
-                    );
-
-                    if ($("orderSearch")) {
-
-                        $("orderSearch").value =
-                            query;
-
-                        renderOrders();
-                    }
-                }
-            }
-        );
-    }
-
-    // ============================================================
-    // NOTIFICATIONS
-    // ============================================================
-
-    function setupNotifications() {
-
-        $("notificationBtn")
-            ?.addEventListener(
-                "click",
-                () => {
-
-                    const lowStock =
-                        products.filter(
-                            product =>
-                                getProductStock(
-                                    product
-                                ) <=
-                                LOW_STOCK_LIMIT
-                        ).length;
-
-                    const pendingOrders =
-                        orders.filter(
-                            order => {
-
-                                const status =
-                                    getOrderStatus(
-                                        order
-                                    );
-
-                                return (
-                                    status ===
-                                    "Confirmed" ||
-                                    status ===
-                                    "Processing"
-                                );
-                            }
-                        ).length;
-
-                    showToast(
-                        `Low stock: ${lowStock} · Pending orders: ${pendingOrders}`,
-                        "warning"
-                    );
-                }
-            );
-    }
-
-    // ============================================================
-    // MARKETING
-    // ============================================================
-
-    function setupMarketing() {
-
-        $("createCouponBtn")
-            ?.addEventListener(
-                "click",
-                () => {
-
-                    showToast(
-                        "Coupon management requires a coupons table.",
-                        "warning"
-                    );
-                }
-            );
-
-        $("marketingCouponAction")
-            ?.addEventListener(
-                "click",
-                () => {
-
-                    showToast(
-                        "Coupon management requires a coupons table.",
-                        "warning"
-                    );
-                }
-            );
-
-        $("bannerManagementBtn")
-            ?.addEventListener(
-                "click",
-                () => {
-
-                    showToast(
-                        "Banner management is ready to connect with your storefront.",
-                        "warning"
-                    );
-                }
-            );
-
-        $("marketingNotificationBtn")
-            ?.addEventListener(
-                "click",
-                () => {
-
-                    openSection(
-                        "settings"
-                    );
-                }
-            );
-    }
-
-    // ============================================================
-    // EXPORT CSV
-    // ============================================================
-
-    function downloadCSV(
-        filename,
-        rows
-    ) {
-
-        if (!rows.length) {
-
-            showToast(
-                "No data available to export.",
-                "warning"
-            );
+    function renderLowStockProducts() {
+
+        const container =
+            $("lowStockContainer") ||
+            $("lowStockProducts");
+
+        if (!container) return;
+
+        const low =
+            products
+                .filter(
+                    product =>
+                        getProductStock(product) <=
+                        LOW_STOCK_LIMIT
+                )
+                .sort(
+                    (a, b) =>
+                        getProductStock(a) -
+                        getProductStock(b)
+                )
+                .slice(0, 6);
+
+        if (!low.length) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    All products have healthy stock.
+                </div>`;
 
             return;
         }
 
-        const headers =
-            Object.keys(
-                rows[0]
-            );
+        container.innerHTML =
+            low.map(product => {
 
-        const csvRows = [
-            headers.join(",")
-        ];
+                const stock =
+                    getProductStock(product);
 
-        rows.forEach(row => {
+                return `
 
-            csvRows.push(
-                headers.map(
-                    header => {
+                    <div class="low-stock-item">
 
-                        const value =
-                            String(
-                                row[header] ??
-                                ""
-                            );
+                        <strong>
+                            ${escapeHTML(
+                                getProductName(product)
+                            )}
+                        </strong>
 
-                        return `"${value.replace(
-                            /"/g,
-                            '""'
-                        )}"`;
-                    }
-                ).join(",")
-            );
+                        <span>
+                            ${stock} units
+                        </span>
+
+                    </div>
+                `;
+
+            }).join("");
+    }
+
+    // ============================================================
+    // TOP PRODUCTS
+    // ============================================================
+
+    function renderTopProducts() {
+
+        const container =
+            $("topProductsContainer") ||
+            $("topProducts");
+
+        if (!container) return;
+
+        const salesMap =
+            new Map();
+
+        orders.forEach(order => {
+
+            let items =
+                order.items ||
+                order.products ||
+                order.order_items ||
+                [];
+
+            if (typeof items === "string") {
+
+                try {
+                    items = JSON.parse(items);
+                } catch {
+                    items = [];
+                }
+            }
+
+            if (!Array.isArray(items)) return;
+
+            items.forEach(item => {
+
+                const name =
+                    item.name ||
+                    item.product_name ||
+                    "Product";
+
+                const quantity =
+                    safeNumber(
+                        item.quantity ||
+                        item.qty ||
+                        1
+                    );
+
+                salesMap.set(
+                    name,
+                    (
+                        salesMap.get(name) ||
+                        0
+                    ) + quantity
+                );
+            });
         });
 
-        const blob =
-            new Blob(
-                [
-                    csvRows.join("\n")
-                ],
-                {
-                    type:
-                        "text/csv;charset=utf-8;"
-                }
-            );
+        const top =
+            Array.from(
+                salesMap.entries()
+            )
+            .sort(
+                (a, b) =>
+                    b[1] - a[1]
+            )
+            .slice(0, 5);
 
-        const url =
-            URL.createObjectURL(
-                blob
-            );
+        if (!top.length) {
 
-        const link =
-            document.createElement(
-                "a"
-            );
+            container.innerHTML =
+                `<div class="empty">
+                    No product sales data available.
+                </div>`;
 
-        link.href =
-            url;
-
-        link.download =
-            filename;
-
-        document.body.appendChild(
-            link
-        );
-
-        link.click();
-
-        link.remove();
-
-        URL.revokeObjectURL(
-            url
-        );
-    }
-
-    function setupExport() {
-
-        $("exportReportBtn")
-            ?.addEventListener(
-                "click",
-                () => {
-
-                    const rows =
-                        orders.map(
-                            order => ({
-
-                                order_id:
-                                    order.id,
-
-                                customer:
-                                    order.customer_name ||
-                                    order.name ||
-                                    order.full_name ||
-                                    "",
-
-                                email:
-                                    order.customer_email ||
-                                    order.email ||
-                                    "",
-
-                                phone:
-                                    order.customer_phone ||
-                                    order.phone ||
-                                    "",
-
-                                amount:
-                                    getOrderAmount(
-                                        order
-                                    ),
-
-                                status:
-                                    getOrderStatus(
-                                        order
-                                    ),
-
-                                date:
-                                    getOrderDate(
-                                        order
-                                    )
-                            })
-                        );
-
-                    downloadCSV(
-                        "fashion-orders-report.csv",
-                        rows
-                    );
-
-                    showToast(
-                        "CSV report exported."
-                    );
-                }
-            );
-    }
-
-    // ============================================================
-    // KEYBOARD SHORTCUTS
-    // ============================================================
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeProductModalFunction();
-                closeOrderModalFunction();
-                closeCustomerModalFunction();
-
-                $("globalSearch")
-                    ?.classList
-                    .remove("show");
-
-                closeMobileSidebar();
-            }
-
-            if (
-                (
-                    event.ctrlKey ||
-                    event.metaKey
-                ) &&
-                event.key.toLowerCase() ===
-                "k"
-            ) {
-
-                event.preventDefault();
-
-                $("globalSearch")
-                    ?.classList
-                    .add("show");
-
-                $("globalSearchInput")
-                    ?.focus();
-            }
+            return;
         }
-    );
+
+        container.innerHTML =
+            top.map(
+                ([name, quantity], index) => `
+
+                    <div class="top-product-item">
+
+                        <span>
+                            #${index + 1}
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(name)}
+                        </strong>
+
+                        <em>
+                            ${quantity} sold
+                        </em>
+
+                    </div>
+                `
+            ).join("");
+    }
 
     // ============================================================
-    // AUTH STATE
+    // SALES PERIOD
     // ============================================================
 
-    supabaseClient.auth.onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
+    function setupSalesPeriod() {
 
-            if (
-                event ===
-                "SIGNED_OUT"
-            ) {
+        const controls =
+            document.querySelectorAll(
+                "[data-sales-period], .sales-period-btn"
+            );
 
-                window.location.replace(
-                    "admin-login.html"
-                );
+        controls.forEach(button => {
 
+            if (button.dataset.salesBound) {
                 return;
             }
 
-            if (
-                (
-                    event ===
-                    "SIGNED_IN" ||
-                    event ===
-                    "TOKEN_REFRESHED"
-                ) &&
-                session?.user?.email
-            ) {
+            button.dataset.salesBound = "true";
 
-                if (
-                    session.user.email
-                        .toLowerCase() !==
-                    ADMIN_EMAIL.toLowerCase()
-                ) {
+            button.addEventListener(
+                "click",
+                event => {
 
-                    await supabaseClient
-                        .auth
-                        .signOut();
+                    event.preventDefault();
 
-                    window.location.replace(
-                        "admin-login.html"
-                    );
-                }
-            }
-        }
-    );
+                    const value =
+                        safeNumber(
+                            button.dataset.salesPeriod ||
+                            button.value ||
+                            7
+                        );
 
-    // ============================================================
-    // SETTINGS BUTTON
-    // ============================================================
+                    salesPeriod =
+                        value > 0
+                            ? value
+                            : 7;
 
-    $("saveSettingsBtn")
-        ?.addEventListener(
-            "click",
-            saveSettings
-        );
+                    controls.forEach(item => {
 
-    [
-        $("newOrderNotifications"),
-        $("lowStockNotifications"),
-        $("marketingNotifications")
-    ].forEach(
-        checkbox => {
+                        item.classList.toggle(
+                            "active",
+                            item === button
+                        );
+                    });
 
-            checkbox?.addEventListener(
-                "change",
-                () => {
-
-                    const settings = {
-                        newOrders:
-                            $("newOrderNotifications")
-                                ?.checked ??
-                            true,
-
-                        lowStock:
-                            $("lowStockNotifications")
-                                ?.checked ??
-                            true,
-
-                        marketing:
-                            $("marketingNotifications")
-                                ?.checked ??
-                            false
-                    };
-
-                    localStorage.setItem(
-                        "fashionAdminNotifications",
-                        JSON.stringify(settings)
-                    );
+                    updateDashboard();
                 }
             );
+        });
+    }
+
+    // ============================================================
+    // MODAL CLOSE BUTTONS
+    // ============================================================
+
+    function setupModalClosing() {
+
+        $("closeProductModal")
+            ?.addEventListener(
+                "click",
+                closeProductModal
+            );
+
+        $("closeProductModalBottom")
+            ?.addEventListener(
+                "click",
+                closeProductModal
+            );
+
+        $("closeOrderModal")
+            ?.addEventListener(
+                "click",
+                closeOrderModal
+            );
+
+        $("closeOrderModalBottom")
+            ?.addEventListener(
+                "click",
+                closeOrderModal
+            );
+
+        productModal?.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    productModal
+                ) {
+                    closeProductModal();
+                }
+            }
+        );
+
+        orderModal?.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    orderModal
+                ) {
+                    closeOrderModal();
+                }
+            }
+        );
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key !== "Escape") {
+                    return;
+                }
+
+                closeProductModal();
+                closeOrderModal();
+                closeCustomerModal();
+            }
+        );
+    }
+
+    // ============================================================
+    // SUPABASE REALTIME
+    // ============================================================
+
+    function setupRealtime() {
+
+        try {
+
+            supabaseClient
+                .channel("fashion-admin-live")
+                .on(
+                    "postgres_changes",
+                    {
+                        event: "*",
+                        schema: "public",
+                        table: PRODUCT_TABLE
+                    },
+                    async () => {
+
+                        await loadProducts();
+                    }
+                )
+                .on(
+                    "postgres_changes",
+                    {
+                        event: "*",
+                        schema: "public",
+                        table: ORDER_TABLE
+                    },
+                    async () => {
+
+                        await loadOrders();
+                        await loadCustomers();
+                    }
+                )
+                .on(
+                    "postgres_changes",
+                    {
+                        event: "*",
+                        schema: "public",
+                        table: REVIEW_TABLE
+                    },
+                    async () => {
+
+                        await loadReviews();
+                    }
+                )
+                .subscribe();
+
+        } catch (error) {
+
+            console.warn(
+                "Realtime setup unavailable:",
+                error
+            );
         }
-    );
+    }
 
     // ============================================================
-    // INITIALIZATION
+    // INITIALIZE
     // ============================================================
 
-    try {
+    async function initializeAdmin() {
 
         const authenticated =
             await checkAdminSession();
@@ -4993,41 +3988,86 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        setupLogout();
-        setupNavigation();
-        setupMobileSidebar();
-        setupProductButtons();
-        setupSearchEvents();
-        setupRefreshButtons();
-        setupGlobalSearch();
-        setupNotifications();
-        setupMarketing();
-        setupExport();
-        loadSettings();
+        hideLoadingScreen();
 
-        await Promise.all([
-            loadProducts(),
-            loadOrders()
-        ]);
+        setupLogout();
+
+        setupNavigation();
+
+        setupMobileSidebar();
+
+        setupProductButtons();
+
+        setupProductFilters();
+
+        setupOrderFilters();
+
+        setupCustomerEvents();
+
+        setupPrintInvoice();
+
+        setupMarketing();
+
+        setupSalesPeriod();
+
+        setupModalClosing();
+
+        // Load independent data
+
+        await loadProducts();
+
+        await loadOrders();
 
         await loadCustomers();
+
         await loadReviews();
 
-        updateDashboard();
-        renderInventory();
-        renderPayments();
-        renderAnalytics();
+        // Initial dashboard
 
-        hideLoadingScreen();
+        updateDashboard();
+
+        // Default section
+
+        const activeSection =
+            document.querySelector(
+                ".admin-section.active"
+            );
+
+        if (!activeSection) {
+
+            const dashboard =
+                document.querySelector(
+                    "#dashboardSection"
+                ) ||
+                document.querySelector(
+                    "[data-section='dashboard']"
+                );
+
+            if (dashboard) {
+
+                openSection("dashboard");
+            }
+        }
+
+        setupRealtime();
 
         console.log(
             "FASHION Admin Dashboard initialized successfully."
         );
+    }
+
+    // ============================================================
+    // START
+    // ============================================================
+
+    try {
+
+        await initializeAdmin();
 
     } catch (error) {
 
         console.error(
-            "Dashboard initialization error:",
+            "Admin initialization error:",
             error
         );
 
@@ -5035,7 +4075,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         showToast(
             error.message ||
-            "Dashboard initialization failed.",
+            "Admin dashboard initialization failed.",
             "error"
         );
     }
