@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Admin Panel | FASHION</title>
+    <title>Admin Dashboard | FASHION</title>
 
     <link
         rel="stylesheet"
@@ -19,16 +19,26 @@
 
     <style>
 
-        body {
-            background: #f7f7f7;
+        * {
+            box-sizing: border-box;
         }
 
-        /* =========================
-           ADMIN NAVBAR
-        ========================= */
+        body {
+            margin: 0;
+            background: #f6f6f6;
+            color: #111;
+            font-family: Arial, sans-serif;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
 
         .admin-navbar {
-            min-height: 75px;
+            min-height: 72px;
             padding: 0 6%;
             background: #111;
             color: #fff;
@@ -41,19 +51,20 @@
         }
 
         .admin-logo {
-            font-size: 25px;
+            font-size: 24px;
             font-weight: 800;
             letter-spacing: 3px;
         }
 
         .admin-nav-actions {
             display: flex;
-            align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .admin-nav-btn {
-            display: inline-block;
+            border: 1px solid rgba(255,255,255,.35);
+            background: transparent;
+            color: #fff;
 
             padding: 10px 16px;
 
@@ -61,17 +72,10 @@
 
             text-decoration: none;
 
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
 
-            border: 1px solid rgba(255,255,255,0.3);
-
-            color: #fff;
-            background: transparent;
-
             cursor: pointer;
-
-            transition: 0.2s ease;
         }
 
         .admin-nav-btn:hover {
@@ -84,334 +88,449 @@
             border-color: #d32f2f;
         }
 
-        .logout-btn:hover {
-            background: #fff;
-            color: #d32f2f;
-        }
-
-
-        /* =========================
-           ADMIN PAGE
-        ========================= */
-
         .admin-page {
-            padding: 55px 6%;
+            width: 100%;
+            max-width: 1400px;
+            margin: auto;
+
+            padding: 45px 6%;
         }
 
         .admin-header {
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
         .admin-header h1 {
-            font-size: 36px;
-            margin-bottom: 8px;
+            margin: 0 0 8px;
+            font-size: 34px;
         }
 
         .admin-header p {
+            margin: 0;
             color: #777;
         }
 
         .admin-user {
-            margin-top: 15px;
-
             display: inline-block;
 
-            padding: 10px 15px;
+            margin-top: 15px;
+
+            padding: 9px 14px;
 
             background: #fff;
 
-            border-radius: 8px;
+            border-radius: 7px;
 
             color: #555;
 
+            font-size: 13px;
+
             box-shadow:
-                0 5px 20px rgba(0,0,0,0.05);
+                0 5px 20px rgba(0,0,0,.05);
         }
 
-
-        /* =========================
-           DASHBOARD CARDS
-        ========================= */
-
-        .admin-grid {
+        .dashboard-grid {
             display: grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(4, 1fr);
 
-            gap: 20px;
+            gap: 18px;
+
+            margin-bottom: 25px;
         }
 
-        .admin-card {
+        .dashboard-card {
             background: #fff;
+
+            border-radius: 12px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 7px 25px rgba(0,0,0,.05);
+        }
+
+        .dashboard-card span {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .dashboard-card strong {
+            display: block;
+
+            margin-top: 8px;
+
+            font-size: 30px;
+        }
+
+        .admin-section {
+            background: #fff;
+
+            border-radius: 12px;
 
             padding: 28px;
 
-            border-radius: 14px;
+            margin-bottom: 25px;
 
             box-shadow:
-                0 8px 30px rgba(0,0,0,0.06);
+                0 7px 25px rgba(0,0,0,.05);
         }
 
-        .admin-card h3 {
-            margin-bottom: 10px;
-        }
-
-        .admin-card p {
-            color: #777;
-
-            font-size: 14px;
-
-            line-height: 1.6;
-        }
-
-        .admin-card .number {
-            font-size: 32px;
-
-            font-weight: 800;
-
-            margin: 10px 0;
-        }
-
-
-        /* =========================
-           ADMIN SECTION
-        ========================= */
-
-        .admin-section {
-            margin-top: 25px;
-
-            background: #fff;
-
-            padding: 30px;
-
-            border-radius: 14px;
-
-            box-shadow:
-                0 8px 30px rgba(0,0,0,0.06);
-        }
-
-        .admin-section h2 {
-            margin-bottom: 20px;
-        }
-
-        .admin-info-row {
+        .section-header {
             display: flex;
 
             align-items: center;
 
             justify-content: space-between;
 
-            gap: 20px;
+            gap: 15px;
 
-            padding: 15px 0;
-
-            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
         }
 
-        .admin-info-row:last-child {
-            border-bottom: none;
+        .section-header h2 {
+            margin: 0;
         }
 
-        .admin-info-row p {
-            margin-top: 5px;
+        .primary-btn {
+            border: none;
 
-            color: #777;
+            background: #111;
+            color: #fff;
 
-            font-size: 14px;
-        }
+            padding: 11px 16px;
 
-        .admin-badge {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border-radius: 20px;
-
-            background: #e8f8ed;
-
-            color: #18753a;
-
-            font-size: 12px;
+            border-radius: 7px;
 
             font-weight: 700;
+            font-size: 12px;
+
+            cursor: pointer;
         }
 
+        .primary-btn:hover {
+            opacity: .85;
+        }
 
-        /* =========================
-           PRODUCT LIST
-        ========================= */
+        .secondary-btn {
+            border: none;
 
-        #adminProductList {
+            background: #eee;
+            color: #111;
+
+            padding: 11px 16px;
+
+            border-radius: 7px;
+
+            font-weight: 700;
+            font-size: 12px;
+
+            cursor: pointer;
+        }
+
+        .danger-btn {
+            border: none;
+
+            background: #d32f2f;
+            color: #fff;
+
+            padding: 10px 14px;
+
+            border-radius: 6px;
+
+            font-weight: 700;
+            font-size: 11px;
+
+            cursor: pointer;
+        }
+
+        .search-row {
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+        .search-row input,
+        .search-row select {
+            padding: 12px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 7px;
+
+            outline: none;
+        }
+
+        .search-row input {
+            flex: 1;
+        }
+
+        .products-grid {
             display: grid;
 
             grid-template-columns:
                 repeat(3, 1fr);
 
-            gap: 20px;
+            gap: 18px;
         }
 
-        .admin-empty {
-            grid-column: 1 / -1;
+        .product-card {
+            border: 1px solid #eee;
 
-            padding: 40px;
+            border-radius: 10px;
 
-            text-align: center;
-
-            border: 1px dashed #ddd;
-
-            border-radius: 12px;
-        }
-
-        .admin-empty h3 {
-            margin-bottom: 8px;
-        }
-
-        .admin-empty p {
-            color: #777;
-        }
-
-        .admin-product-card {
             overflow: hidden;
 
             background: #fff;
-
-            border: 1px solid #eee;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 5px 20px rgba(0,0,0,0.04);
         }
 
-        .admin-product-image {
+        .product-image {
             width: 100%;
+            height: 230px;
 
-            height: 250px;
-
-            background: #f4f4f4;
-
-            overflow: hidden;
+            background: #f1f1f1;
         }
 
-        .admin-product-image img {
+        .product-image img {
             width: 100%;
-
             height: 100%;
 
             object-fit: cover;
-
-            display: block;
         }
 
-        .admin-product-info {
-            padding: 18px;
+        .product-info {
+            padding: 17px;
         }
 
-        .admin-product-category {
-            display: inline-block;
-
-            margin-bottom: 8px;
-
-            font-size: 11px;
-
-            font-weight: 700;
-
-            text-transform: uppercase;
-
-            color: #777;
-
-            letter-spacing: 0.5px;
+        .product-info h3 {
+            margin: 5px 0 8px;
+            font-size: 17px;
         }
 
-        .admin-product-info h3 {
-            margin: 5px 0 10px;
-
-            font-size: 18px;
-        }
-
-        .admin-product-info strong {
-            display: block;
-
-            font-size: 18px;
-
-            margin-bottom: 10px;
-        }
-
-        .admin-product-info p {
+        .product-info p {
             margin: 5px 0;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .product-actions {
+            display: flex;
+
+            gap: 8px;
+
+            padding: 0 17px 17px;
+        }
+
+        .product-actions button {
+            flex: 1;
+        }
+
+        .orders-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .order-card {
+            border: 1px solid #eee;
+
+            border-radius: 10px;
+
+            padding: 20px;
+        }
+
+        .order-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 18px;
+        }
+
+        .order-top h3 {
+            margin: 0 0 5px;
+        }
+
+        .order-top p {
+            margin: 0;
 
             color: #777;
 
             font-size: 13px;
         }
 
-        .admin-product-actions {
-            display: flex;
+        .status-box label {
+            display: block;
 
-            gap: 10px;
+            margin-bottom: 5px;
 
-            padding: 0 18px 18px;
-        }
-
-        .edit-product-btn,
-        .delete-product-btn {
-            flex: 1;
-
-            padding: 10px;
-
-            border: none;
-
-            border-radius: 6px;
-
-            font-size: 12px;
+            font-size: 10px;
 
             font-weight: 700;
 
-            cursor: pointer;
+            color: #777;
         }
 
-        .edit-product-btn {
-            background: #111;
+        .status-box select {
+            padding: 9px;
 
-            color: #fff;
+            border: 1px solid #ddd;
+
+            border-radius: 6px;
         }
 
-        .delete-product-btn {
-            background: #d32f2f;
+        .customer-box {
+            background: #fafafa;
 
-            color: #fff;
+            padding: 15px;
+
+            border-radius: 8px;
+
+            margin-bottom: 15px;
         }
 
+        .customer-box h4 {
+            margin: 0 0 10px;
+        }
 
-        /* =========================
-           PRODUCT MODAL
-        ========================= */
+        .customer-box p {
+            margin: 5px 0;
 
-        .product-modal {
+            font-size: 13px;
+
+            color: #555;
+        }
+
+        .order-items {
+            display: grid;
+
+            gap: 10px;
+        }
+
+        .order-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 10px;
+
+            border: 1px solid #eee;
+
+            border-radius: 7px;
+        }
+
+        .order-item img {
+            width: 60px;
+            height: 60px;
+
+            object-fit: cover;
+
+            border-radius: 6px;
+
+            background: #eee;
+        }
+
+        .order-item strong {
+            display: block;
+
+            margin-bottom: 4px;
+        }
+
+        .order-item span {
+            color: #777;
+
+            font-size: 12px;
+        }
+
+        .order-footer {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-top: 18px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid #eee;
+        }
+
+        .order-footer span {
+            display: block;
+
+            color: #777;
+
+            font-size: 10px;
+
+            margin-bottom: 4px;
+        }
+
+        .customers-table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        .customers-table th,
+        .customers-table td {
+            padding: 13px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #eee;
+
+            font-size: 13px;
+        }
+
+        .customers-table th {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #777;
+        }
+
+        .empty {
+            padding: 40px;
+
+            text-align: center;
+
+            color: #777;
+
+            border: 1px dashed #ddd;
+
+            border-radius: 8px;
+        }
+
+        .modal {
             position: fixed;
 
             inset: 0;
 
             z-index: 9999;
 
-            display: flex;
+            background: rgba(0,0,0,.65);
+
+            display: none;
 
             align-items: center;
 
             justify-content: center;
 
             padding: 20px;
-
-            background:
-                rgba(0,0,0,0.65);
-
-            overflow-y: auto;
         }
 
-        .product-modal-box {
-            width: 100%;
+        .modal.show {
+            display: flex;
+        }
 
+        .modal-box {
+            width: 100%;
             max-width: 650px;
 
             max-height: 90vh;
@@ -420,225 +539,152 @@
 
             background: #fff;
 
-            border-radius: 14px;
+            border-radius: 12px;
 
-            padding: 30px;
+            padding: 25px;
         }
 
-        .product-modal-header {
+        .modal-header {
             display: flex;
 
-            align-items: flex-start;
+            align-items: center;
 
             justify-content: space-between;
 
-            gap: 20px;
-
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        .product-modal-header p {
-            margin-bottom: 5px;
-
-            color: #777;
-
-            font-size: 11px;
-
-            font-weight: 700;
-
-            letter-spacing: 2px;
-        }
-
-        .product-modal-header h2 {
+        .modal-header h2 {
             margin: 0;
-
-            font-size: 26px;
         }
 
-        .product-modal-close {
-            width: 38px;
-
-            height: 38px;
+        .close-btn {
+            width: 35px;
+            height: 35px;
 
             border: none;
 
             border-radius: 50%;
 
-            background: #f2f2f2;
-
-            font-size: 24px;
+            background: #eee;
 
             cursor: pointer;
+
+            font-size: 20px;
         }
 
-        .product-form-group {
-            margin-bottom: 18px;
+        .form-group {
+            margin-bottom: 15px;
         }
 
-        .product-form-group label {
+        .form-group label {
             display: block;
 
-            margin-bottom: 7px;
+            margin-bottom: 6px;
 
-            font-size: 13px;
+            font-size: 12px;
 
             font-weight: 700;
         }
 
-        .product-form-group input[type="text"],
-        .product-form-group input[type="number"],
-        .product-form-group input[type="file"],
-        .product-form-group select,
-        .product-form-group textarea {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
 
-            padding: 12px;
+            padding: 11px;
 
             border: 1px solid #ddd;
 
             border-radius: 7px;
 
-            font-family: inherit;
-
-            font-size: 14px;
-
             outline: none;
         }
 
-        .product-form-group textarea {
+        .form-group textarea {
+            min-height: 100px;
+
             resize: vertical;
         }
 
-        .product-form-group input:focus,
-        .product-form-group select:focus,
-        .product-form-group textarea:focus {
-            border-color: #111;
-        }
-
-        .product-form-row {
+        .form-row {
             display: grid;
 
             grid-template-columns:
                 repeat(2, 1fr);
 
-            gap: 15px;
+            gap: 12px;
         }
 
-        .product-size-options {
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 10px;
-        }
-
-        .product-size-options label {
+        .checkbox-row {
             display: flex;
 
             align-items: center;
 
-            gap: 5px;
+            gap: 8px;
 
-            margin: 0;
+            margin-bottom: 15px;
 
-            padding: 8px 12px;
-
-            background: #f5f5f5;
-
-            border-radius: 6px;
-
-            cursor: pointer;
+            font-size: 13px;
         }
 
-        .product-form-group small {
-            display: block;
-
-            margin-top: 7px;
-
-            color: #777;
-
-            font-size: 12px;
-        }
-
-        .product-image-preview {
-            margin-top: 12px;
-
-            text-align: center;
-        }
-
-        .product-image-preview img {
-            width: 180px;
-
-            height: 180px;
-
-            object-fit: cover;
-
-            border-radius: 10px;
-
-            border: 1px solid #eee;
-        }
-
-        .product-image-preview p {
-            margin-top: 8px;
-
-            color: #777;
-
-            font-size: 12px;
-        }
-
-        .product-form-actions {
+        .modal-actions {
             display: flex;
 
             justify-content: flex-end;
 
             gap: 10px;
 
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
-        .admin-secondary-btn,
-        .admin-primary-btn {
-            padding: 12px 18px;
+        .loading {
+            padding: 30px;
+
+            text-align: center;
+
+            color: #777;
+        }
+
+        .toast {
+            position: fixed;
+
+            right: 20px;
+            bottom: 20px;
+
+            z-index: 20000;
+
+            background: #111;
+            color: #fff;
+
+            padding: 13px 18px;
 
             border-radius: 7px;
 
-            border: none;
+            display: none;
 
-            font-size: 12px;
-
-            font-weight: 700;
-
-            cursor: pointer;
+            font-size: 13px;
         }
 
-        .admin-secondary-btn {
-            background: #eee;
-
-            color: #111;
+        .toast.show {
+            display: block;
         }
 
-        .admin-primary-btn {
-            background: #111;
+        @media (max-width: 1000px) {
 
-            color: #fff;
-        }
+            .dashboard-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
 
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 900px) {
-
-            .admin-grid,
-            #adminProductList {
+            .products-grid {
                 grid-template-columns:
                     repeat(2, 1fr);
             }
 
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
 
             .admin-navbar {
                 padding: 15px 5%;
@@ -654,35 +700,31 @@
 
             .admin-nav-btn {
                 flex: 1;
-
                 text-align: center;
             }
 
-            .admin-grid,
-            #adminProductList {
+            .admin-page {
+                padding: 30px 5%;
+            }
+
+            .dashboard-grid,
+            .products-grid {
                 grid-template-columns: 1fr;
             }
 
-            .admin-page {
-                padding: 35px 5%;
-            }
-
-            .admin-header h1 {
-                font-size: 28px;
-            }
-
-            .admin-info-row {
-                align-items: flex-start;
-
+            .search-row,
+            .order-top,
+            .order-footer {
                 flex-direction: column;
             }
 
-            .product-form-row {
+            .form-row {
                 grid-template-columns: 1fr;
             }
 
-            .product-modal-box {
-                padding: 20px;
+            .customers-table {
+                display: block;
+                overflow-x: auto;
             }
 
         }
@@ -694,705 +736,527 @@
 
 <body>
 
+<header class="admin-navbar">
 
-    <!-- =====================================================
-         ADMIN NAVBAR
-    ====================================================== -->
+    <div class="admin-logo">
+        FASHION
+    </div>
 
-    <header class="admin-navbar">
+    <div class="admin-nav-actions">
 
-        <div class="admin-logo">
-            FASHION
+        <a
+            href="index.html"
+            class="admin-nav-btn"
+        >
+            ← STORE
+        </a>
+
+        <button
+            type="button"
+            id="adminLogout"
+            class="admin-nav-btn logout-btn"
+        >
+            LOGOUT
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="admin-page">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+
+    <section class="admin-header">
+
+        <h1>
+            Admin Dashboard
+        </h1>
+
+        <p>
+            Manage your FASHION store.
+        </p>
+
+        <div
+            class="admin-user"
+            id="adminUserInfo"
+        >
+            Checking admin session...
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         DASHBOARD
+    ================================================== -->
+
+    <section class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <span>
+                TOTAL PRODUCTS
+            </span>
+
+            <strong id="productCount">
+                0
+            </strong>
+
         </div>
 
 
-        <div class="admin-nav-actions">
+        <div class="dashboard-card">
 
-            <a
-                href="index.html"
-                class="admin-nav-btn"
-            >
-                ← Back to Store
-            </a>
+            <span>
+                TOTAL ORDERS
+            </span>
 
-
-            <button
-                type="button"
-                id="adminLogout"
-                class="admin-nav-btn logout-btn"
-            >
-                Logout
-            </button>
+            <strong id="orderCount">
+                0
+            </strong>
 
         </div>
 
-    </header>
 
+        <div class="dashboard-card">
 
+            <span>
+                CUSTOMERS
+            </span>
 
-    <!-- =====================================================
-         ADMIN CONTENT
-    ====================================================== -->
+            <strong id="customerCount">
+                0
+            </strong>
 
-    <main class="admin-page">
+        </div>
 
 
-        <!-- HEADER -->
+        <div class="dashboard-card">
 
-        <section class="admin-header">
+            <span>
+                TOTAL SALES
+            </span>
 
-            <h1>
-                Admin Dashboard
-            </h1>
+            <strong id="salesCount">
+                ₹0
+            </strong>
 
-            <p>
-                Manage your FASHION store from here.
-            </p>
+        </div>
 
+    </section>
 
-            <div
-                class="admin-user"
-                id="adminUserInfo"
-            >
-                Loading admin...
-            </div>
 
-        </section>
+    <!-- =================================================
+         PRODUCTS
+    ================================================== -->
 
+    <section class="admin-section">
 
-
-        <!-- =================================================
-             DASHBOARD CARDS
-        ================================================== -->
-
-        <section class="admin-grid">
-
-
-            <div class="admin-card">
-
-                <h3>
-                    Products
-                </h3>
-
-                <div
-                    class="number"
-                    id="productCount"
-                >
-                    0
-                </div>
-
-                <p>
-                    Products available in your fashion store.
-                </p>
-
-            </div>
-
-
-
-            <div class="admin-card">
-
-                <h3>
-                    Orders
-                </h3>
-
-                <div
-                    class="number"
-                    id="orderCount"
-                >
-                    0
-                </div>
-
-                <p>
-                    Total orders received from customers.
-                </p>
-
-            </div>
-
-
-
-            <div class="admin-card">
-
-                <h3>
-                    Customers
-                </h3>
-
-                <div
-                    class="number"
-                    id="customerCount"
-                >
-                    0
-                </div>
-
-                <p>
-                    Registered customers on your website.
-                </p>
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             ADMIN INFORMATION
-        ================================================== -->
-
-        <section class="admin-section">
-
-            <h2>
-                Admin Account
-            </h2>
-
-
-            <div class="admin-info-row">
-
-                <span>
-                    Name
-                </span>
-
-                <strong id="adminName">
-                    Fashion Admin
-                </strong>
-
-            </div>
-
-
-            <div class="admin-info-row">
-
-                <span>
-                    Email
-                </span>
-
-                <strong id="adminEmail">
-                    admin@fashion.com
-                </strong>
-
-            </div>
-
-
-            <div class="admin-info-row">
-
-                <span>
-                    Role
-                </span>
-
-                <span class="admin-badge">
-                    ADMIN
-                </span>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             QUICK ACTIONS
-        ================================================== -->
-
-        <section class="admin-section">
-
-            <h2>
-                Quick Actions
-            </h2>
-
-
-            <!-- VIEW STORE -->
-
-            <div class="admin-info-row">
-
-                <div>
-
-                    <strong>
-                        View Store
-                    </strong>
-
-                    <p>
-                        Open the normal customer website.
-                    </p>
-
-                </div>
-
-
-                <a
-                    href="index.html"
-                    class="admin-nav-btn"
-                    style="
-                        background:#111;
-                        color:#fff;
-                        border-color:#111;
-                    "
-                >
-                    Open Store
-                </a>
-
-            </div>
-
-
-
-            <!-- MANAGE PRODUCTS -->
-
-            <div class="admin-info-row">
-
-                <div>
-
-                    <strong>
-                        Manage Products
-                    </strong>
-
-                    <p>
-                        Add, edit and delete products.
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="addProductBtn"
-                    class="admin-nav-btn"
-                    style="
-                        background:#111;
-                        color:#fff;
-                        border-color:#111;
-                    "
-                >
-                    + ADD PRODUCT
-                </button>
-
-            </div>
-
-
-
-            <!-- MANAGE ORDERS -->
-
-            <div class="admin-info-row">
-
-                <div>
-
-                    <strong>
-                        Manage Orders
-                    </strong>
-
-                    <p>
-                        View and manage customer orders.
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="manageOrdersBtn"
-                    class="admin-nav-btn"
-                    style="
-                        background:#111;
-                        color:#fff;
-                        border-color:#111;
-                    "
-                >
-                    MANAGE
-                </button>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             PRODUCT MANAGEMENT
-        ================================================== -->
-
-        <section class="admin-section">
+        <div class="section-header">
 
             <h2>
                 Products
             </h2>
 
+            <button
+                type="button"
+                id="addProductBtn"
+                class="primary-btn"
+            >
+                + ADD PRODUCT
+            </button>
 
-            <div id="adminProductList">
+        </div>
 
-                <div class="admin-empty">
+        <div class="search-row">
 
-                    <h3>
-                        Loading products...
-                    </h3>
+            <input
+                type="search"
+                id="productSearch"
+                placeholder="Search products..."
+            >
 
-                    <p>
-                        Your products will appear here.
-                    </p>
+            <select id="productCategoryFilter">
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="men">
+                    Men
+                </option>
+
+                <option value="women">
+                    Women
+                </option>
+
+                <option value="accessories">
+                    Accessories
+                </option>
+
+                <option value="new">
+                    New
+                </option>
+
+            </select>
+
+        </div>
+
+        <div
+            id="adminProductList"
+            class="products-grid"
+        >
+
+            <div class="loading">
+                Loading products...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ORDERS
+    ================================================== -->
+
+    <section class="admin-section">
+
+        <div class="section-header">
+
+            <h2>
+                Orders
+            </h2>
+
+        </div>
+
+        <div class="search-row">
+
+            <input
+                type="search"
+                id="orderSearch"
+                placeholder="Search order, customer, email..."
+            >
+
+            <select id="orderStatusFilter">
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="Confirmed">
+                    Confirmed
+                </option>
+
+                <option value="Processing">
+                    Processing
+                </option>
+
+                <option value="Shipped">
+                    Shipped
+                </option>
+
+                <option value="Delivered">
+                    Delivered
+                </option>
+
+                <option value="Cancelled">
+                    Cancelled
+                </option>
+
+            </select>
+
+        </div>
+
+        <div
+            id="adminOrders"
+            class="orders-list"
+        >
+
+            <div class="loading">
+                Loading orders...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         CUSTOMERS
+    ================================================== -->
+
+    <section class="admin-section">
+
+        <div class="section-header">
+
+            <h2>
+                Customers
+            </h2>
+
+        </div>
+
+        <div
+            id="customersContainer"
+        >
+
+            <div class="loading">
+                Loading customers...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================================
+     PRODUCT MODAL
+====================================================== -->
+
+<div
+    id="productModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="productModalTitle">
+                Add Product
+            </h2>
+
+            <button
+                type="button"
+                id="closeProductModal"
+                class="close-btn"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <input
+                type="hidden"
+                id="productId"
+            >
+
+
+            <div class="form-group">
+
+                <label for="productName">
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="productPrice">
+                        Price
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productPrice"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productStock">
+                        Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productStock"
+                        min="0"
+                        step="1"
+                        required
+                    >
 
                 </div>
 
             </div>
 
-        </section>
 
+            <div class="form-row">
 
-    </main>
+                <div class="form-group">
 
+                    <label for="productCategory">
+                        Category
+                    </label>
 
+                    <input
+                        type="text"
+                        id="productCategory"
+                        placeholder="e.g. men"
+                        required
+                    >
 
-    <!-- =====================================================
-         SUPABASE
-    ====================================================== -->
+                </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="js/supabase.js"></script>
+                <div class="form-group">
 
+                    <label for="productGender">
+                        Gender
+                    </label>
 
+                    <select id="productGender">
 
-    <!-- =====================================================
-         ADMIN AUTHENTICATION
-    ====================================================== -->
+                        <option value="">
+                            Select
+                        </option>
 
-    <script>
+                        <option value="men">
+                            Men
+                        </option>
 
-        "use strict";
+                        <option value="women">
+                            Women
+                        </option>
 
+                        <option value="unisex">
+                            Unisex
+                        </option>
 
-        // =================================================
-        // CHECK ADMIN LOGIN
-        // =================================================
+                    </select>
 
-        const adminLoggedIn =
-            localStorage.getItem(
-                "fashionAdminLoggedIn"
-            );
+                </div>
 
+            </div>
 
-        /*
-         * IMPORTANT:
-         *
-         * Admin login currently uses:
-         *
-         * fashionAdminLoggedIn = "true"
-         *
-         * So admin.html checks this value.
-         */
 
-        if (adminLoggedIn !== "true") {
+            <div class="form-group">
 
-            alert(
-                "Admin access required. Please login as admin."
-            );
+                <label for="productSizes">
+                    Sizes
+                </label>
 
-            window.location.replace(
-                "admin-login.html"
-            );
+                <input
+                    type="text"
+                    id="productSizes"
+                    placeholder="S, M, L, XL"
+                >
 
-        }
+            </div>
 
 
-        // =================================================
-        // CURRENT ADMIN
-        // =================================================
+            <div class="form-group">
 
-        let currentUser = null;
+                <label for="productImage">
+                    Product Image URL
+                </label>
 
+                <input
+                    type="url"
+                    id="productImage"
+                    placeholder="https://..."
+                >
 
-        try {
+            </div>
 
-            const savedUser =
-                localStorage.getItem(
-                    "fashionCurrentUser"
-                );
 
+            <div class="form-group">
 
-            if (savedUser) {
+                <label for="productDescription">
+                    Description
+                </label>
 
-                currentUser =
-                    JSON.parse(savedUser);
+                <textarea
+                    id="productDescription"
+                ></textarea>
 
-            }
+            </div>
 
-        } catch (error) {
 
-            console.error(
-                "Current user error:",
-                error
-            );
+            <label class="checkbox-row">
 
-            currentUser = null;
+                <input
+                    type="checkbox"
+                    id="productIsNew"
+                >
 
-        }
+                Mark as New Product
 
+            </label>
 
-        // =================================================
-        // DISPLAY ADMIN INFORMATION
-        // =================================================
 
-        const adminUserInfo =
-            document.getElementById(
-                "adminUserInfo"
-            );
+            <div class="modal-actions">
 
+                <button
+                    type="button"
+                    id="cancelProductBtn"
+                    class="secondary-btn"
+                >
+                    CANCEL
+                </button>
 
-        const adminName =
-            document.getElementById(
-                "adminName"
-            );
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="saveProductBtn"
+                >
+                    SAVE PRODUCT
+                </button>
 
+            </div>
 
-        const adminEmail =
-            document.getElementById(
-                "adminEmail"
-            );
+        </form>
 
+    </div>
 
-        if (adminUserInfo) {
+</div>
 
-            adminUserInfo.textContent =
-                "Logged in as: " +
-                (
-                    currentUser &&
-                    currentUser.email
-                        ? currentUser.email
-                        : "admin@fashion.com"
-                );
 
-        }
+<div
+    id="toast"
+    class="toast"
+></div>
 
 
-        if (adminName) {
+<!-- =====================================================
+     SUPABASE
+====================================================== -->
 
-            adminName.textContent =
-                currentUser &&
-                currentUser.name
-                    ? currentUser.name
-                    : "Fashion Admin";
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        }
+<script src="supabase.js"></script>
 
 
-        if (adminEmail) {
+<!-- =====================================================
+     ADMIN SYSTEM
+====================================================== -->
 
-            adminEmail.textContent =
-                currentUser &&
-                currentUser.email
-                    ? currentUser.email
-                    : "admin@fashion.com";
-
-        }
-
-
-
-        // =================================================
-        // ADMIN LOGOUT
-        // =================================================
-
-        const adminLogout =
-            document.getElementById(
-                "adminLogout"
-            );
-
-
-        if (adminLogout) {
-
-            adminLogout.addEventListener(
-                "click",
-                function () {
-
-                    localStorage.removeItem(
-                        "fashionAdminLoggedIn"
-                    );
-
-
-                    localStorage.removeItem(
-                        "fashionCurrentUser"
-                    );
-
-
-                    window.location.href =
-                        "admin-login.html";
-
-                }
-            );
-
-        }
-
-
-
-        // =================================================
-        // MANAGE ORDERS
-        // =================================================
-
-        const manageOrdersBtn =
-            document.getElementById(
-                "manageOrdersBtn"
-            );
-
-
-        if (manageOrdersBtn) {
-
-            manageOrdersBtn.addEventListener(
-                "click",
-                function () {
-
-                    alert(
-                        "Order management will be added next."
-                    );
-
-                }
-            );
-
-        }
-
-
-
-        // =================================================
-        // PRODUCT COUNT
-        // =================================================
-
-        function updateProductCount() {
-
-            const productCount =
-                document.getElementById(
-                    "productCount"
-                );
-
-
-            if (!productCount) {
-                return;
-            }
-
-
-            try {
-
-                const products =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "fashionProducts"
-                        )
-                    ) || [];
-
-
-                productCount.textContent =
-                    Array.isArray(products)
-                        ? products.length
-                        : 0;
-
-            } catch (error) {
-
-                productCount.textContent =
-                    "0";
-
-            }
-
-        }
-
-
-        updateProductCount();
-
-
-
-        // =================================================
-        // ORDER COUNT
-        // =================================================
-
-        try {
-
-            const orders =
-                JSON.parse(
-                    localStorage.getItem(
-                        "fashionOrders"
-                    )
-                ) || [];
-
-
-            const orderCount =
-                document.getElementById(
-                    "orderCount"
-                );
-
-
-            if (orderCount) {
-
-                orderCount.textContent =
-                    Array.isArray(orders)
-                        ? orders.length
-                        : 0;
-
-            }
-
-        } catch (error) {
-
-            const orderCount =
-                document.getElementById(
-                    "orderCount"
-                );
-
-
-            if (orderCount) {
-
-                orderCount.textContent =
-                    "0";
-
-            }
-
-        }
-
-
-
-        // =================================================
-        // CUSTOMER COUNT
-        // =================================================
-
-        try {
-
-            const users =
-                JSON.parse(
-                    localStorage.getItem(
-                        "fashionUsers"
-                    )
-                ) || [];
-
-
-            const customerCount =
-                document.getElementById(
-                    "customerCount"
-                );
-
-
-            if (customerCount) {
-
-                customerCount.textContent =
-                    Array.isArray(users)
-                        ? users.length
-                        : 0;
-
-            }
-
-        } catch (error) {
-
-            const customerCount =
-                document.getElementById(
-                    "customerCount"
-                );
-
-
-            if (customerCount) {
-
-                customerCount.textContent =
-                    "0";
-
-            }
-
-        }
-
-    </script>
-
-
-
-    <!-- =====================================================
-         ADMIN PRODUCT MANAGEMENT
-    ====================================================== -->
-
-    <script src="admin-products.js"></script>
-
+<script src="admin.js"></script>
 
 
 </body>

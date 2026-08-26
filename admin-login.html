@@ -24,13 +24,7 @@
 
 </head>
 
-
 <body>
-
-
-    <!-- =========================
-         ADMIN LOGIN
-    ========================== -->
 
     <main class="auth-page">
 
@@ -48,11 +42,7 @@
                 Sign in to manage your store.
             </p>
 
-
             <form id="adminLoginForm">
-
-
-                <!-- EMAIL -->
 
                 <div class="form-group">
 
@@ -64,13 +54,11 @@
                         type="email"
                         id="adminEmail"
                         placeholder="Enter admin email"
+                        autocomplete="email"
                         required
                     >
 
                 </div>
-
-
-                <!-- PASSWORD -->
 
                 <div class="form-group">
 
@@ -82,22 +70,21 @@
                         type="password"
                         id="adminPassword"
                         placeholder="Enter admin password"
+                        autocomplete="current-password"
                         required
                     >
 
                 </div>
 
-
                 <button
                     type="submit"
                     class="auth-btn"
+                    id="adminLoginButton"
                 >
                     ADMIN LOGIN
                 </button>
 
-
             </form>
-
 
             <p class="auth-switch">
 
@@ -111,6 +98,20 @@
 
     </main>
 
+
+    <!-- SUPABASE LIBRARY -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+    ></script>
+
+
+    <!-- YOUR SUPABASE CONFIG -->
+
+    <script src="supabase.js"></script>
+
+
+    <!-- ADMIN LOGIN -->
 
     <script src="admin-login.js"></script>
 

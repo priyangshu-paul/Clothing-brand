@@ -1,170 +1,185 @@
 // =====================================================
 // FASHION ADMIN LOGIN
+// SUPABASE AUTH
 // =====================================================
 
 "use strict";
 
+document.addEventListener("DOMContentLoaded", async function () {
 
-// =====================================================
-// ADMIN CREDENTIALS
-// =====================================================
+    if (typeof supabaseClient === "undefined") {
+        alert("Supabase is not connected. Check supabase.js.");
+        return;
+    }
 
-const ADMIN_EMAIL = "admin@fashion.com";
-const ADMIN_PASSWORD = "admin123";
+    const ADMIN_EMAIL = "admin@fashion.com";
 
+    const form = document.getElementById("adminLoginForm");
+    const emailInput = document.getElementById("adminEmail");
+    const passwordInput = document.getElementById("adminPassword");
+    const loginButton = document.getElementById("adminLoginButton");
 
-// =====================================================
-// CHECK EXISTING ADMIN LOGIN
-// =====================================================
+    if (!form) {
+        return;
+    }
 
-const adminLoggedIn =
-    localStorage.getItem(
-        "fashionAdminLoggedIn"
-    );
+    // =================================================
+    // CHECK EXISTING SESSION
+    // =================================================
 
+    try {
 
-if (adminLoggedIn === "true") {
+        const {
+            data,
+            error
+        } = await supabaseClient.auth.getSession();
 
-    window.location.href =
-        "admin.html";
+        if (error) {
+            throw error;
+        }
 
-}
+        const session = data?.session;
 
-
-// =====================================================
-// LOGIN FORM
-// =====================================================
-
-const adminLoginForm =
-    document.getElementById(
-        "adminLoginForm"
-    );
-
-
-if (adminLoginForm) {
-
-    adminLoginForm.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            // =================================================
-            // GET EMAIL
-            // =================================================
+        if (session?.user) {
 
             const email =
-                document
-                    .getElementById(
-                        "adminEmail"
-                    )
-                    .value
+                String(session.user.email || "")
                     .trim()
                     .toLowerCase();
 
+            if (email === ADMIN_EMAIL) {
+                window.location.replace("admin.html");
+                return;
+            }
 
-            // =================================================
-            // GET PASSWORD
-            // =================================================
+            await supabaseClient.auth.signOut();
+        }
 
-            const password =
-                document
-                    .getElementById(
-                        "adminPassword"
-                    )
-                    .value;
+    } catch (error) {
 
+        console.error(
+            "Admin session check failed:",
+            error
+        );
 
-            // =================================================
-            // CHECK ADMIN CREDENTIALS
-            // =================================================
-
-            if (
-                email === ADMIN_EMAIL &&
-                password === ADMIN_PASSWORD
-            ) {
+    }
 
 
-                // =================================================
-                // SAVE ADMIN LOGIN
-                // =================================================
+    // =================================================
+    // LOGIN
+    // =================================================
 
-                localStorage.setItem(
-                    "fashionAdminLoggedIn",
-                    "true"
-                );
+    form.addEventListener("submit", async function (event) {
 
+        event.preventDefault();
 
-                // =================================================
-                // SAVE ADMIN USER
-                // =================================================
+        const email =
+            emailInput.value
+                .trim()
+                .toLowerCase();
 
-                const adminUser = {
+        const password =
+            passwordInput.value;
 
-                    name: "Fashion Admin",
+        if (email !== ADMIN_EMAIL) {
 
-                    email: ADMIN_EMAIL,
+            alert(
+                "Only the authorized admin account can access this panel."
+            );
 
-                    role: "admin"
+            return;
+        }
 
-                };
+        if (!password) {
 
+            alert(
+                "Please enter your password."
+            );
 
-                localStorage.setItem(
-                    "fashionCurrentUser",
-                    JSON.stringify(
-                        adminUser
-                    )
-                );
+            return;
+        }
 
+        loginButton.disabled = true;
+        loginButton.textContent = "SIGNING IN...";
 
-                // =================================================
-                // VERIFY STORAGE
-                // =================================================
+        try {
 
-                console.log(
-                    "Admin login successful."
-                );
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.signInWithPassword({
 
+                email: email,
 
-                console.log(
-                    "fashionAdminLoggedIn:",
-                    localStorage.getItem(
-                        "fashionAdminLoggedIn"
-                    )
-                );
+                password: password
 
+            });
 
-                console.log(
-                    "fashionCurrentUser:",
-                    localStorage.getItem(
-                        "fashionCurrentUser"
-                    )
-                );
+            if (error) {
+                throw error;
+            }
 
+            if (!data?.user) {
 
-                // =================================================
-                // REDIRECT TO ADMIN DASHBOARD
-                // =================================================
-
-                window.location.href =
-                    "admin.html";
-
-            } else {
-
-
-                // =================================================
-                // INVALID LOGIN
-                // =================================================
-
-                alert(
-                    "Invalid admin email or password."
+                throw new Error(
+                    "Admin session could not be created."
                 );
 
             }
 
-        }
-    );
+            const loggedEmail =
+                String(data.user.email || "")
+                    .trim()
+                    .toLowerCase();
 
-}
+            if (loggedEmail !== ADMIN_EMAIL) {
+
+                await supabaseClient.auth.signOut();
+
+                throw new Error(
+                    "This account is not authorized as an admin."
+                );
+
+            }
+
+            // Remove old authentication values
+            localStorage.removeItem(
+                "fashionAdminLoggedIn"
+            );
+
+            localStorage.removeItem(
+                "fashionCurrentUser"
+            );
+
+            localStorage.removeItem(
+                "fashionAdmin"
+            );
+
+            window.location.replace(
+                "admin.html"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Admin login error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Invalid admin email or password."
+            );
+
+            passwordInput.value = "";
+
+        } finally {
+
+            loginButton.disabled = false;
+            loginButton.textContent = "ADMIN LOGIN";
+
+        }
+
+    });
+
+});

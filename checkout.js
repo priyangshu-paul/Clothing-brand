@@ -8,7 +8,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
 
     // =====================================================
-    // CHECK SUPABASE
+    // SUPABASE CHECK
     // =====================================================
 
     if (typeof supabaseClient === "undefined") {
@@ -57,7 +57,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             );
 
         if (Array.isArray(savedCart)) {
+
             cart = savedCart;
+
         }
 
     } catch (error) {
@@ -68,11 +70,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         );
 
         cart = [];
+
     }
 
 
     // =====================================================
-    // GET SUPABASE SESSION
+    // GET SUPABASE AUTH SESSION
     // =====================================================
 
     const {
@@ -94,11 +97,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         );
 
         return;
+
     }
 
 
     const session =
         sessionData?.session;
+
 
     const authUser =
         session?.user;
@@ -111,12 +116,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!authUser) {
 
         if (placeOrder) {
-            placeOrder.disabled = true;
+
+            placeOrder.disabled =
+                true;
+
         }
 
         alert(
             "Please login before checkout."
         );
+
 
         setTimeout(function () {
 
@@ -125,15 +134,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }, 800);
 
+
         return;
+
     }
 
 
     // =====================================================
-    // GET USER PROFILE
+    // GET PROFILE
     // =====================================================
 
     let profile = null;
+
 
     try {
 
@@ -144,7 +156,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             await supabaseClient
                 .from("profiles")
                 .select("*")
-                .eq("id", authUser.id)
+                .eq(
+                    "id",
+                    authUser.id
+                )
                 .maybeSingle();
 
 
@@ -157,7 +172,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         } else {
 
-            profile = data;
+            profile =
+                data;
+
         }
 
     } catch (error) {
@@ -166,11 +183,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             "Profile request failed:",
             error
         );
+
     }
 
 
     // =====================================================
-    // USER INFORMATION
+    // USER DATA
     // =====================================================
 
     const metadata =
@@ -186,7 +204,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     const userEmail =
-        authUser.email || "";
+        authUser.email ||
+        "";
 
 
     const userPhone =
@@ -214,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     // =====================================================
-    // KEEP OLD LOGIN SYSTEM COMPATIBLE
+    // LEGACY LOGIN COMPATIBILITY
     // =====================================================
 
     localStorage.setItem(
@@ -259,7 +278,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             "₹" +
             (
                 Number(value) || 0
-            ).toLocaleString("en-IN")
+            ).toLocaleString(
+                "en-IN"
+            )
         );
 
     }
@@ -271,42 +292,79 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function escapeHTML(value) {
 
-        return String(value || "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        return String(
+            value || ""
+        )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
 
     }
 
 
     // =====================================================
-    // FILL USER INFORMATION
+    // FILL CUSTOMER INFORMATION
     // =====================================================
 
     function fillUserInformation() {
 
         const email =
-            document.getElementById("email");
+            document.getElementById(
+                "email"
+            );
+
 
         const firstName =
-            document.getElementById("firstName");
+            document.getElementById(
+                "firstName"
+            );
+
 
         const lastName =
-            document.getElementById("lastName");
+            document.getElementById(
+                "lastName"
+            );
+
 
         const address =
-            document.getElementById("address");
+            document.getElementById(
+                "address"
+            );
+
 
         const city =
-            document.getElementById("city");
+            document.getElementById(
+                "city"
+            );
+
 
         const pincode =
-            document.getElementById("pincode");
+            document.getElementById(
+                "pincode"
+            );
+
 
         const phone =
-            document.getElementById("phone");
+            document.getElementById(
+                "phone"
+            );
 
 
         const nameParts =
@@ -377,13 +435,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     // =====================================================
-    // DISPLAY CHECKOUT CART
+    // DISPLAY CHECKOUT
     // =====================================================
 
     function displayCheckout() {
 
         if (!checkoutItems) {
+
             return;
+
         }
 
 
@@ -391,7 +451,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             "";
 
 
+        // =================================================
         // EMPTY CART
+        // =================================================
 
         if (!cart.length) {
 
@@ -449,32 +511,42 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
             return;
+
         }
 
+
+        // =================================================
+        // CALCULATE SUBTOTAL
+        // =================================================
 
         let subtotal =
             0;
 
 
         // =================================================
-        // RENDER CART ITEMS
+        // DISPLAY PRODUCTS
         // =================================================
 
         cart.forEach(function (item) {
 
             const price =
-                Number(item.price) || 0;
+                Number(
+                    item.price
+                ) || 0;
 
 
             const quantity =
                 Math.max(
                     1,
-                    Number(item.quantity) || 1
+                    Number(
+                        item.quantity
+                    ) || 1
                 );
 
 
             const itemTotal =
-                price * quantity;
+                price *
+                quantity;
 
 
             subtotal +=
@@ -491,7 +563,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 "checkout-item";
 
 
+            // =================================================
             // IMAGE
+            // =================================================
 
             const image =
                 document.createElement(
@@ -525,7 +599,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 };
 
 
-            // PRODUCT INFORMATION
+            // =================================================
+            // PRODUCT INFO
+            // =================================================
 
             const info =
                 document.createElement(
@@ -605,6 +681,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             shipping;
 
 
+        // =================================================
+        // UPDATE TOTALS
+        // =================================================
+
         if (checkoutSubtotal) {
 
             checkoutSubtotal.textContent =
@@ -648,7 +728,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     // =====================================================
-    // VALIDATE CHECKOUT FORM
+    // VALIDATE FORM
     // =====================================================
 
     function validateForm() {
@@ -658,36 +738,44 @@ document.addEventListener("DOMContentLoaded", async function () {
                 "email"
             );
 
+
         const firstName =
             document.getElementById(
                 "firstName"
             );
+
 
         const lastName =
             document.getElementById(
                 "lastName"
             );
 
+
         const address =
             document.getElementById(
                 "address"
             );
+
 
         const city =
             document.getElementById(
                 "city"
             );
 
+
         const pincode =
             document.getElementById(
                 "pincode"
             );
+
 
         const phone =
             document.getElementById(
                 "phone"
             );
 
+
+        // EMAIL
 
         if (
             !email ||
@@ -701,8 +789,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             email?.focus();
 
             return false;
+
         }
 
+
+        // FIRST NAME
 
         if (
             !firstName ||
@@ -716,8 +807,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             firstName?.focus();
 
             return false;
+
         }
 
+
+        // LAST NAME
 
         if (
             !lastName ||
@@ -731,8 +825,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             lastName?.focus();
 
             return false;
+
         }
 
+
+        // ADDRESS
 
         if (
             !address ||
@@ -746,8 +843,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             address?.focus();
 
             return false;
+
         }
 
+
+        // CITY
 
         if (
             !city ||
@@ -761,8 +861,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             city?.focus();
 
             return false;
+
         }
 
+
+        // PINCODE
 
         if (
             !pincode ||
@@ -778,8 +881,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             pincode?.focus();
 
             return false;
+
         }
 
+
+        // PHONE
 
         if (
             !phone ||
@@ -795,6 +901,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             phone?.focus();
 
             return false;
+
         }
 
 
@@ -831,6 +938,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     );
 
                     return;
+
                 }
 
 
@@ -854,7 +962,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 try {
 
                     // =====================================
-                    // GET CUSTOMER DETAILS
+                    // CUSTOMER DETAILS
                     // =====================================
 
                     const email =
@@ -937,7 +1045,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // CALCULATE SUBTOTAL
+                    // CALCULATE TOTAL
                     // =====================================
 
                     let subtotal =
@@ -969,10 +1077,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                         }
                     );
 
-
-                    // =====================================
-                    // SHIPPING
-                    // =====================================
 
                     const shipping =
                         subtotal >= 1999
@@ -1009,17 +1113,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // ORDER DATA
+                    // DATABASE ORDER
                     //
-                    // IMPORTANT:
-                    // Only columns already confirmed
-                    // in the current orders table are used.
+                    // ONLY EXISTING COLUMNS
                     // =====================================
 
                     const orderData = {
-
-                        user_id:
-                            authUser.id,
 
                         customer_name:
                             customerName,
@@ -1046,13 +1145,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     console.log(
-                        "Creating order:",
+                        "Order data:",
                         orderData
                     );
 
 
                     // =====================================
-                    // INSERT ORDER
+                    // INSERT INTO SUPABASE
                     // =====================================
 
                     const {
@@ -1081,7 +1180,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // GENERATE ORDER NUMBER
+                    // ORDER NUMBER
                     // =====================================
 
                     const orderNumber =
@@ -1090,7 +1189,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // SUCCESS ORDER OBJECT
+                    // SUCCESS ORDER
                     // =====================================
 
                     const successOrder = {
@@ -1105,13 +1204,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         orderNumber:
                             orderNumber,
 
-                        userId:
-                            authUser.id,
-
                         customer: {
-
-                            userId:
-                                authUser.id,
 
                             name:
                                 customerName,
@@ -1172,7 +1265,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // SAVE ORDER LOCALLY
+                    // SAVE LAST ORDER
                     // =====================================
 
                     localStorage.setItem(
@@ -1206,7 +1299,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // CART UPDATE EVENT
+                    // UPDATE CART
                     // =====================================
 
                     document.dispatchEvent(
@@ -1222,7 +1315,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
                     // =====================================
-                    // SUCCESS MESSAGE
+                    // SUCCESS
                     // =====================================
 
                     alert(
