@@ -1,24 +1,48 @@
 // =====================================================
 // FASHION ACCOUNT SYSTEM
-// MY ORDERS
-// FLIPKART-STYLE ORDER FLOW
+// SUPABASE PROFILE + ORDERS
 // =====================================================
 
-document.addEventListener("DOMContentLoaded", function () {
+"use strict";
+
+document.addEventListener("DOMContentLoaded", async function () {
 
     // =====================================================
-    // LOGIN
+    // SUPABASE CHECK
     // =====================================================
 
-    const loggedInUser = JSON.parse(
-        localStorage.getItem("fashionLoggedIn")
-    );
-
-    if (!loggedInUser) {
-        window.location.href = "login.html";
+    if (typeof supabaseClient === "undefined") {
+        console.error("supabaseClient is not defined.");
+        alert("Supabase is not connected.");
         return;
     }
 
+    // =====================================================
+    // GET SESSION
+    // =====================================================
+
+    const {
+        data: sessionData,
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+    if (sessionError) {
+        console.error("Session error:", sessionError);
+        alert("Unable to verify your account.");
+        return;
+    }
+
+    const session = sessionData?.session;
+    const authUser = session?.user;
+
+    // =====================================================
+    // LOGIN CHECK
+    // =====================================================
+
+    if (!authUser) {
+        window.location.href = "login.html";
+        return;
+    }
 
     // =====================================================
     // ELEMENTS
@@ -47,11 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const accountLogout =
         document.getElementById("accountLogout");
-
-
-    // =====================================================
-    // PROFILE ELEMENTS
-    // =====================================================
 
     const editProfileBtn =
         document.getElementById("editProfileBtn");
@@ -98,103 +117,201 @@ document.addEventListener("DOMContentLoaded", function () {
     const userPincode =
         document.getElementById("userPincode");
 
+    // =====================================================
+    // LOAD PROFILE FROM SUPABASE
+    // =====================================================
+
+    let profile = null;
+
+    const {
+        data: profileData,
+        error: profileError
+    } = await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", authUser.id)
+        .maybeSingle();
+
+    if (profileError) {
+        console.error(
+            "Profile loading error:",
+            profileError
+        );
+    } else {
+        profile = profileData;
+    }
 
     // =====================================================
-    // USER INFORMATION
+    // CREATE PROFILE IF MISSING
+    // =====================================================
+
+    if (!profile) {
+
+        const metadata =
+            authUser.user_metadata || {};
+
+        const newProfile = {
+            id: authUser.id,
+
+            name:
+                metadata.name ||
+                metadata.full_name ||
+                authUser.email?.split("@")[0] ||
+                "User",
+
+            email:
+                authUser.email || "",
+
+            phone:
+                metadata.phone || "",
+
+            address:
+                metadata.address || "",
+
+            city:
+                metadata.city || "",
+
+            pincode:
+                metadata.pincode || ""
+        };
+
+        const {
+            data: createdProfile,
+            error: createError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .insert([newProfile])
+                .select()
+                .single();
+
+        if (createError) {
+
+            console.error(
+                "Profile creation error:",
+                createError
+            );
+
+        } else {
+
+            profile =
+                createdProfile;
+
+        }
+    }
+
+    // =====================================================
+    // FALLBACK PROFILE
+    // =====================================================
+
+    profile = profile || {
+
+        id: authUser.id,
+
+        name:
+            authUser.user_metadata?.name ||
+            authUser.email?.split("@")[0] ||
+            "User",
+
+        email:
+            authUser.email || "",
+
+        phone: "",
+        address: "",
+        city: "",
+        pincode: ""
+    };
+
+    // =====================================================
+    // DISPLAY USER
     // =====================================================
 
     function displayUser() {
 
         const name =
-            loggedInUser.name || "User";
-
+            profile.name ||
+            "User";
 
         if (accountName) {
-            accountName.textContent = name;
+            accountName.textContent =
+                name;
         }
-
 
         if (accountAvatar) {
             accountAvatar.textContent =
-                name.charAt(0).toUpperCase();
+                name
+                    .charAt(0)
+                    .toUpperCase();
         }
-
 
         if (userName) {
             userName.textContent =
-                loggedInUser.name || "-";
+                profile.name || "-";
         }
-
 
         if (userEmail) {
             userEmail.textContent =
-                loggedInUser.email || "-";
+                profile.email ||
+                authUser.email ||
+                "-";
         }
-
 
         if (userPhone) {
             userPhone.textContent =
-                loggedInUser.phone || "Not added";
+                profile.phone ||
+                "Not added";
         }
-
 
         if (userAddress) {
             userAddress.textContent =
-                loggedInUser.address || "Not added";
+                profile.address ||
+                "Not added";
         }
-
 
         if (userCity) {
             userCity.textContent =
-                loggedInUser.city || "Not added";
+                profile.city ||
+                "Not added";
         }
-
 
         if (userPincode) {
             userPincode.textContent =
-                loggedInUser.pincode || "Not added";
+                profile.pincode ||
+                "Not added";
         }
-
     }
 
-
     // =====================================================
-    // PROFILE FORM
+    // LOAD PROFILE FORM
     // =====================================================
 
-    function loadProfile() {
+    function loadProfileForm() {
 
         if (profileName) {
             profileName.value =
-                loggedInUser.name || "";
+                profile.name || "";
         }
-
 
         if (profilePhone) {
             profilePhone.value =
-                loggedInUser.phone || "";
+                profile.phone || "";
         }
-
 
         if (profileAddress) {
             profileAddress.value =
-                loggedInUser.address || "";
+                profile.address || "";
         }
-
 
         if (profileCity) {
             profileCity.value =
-                loggedInUser.city || "";
+                profile.city || "";
         }
-
 
         if (profilePincode) {
             profilePincode.value =
-                loggedInUser.pincode || "";
+                profile.pincode || "";
         }
-
     }
-
 
     // =====================================================
     // EDIT PROFILE
@@ -206,32 +323,26 @@ document.addEventListener("DOMContentLoaded", function () {
             "click",
             function () {
 
-                loadProfile();
-
+                loadProfileForm();
 
                 if (profileView) {
                     profileView.style.display =
                         "none";
                 }
 
-
                 if (profileForm) {
                     profileForm.style.display =
                         "block";
                 }
 
-
                 editProfileBtn.style.display =
                     "none";
-
             }
         );
-
     }
 
-
     // =====================================================
-    // CANCEL PROFILE EDIT
+    // CANCEL PROFILE
     // =====================================================
 
     if (cancelProfileBtn) {
@@ -245,68 +356,45 @@ document.addEventListener("DOMContentLoaded", function () {
                         "none";
                 }
 
-
                 if (profileView) {
                     profileView.style.display =
                         "";
                 }
 
-
                 if (editProfileBtn) {
                     editProfileBtn.style.display =
                         "";
                 }
-
             }
         );
-
     }
 
-
     // =====================================================
-    // SAVE PROFILE
+    // SAVE PROFILE TO SUPABASE
     // =====================================================
 
     if (profileForm) {
 
         profileForm.addEventListener(
             "submit",
-            function (event) {
+            async function (event) {
 
                 event.preventDefault();
 
-
                 const name =
-                    profileName
-                        ? profileName.value.trim()
-                        : "";
-
+                    profileName?.value.trim() || "";
 
                 const phone =
-                    profilePhone
-                        ? profilePhone.value.trim()
-                        : "";
-
+                    profilePhone?.value.trim() || "";
 
                 const address =
-                    profileAddress
-                        ? profileAddress.value.trim()
-                        : "";
-
+                    profileAddress?.value.trim() || "";
 
                 const city =
-                    profileCity
-                        ? profileCity.value.trim()
-                        : "";
-
+                    profileCity?.value.trim() || "";
 
                 const pincode =
-                    profilePincode
-                        ? profilePincode.value.trim()
-                        : "";
-
-
-                // NAME
+                    profilePincode?.value.trim() || "";
 
                 if (!name) {
 
@@ -314,16 +402,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         "Please enter your full name."
                     );
 
-                    if (profileName) {
-                        profileName.focus();
-                    }
+                    profileName?.focus();
 
                     return;
-
                 }
-
-
-                // PHONE
 
                 if (
                     phone &&
@@ -334,16 +416,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         "Please enter a valid 10-digit phone number."
                     );
 
-                    if (profilePhone) {
-                        profilePhone.focus();
-                    }
+                    profilePhone?.focus();
 
                     return;
-
                 }
-
-
-                // PIN
 
                 if (
                     pincode &&
@@ -354,190 +430,225 @@ document.addEventListener("DOMContentLoaded", function () {
                         "Please enter a valid 6-digit PIN code."
                     );
 
-                    if (profilePincode) {
-                        profilePincode.focus();
-                    }
+                    profilePincode?.focus();
 
                     return;
-
                 }
 
-
-                // UPDATE USER
-
-                loggedInUser.name =
-                    name;
-
-                loggedInUser.phone =
-                    phone;
-
-                loggedInUser.address =
-                    address;
-
-                loggedInUser.city =
-                    city;
-
-                loggedInUser.pincode =
-                    pincode;
-
-
-                // SAVE LOGIN USER
-
-                localStorage.setItem(
-                    "fashionLoggedIn",
-                    JSON.stringify(
-                        loggedInUser
-                    )
-                );
-
-
-                // UPDATE USERS
-
-                let users =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "fashionUsers"
-                        )
-                    ) || [];
-
-
-                const userIndex =
-                    users.findIndex(
-                        user =>
-                            String(user.id) ===
-                            String(loggedInUser.id)
+                const saveButton =
+                    profileForm.querySelector(
+                        'button[type="submit"]'
                     );
 
+                if (saveButton) {
+                    saveButton.disabled = true;
+                    saveButton.textContent =
+                        "SAVING...";
+                }
 
-                if (userIndex !== -1) {
+                try {
 
-                    users[userIndex] = {
-                        ...users[userIndex],
-                        name,
-                        phone,
-                        address,
-                        city,
-                        pincode
+                    const updatedProfile = {
+
+                        id:
+                            authUser.id,
+
+                        name:
+                            name,
+
+                        email:
+                            authUser.email ||
+                            profile.email ||
+                            "",
+
+                        phone:
+                            phone,
+
+                        address:
+                            address,
+
+                        city:
+                            city,
+
+                        pincode:
+                            pincode
                     };
 
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .from("profiles")
+                            .upsert(
+                                updatedProfile,
+                                {
+                                    onConflict: "id"
+                                }
+                            )
+                            .select()
+                            .single();
 
-                    localStorage.setItem(
-                        "fashionUsers",
-                        JSON.stringify(users)
+                    if (error) {
+                        throw error;
+                    }
+
+                    profile =
+                        data;
+
+                    displayUser();
+
+                    if (profileForm) {
+                        profileForm.style.display =
+                            "none";
+                    }
+
+                    if (profileView) {
+                        profileView.style.display =
+                            "";
+                    }
+
+                    if (editProfileBtn) {
+                        editProfileBtn.style.display =
+                            "";
+                    }
+
+                    alert(
+                        "Profile updated successfully."
                     );
 
+                } catch (error) {
+
+                    console.error(
+                        "Profile update error:",
+                        error
+                    );
+
+                    alert(
+                        error.message ||
+                        "Unable to update profile."
+                    );
+
+                } finally {
+
+                    if (saveButton) {
+
+                        saveButton.disabled =
+                            false;
+
+                        saveButton.textContent =
+                            "SAVE CHANGES";
+                    }
                 }
-
-
-                displayUser();
-
-
-                if (profileForm) {
-                    profileForm.style.display =
-                        "none";
-                }
-
-
-                if (profileView) {
-                    profileView.style.display =
-                        "";
-                }
-
-
-                if (editProfileBtn) {
-                    editProfileBtn.style.display =
-                        "";
-                }
-
-
-                alert(
-                    "Profile updated successfully."
-                );
-
             }
         );
-
     }
-
 
     // =====================================================
     // ORDERS
     // =====================================================
 
-    let allOrders =
-        JSON.parse(
-            localStorage.getItem(
-                "fashionOrders"
+    let userOrders = [];
+
+    async function loadOrders() {
+
+        if (!orderHistory) {
+            return;
+        }
+
+        orderHistory.innerHTML = `
+            <div class="admin-empty">
+                Loading your orders...
+            </div>
+        `;
+
+        try {
+
+            /*
+             * IMPORTANT:
+             * orders table does NOT contain user_id.
+             *
+             * Therefore we identify the customer's orders
+             * using customer_email.
+             */
+
+            const email =
+                authUser.email ||
+                profile.email ||
+                "";
+
+            if (!email) {
+
+                userOrders = [];
+
+                renderOrders();
+
+                return;
+            }
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("orders")
+                    .select("*")
+                    .eq(
+                        "customer_email",
+                        email
+                    )
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+            if (error) {
+                throw error;
+            }
+
+            userOrders =
+                Array.isArray(data)
+                    ? data
+                    : [];
+
+            renderOrders();
+
+        } catch (error) {
+
+            console.error(
+                "Orders loading error:",
+                error
+            );
+
+            orderHistory.innerHTML = `
+                <div class="admin-empty">
+                    <h3>Unable to load orders</h3>
+                    <p>
+                        Please refresh the page and try again.
+                    </p>
+                </div>
+            `;
+        }
+    }
+
+    // =====================================================
+    // FORMAT PRICE
+    // =====================================================
+
+    function formatPrice(value) {
+
+        const number =
+            Number(value) || 0;
+
+        return (
+            "₹" +
+            number.toLocaleString(
+                "en-IN"
             )
-        ) || [];
-
-
-    // =====================================================
-    // USER ORDERS
-    // =====================================================
-
-    let userOrders =
-        allOrders.filter(
-            order =>
-                String(order.userId) ===
-                String(loggedInUser.id)
         );
-
-
-    // =====================================================
-    // UPDATE ORDER COUNTS
-    // =====================================================
-
-    function updateOrderCounts() {
-
-        if (orderMenuCount) {
-
-            orderMenuCount.textContent =
-                userOrders.length;
-
-        }
-
-
-        if (ordersCountText) {
-
-            ordersCountText.textContent =
-                userOrders.length === 1
-                    ? "1 Order"
-                    : `${userOrders.length} Orders`;
-
-        }
-
     }
-
-
-    // =====================================================
-    // GET PRODUCTS
-    // =====================================================
-
-    function getProducts(order) {
-
-        return (
-            order.products ||
-            order.items ||
-            []
-        );
-
-    }
-
-
-    // =====================================================
-    // GET STATUS
-    // =====================================================
-
-    function getStatus(order) {
-
-        return (
-            order.status ||
-            "Confirmed"
-        );
-
-    }
-
 
     // =====================================================
     // FORMAT DATE
@@ -549,427 +660,283 @@ document.addEventListener("DOMContentLoaded", function () {
             return "Date unavailable";
         }
 
-
         const date =
             new Date(value);
-
 
         if (
             isNaN(
                 date.getTime()
             )
         ) {
-
             return "Date unavailable";
-
         }
 
-
-        return date.toLocaleDateString(
+        return date.toLocaleString(
             "en-IN",
             {
                 day: "2-digit",
                 month: "short",
-                year: "numeric"
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
             }
         );
-
     }
 
-
     // =====================================================
-    // GET ORDER NUMBER
-    // =====================================================
-
-    function getOrderNumber(order) {
-
-        return (
-            order.orderNumber ||
-            order.orderId ||
-            "N/A"
-        );
-
-    }
-
-
-    // =====================================================
-    // GET TOTAL
+    // GET ORDER ITEMS
     // =====================================================
 
-    function getOrderTotal(order) {
+    function getOrderItems(order) {
 
-        if (
-            order.total !== undefined &&
-            order.total !== null &&
-            order.total !== ""
-        ) {
+        let items =
+            order.items;
 
-            return String(
-                order.total
-            ).startsWith("₹")
-                ? String(order.total)
-                : "₹" +
-                  Number(
-                      order.total
-                  ).toLocaleString("en-IN");
+        if (typeof items === "string") {
 
-        }
-
-
-        const products =
-            getProducts(order);
-
-
-        let total = 0;
-
-
-        products.forEach(
-            product => {
-
-                const price =
-                    Number(
-                        product.price
-                    ) || 0;
-
-
-                const quantity =
-                    Number(
-                        product.quantity
-                    ) || 1;
-
-
-                total +=
-                    price * quantity;
-
+            try {
+                items =
+                    JSON.parse(items);
+            } catch {
+                items = [];
             }
-        );
+        }
 
-
-        return "₹" +
-            total.toLocaleString(
-                "en-IN"
-            );
-
+        return Array.isArray(items)
+            ? items
+            : [];
     }
 
+    // =====================================================
+    // ESCAPE HTML
+    // =====================================================
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+    }
 
     // =====================================================
-    // CHECK IF ORDER CAN BE CANCELLED
+    // STATUS CLASS
     // =====================================================
 
-    function canCancel(order) {
+    function statusClass(status) {
+
+        return String(
+            status || "Confirmed"
+        )
+            .toLowerCase()
+            .replace(
+                /\s+/g,
+                "-"
+            );
+    }
+
+    // =====================================================
+    // CREATE ORDER CARD
+    // =====================================================
+
+    function createOrderCard(order) {
+
+        const card =
+            document.createElement(
+                "article"
+            );
+
+        card.className =
+            "order-card";
+
+        const items =
+            getOrderItems(order);
 
         const status =
-            getStatus(order);
+            order.status ||
+            "Confirmed";
 
+        const orderId =
+            order.id ||
+            "N/A";
 
-        return (
-            status === "Confirmed" ||
-            status === "Processing"
-        );
+        let itemsHTML =
+            "";
 
-    }
+        if (items.length) {
 
+            itemsHTML =
+                items
+                    .map(
+                        function (item) {
 
-    // =====================================================
-    // CHECK REVIEW AVAILABILITY
-    // =====================================================
+                            const quantity =
+                                Math.max(
+                                    1,
+                                    Number(
+                                        item.quantity
+                                    ) || 1
+                                );
 
-    function canReview(order) {
+                            const price =
+                                Number(
+                                    item.price
+                                ) || 0;
 
-        const status =
-            getStatus(order);
+                            const image =
+                                item.image ||
+                                "product1.jpg";
 
+                            return `
+                                <div class="order-product">
 
-        return status === "Delivered";
+                                    <img
+                                        src="${escapeHTML(image)}"
+                                        alt="${escapeHTML(
+                                            item.name ||
+                                            "Product"
+                                        )}"
+                                    >
 
-    }
+                                    <div class="order-product-info">
 
+                                        <strong>
+                                            ${escapeHTML(
+                                                item.name ||
+                                                "Product"
+                                            )}
+                                        </strong>
 
-    // =====================================================
-    // OPEN ORDER DETAILS
-    // =====================================================
+                                        <span>
+                                            Qty: ${quantity}
+                                        </span>
 
-    function openOrder(order) {
+                                        ${
+                                            item.size
+                                                ? `
+                                                    <span>
+                                                        Size:
+                                                        ${escapeHTML(
+                                                            item.size
+                                                        )}
+                                                    </span>
+                                                `
+                                                : ""
+                                        }
 
-        localStorage.setItem(
-            "selectedOrder",
-            JSON.stringify(order)
-        );
+                                        <span>
+                                            ${formatPrice(
+                                                price
+                                            )}
+                                        </span>
 
+                                    </div>
 
-        window.location.href =
-            "order-details.html";
-
-    }
-
-
-    // =====================================================
-    // CANCEL ORDER
-    // =====================================================
-
-    function cancelOrder(order) {
-
-        const orderNumber =
-            getOrderNumber(order);
-
-
-        if (!canCancel(order)) {
-
-            alert(
-                "This order can no longer be cancelled."
-            );
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-                `Are you sure you want to cancel Order #${orderNumber}?`
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        // ---------------------------------------------
-        // FIND ORDER
-        // ---------------------------------------------
-
-        const orderIndex =
-            allOrders.findIndex(
-                existingOrder => {
-
-                    const existingNumber =
-                        getOrderNumber(
-                            existingOrder
-                        );
-
-
-                    return (
-                        String(existingNumber) ===
-                        String(orderNumber)
-                    );
-
-                }
-            );
-
-
-        if (orderIndex === -1) {
-
-            alert(
-                "Order could not be found."
-            );
-
-            return;
-
-        }
-
-
-        // ---------------------------------------------
-        // UPDATE STATUS
-        // ---------------------------------------------
-
-        allOrders[orderIndex].status =
-            "Cancelled";
-
-
-        allOrders[orderIndex].cancelledAt =
-            new Date().toISOString();
-
-
-        // ---------------------------------------------
-        // SAVE
-        // ---------------------------------------------
-
-        localStorage.setItem(
-            "fashionOrders",
-            JSON.stringify(
-                allOrders
-            )
-        );
-
-
-        // ---------------------------------------------
-        // UPDATE SELECTED ORDER
-        // ---------------------------------------------
-
-        localStorage.setItem(
-            "selectedOrder",
-            JSON.stringify(
-                allOrders[orderIndex]
-            )
-        );
-
-
-        // ---------------------------------------------
-        // REFRESH USER ORDERS
-        // ---------------------------------------------
-
-        userOrders =
-            allOrders.filter(
-                existingOrder =>
-                    String(
-                        existingOrder.userId
-                    ) ===
-                    String(
-                        loggedInUser.id
+                                </div>
+                            `;
+                        }
                     )
-            );
+                    .join("");
 
+        } else {
 
-        updateOrderCounts();
+            itemsHTML = `
+                <p>
+                    No product details available.
+                </p>
+            `;
+        }
 
-        renderOrders();
+        card.innerHTML = `
 
+            <div class="order-card-header">
 
-        alert(
-            `Order #${orderNumber} has been cancelled successfully.`
-        );
+                <div>
 
-    }
+                    <span class="order-label">
+                        ORDER
+                    </span>
 
+                    <h3>
+                        #${escapeHTML(orderId)}
+                    </h3>
 
-    // =====================================================
-    // WRITE REVIEW
-    // =====================================================
-
-    function writeReview(order) {
-
-        localStorage.setItem(
-            "selectedOrder",
-            JSON.stringify(order)
-        );
-
-
-        localStorage.setItem(
-            "openReview",
-            "true"
-        );
-
-
-        window.location.href =
-            "order-details.html";
-
-    }
-
-
-    // =====================================================
-    // RENDER ORDER PRODUCTS
-    // =====================================================
-
-    function renderProducts(products) {
-
-        if (!products.length) {
-
-            return `
-
-                <div class="account-order-product">
-
-                    <div class="account-order-product-info">
-
-                        <strong>
-                            Product information unavailable
-                        </strong>
-
-                    </div>
+                    <p>
+                        ${formatDate(
+                            order.created_at
+                        )}
+                    </p>
 
                 </div>
 
-            `;
+                <span
+                    class="order-status ${statusClass(status)}"
+                >
+                    ${escapeHTML(status)}
+                </span>
 
-        }
+            </div>
 
+            <div class="order-products">
 
-        return products
-            .map(
-                function (product) {
+                ${itemsHTML}
 
-                    const quantity =
-                        Number(
-                            product.quantity
-                        ) || 1;
+            </div>
 
+            <div class="order-card-footer">
 
-                    const price =
-                        Number(
-                            product.price
-                        ) || 0;
+                <div>
 
+                    <span>
+                        TOTAL
+                    </span>
 
-                    const total =
-                        price *
-                        quantity;
+                    <strong>
+                        ${formatPrice(
+                            order.total
+                        )}
+                    </strong>
 
+                </div>
 
-                    return `
+                <div>
 
-                        <div class="account-order-product">
+                    <span>
+                        SHIP TO
+                    </span>
 
-                            <div class="account-order-image">
+                    <strong>
+                        ${escapeHTML(
+                            order.shipping_address ||
+                            "-"
+                        )}
+                    </strong>
 
-                                <img
-                                    src="${
-                                        product.image ||
-                                        "images/product1.jpg"
-                                    }"
-                                    alt="${
-                                        product.name ||
-                                        "Product"
-                                    }"
-                                >
+                </div>
 
-                            </div>
+            </div>
 
+        `;
 
-                            <div class="account-order-product-info">
-
-                                <strong>
-                                    ${
-                                        product.name ||
-                                        "Product"
-                                    }
-                                </strong>
-
-
-                                ${
-                                    product.size
-                                        ? `
-                                            <p>
-                                                Size: ${product.size}
-                                            </p>
-                                        `
-                                        : ""
-                                }
-
-
-                                <p>
-                                    Qty: ${quantity}
-                                </p>
-
-                            </div>
-
-
-                            <div class="account-product-price">
-
-                                ₹${total.toLocaleString("en-IN")}
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                }
-            )
-            .join("");
-
+        return card;
     }
-
 
     // =====================================================
     // RENDER ORDERS
@@ -981,7 +948,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         const search =
             orderSearch
                 ? orderSearch.value
@@ -989,450 +955,120 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toLowerCase()
                 : "";
 
-
         const filter =
             orderFilter
                 ? orderFilter.value
                 : "all";
 
-
-        let orders =
+        const filtered =
             userOrders.filter(
                 function (order) {
 
                     const status =
-                        getStatus(order);
+                        order.status ||
+                        "Confirmed";
 
+                    const items =
+                        getOrderItems(order);
 
-                    const orderNumber =
+                    const orderId =
                         String(
-                            getOrderNumber(order)
-                        )
-                        .toLowerCase();
+                            order.id || ""
+                        ).toLowerCase();
 
+                    const productsText =
+                        items
+                            .map(
+                                item =>
+                                    String(
+                                        item.name ||
+                                        ""
+                                    ).toLowerCase()
+                            )
+                            .join(" ");
 
-                    const products =
-                        getProducts(order);
-
-
-                    const productFound =
-                        products.some(
-                            product =>
-                                String(
-                                    product.name || ""
-                                )
-                                .toLowerCase()
-                                .includes(
-                                    search
-                                )
-                        );
-
-
-                    const searchMatch =
+                    const matchesSearch =
                         !search ||
-                        orderNumber.includes(
-                            search
-                        ) ||
-                        productFound;
+                        orderId.includes(search) ||
+                        productsText.includes(search);
 
-
-                    const filterMatch =
+                    const matchesFilter =
                         filter === "all" ||
                         status === filter;
 
-
                     return (
-                        searchMatch &&
-                        filterMatch
+                        matchesSearch &&
+                        matchesFilter
                     );
-
                 }
             );
 
+        // =================================================
+        // COUNTS
+        // =================================================
 
-        // NEWEST FIRST
+        if (orderMenuCount) {
+            orderMenuCount.textContent =
+                userOrders.length;
+        }
 
-        orders =
-            orders
-                .slice()
-                .reverse();
+        if (ordersCountText) {
 
+            ordersCountText.textContent =
+                userOrders.length === 1
+                    ? "1 Order"
+                    : `${userOrders.length} Orders`;
+        }
 
         // =================================================
         // EMPTY
         // =================================================
 
-        if (orders.length === 0) {
+        if (!filtered.length) {
 
             orderHistory.innerHTML = `
 
-                <div class="empty-orders">
-
-                    <div class="empty-orders-icon">
-                        🛍
-                    </div>
+                <div class="admin-empty">
 
                     <h3>
                         ${
-                            userOrders.length === 0
-                                ? "No orders yet"
-                                : "No matching orders"
+                            userOrders.length
+                                ? "No matching orders"
+                                : "No orders yet"
                         }
                     </h3>
 
                     <p>
                         ${
-                            userOrders.length === 0
-                                ? "Your placed orders will appear here."
-                                : "Try another search or filter."
+                            userOrders.length
+                                ? "Try another search or filter."
+                                : "Your orders will appear here."
                         }
                     </p>
-
-                    ${
-                        userOrders.length === 0
-                            ? `
-                                <a
-                                    href="index.html#shop"
-                                    class="empty-orders-btn"
-                                >
-                                    START SHOPPING
-                                </a>
-                            `
-                            : ""
-                    }
 
                 </div>
 
             `;
 
             return;
-
         }
 
-
-        // CLEAR
+        // =================================================
+        // DISPLAY
+        // =================================================
 
         orderHistory.innerHTML = "";
 
-
-        // =================================================
-        // CREATE CARDS
-        // =================================================
-
-        orders.forEach(
+        filtered.forEach(
             function (order) {
 
-                const products =
-                    getProducts(order);
-
-
-                const status =
-                    getStatus(order);
-
-
-                const orderNumber =
-                    getOrderNumber(order);
-
-
-                const date =
-                    formatDate(
-                        order.date
-                    );
-
-
-                const payment =
-                    order.payment === "cod"
-                        ? "Cash on Delivery"
-                        : "Online Payment";
-
-
-                const total =
-                    getOrderTotal(order);
-
-
-                // -------------------------------------------------
-                // CANCEL BUTTON
-                // -------------------------------------------------
-
-                const cancelButton =
-                    canCancel(order)
-                        ? `
-
-                            <button
-                                type="button"
-                                class="order-cancel-btn"
-                            >
-                                CANCEL ORDER
-                            </button>
-
-                        `
-                        : "";
-
-
-                // -------------------------------------------------
-                // REVIEW BUTTON
-                // -------------------------------------------------
-
-                const reviewButton =
-                    canReview(order)
-                        ? `
-
-                            <button
-                                type="button"
-                                class="order-review-btn"
-                            >
-                                WRITE A REVIEW
-                            </button>
-
-                        `
-                        : "";
-
-
-                // -------------------------------------------------
-                // CARD
-                // -------------------------------------------------
-
-                const card =
-                    document.createElement(
-                        "article"
-                    );
-
-
-                card.className =
-                    "order-history-item";
-
-
-                card.innerHTML = `
-
-                    <!-- =========================================
-                         ORDER HEADER
-                    ========================================== -->
-
-                    <div class="order-card-top">
-
-                        <div class="order-card-number">
-
-                            <span>
-                                ORDER ID
-                            </span>
-
-                            <strong>
-                                #${orderNumber}
-                            </strong>
-
-                            <div class="order-card-date">
-                                ${date}
-                            </div>
-
-                        </div>
-
-
-                        <span
-                            class="order-status ${status
-                                .toLowerCase()
-                                .replace(
-                                    /\s+/g,
-                                    "-"
-                                )}"
-                        >
-                            ${status}
-                        </span>
-
-                    </div>
-
-
-                    <!-- =========================================
-                         PRODUCTS
-                    ========================================== -->
-
-                    <div class="order-card-body">
-
-                        ${renderProducts(products)}
-
-                    </div>
-
-
-                    <!-- =========================================
-                         FOOTER
-                    ========================================== -->
-
-                    <div class="order-card-footer">
-
-
-                        <div class="order-footer-info">
-
-
-                            <div class="order-footer-item">
-
-                                <span>
-                                    PAYMENT
-                                </span>
-
-                                <strong>
-                                    ${payment}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="order-footer-item">
-
-                                <span>
-                                    TOTAL
-                                </span>
-
-                                <strong>
-                                    ${total}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =================================
-                             ACTIONS
-                        ================================== -->
-
-                        <div class="order-card-actions">
-
-
-                            <button
-                                type="button"
-                                class="view-order-details"
-                            >
-
-                                VIEW DETAILS
-
-                                <b>
-                                    →
-                                </b>
-
-                            </button>
-
-
-                            ${cancelButton}
-
-
-                            ${reviewButton}
-
-                        </div>
-
-                    </div>
-
-                `;
-
-
-                // =================================================
-                // VIEW DETAILS
-                // =================================================
-
-                const viewButton =
-                    card.querySelector(
-                        ".view-order-details"
-                    );
-
-
-                if (viewButton) {
-
-                    viewButton.addEventListener(
-                        "click",
-                        function (event) {
-
-                            event.stopPropagation();
-
-                            openOrder(order);
-
-                        }
-                    );
-
-                }
-
-
-                // =================================================
-                // CANCEL
-                // =================================================
-
-                const cancelButtonElement =
-                    card.querySelector(
-                        ".order-cancel-btn"
-                    );
-
-
-                if (cancelButtonElement) {
-
-                    cancelButtonElement.addEventListener(
-                        "click",
-                        function (event) {
-
-                            event.stopPropagation();
-
-                            cancelOrder(order);
-
-                        }
-                    );
-
-                }
-
-
-                // =================================================
-                // REVIEW
-                // =================================================
-
-                const reviewButtonElement =
-                    card.querySelector(
-                        ".order-review-btn"
-                    );
-
-
-                if (reviewButtonElement) {
-
-                    reviewButtonElement.addEventListener(
-                        "click",
-                        function (event) {
-
-                            event.stopPropagation();
-
-                            writeReview(order);
-
-                        }
-                    );
-
-                }
-
-
-                // =================================================
-                // CARD CLICK
-                // =================================================
-
-                card.addEventListener(
-                    "click",
-                    function (event) {
-
-                        if (
-                            event.target.closest(
-                                "button"
-                            )
-                        ) {
-                            return;
-                        }
-
-
-                        openOrder(order);
-
-                    }
-                );
-
-
                 orderHistory.appendChild(
-                    card
+                    createOrderCard(order)
                 );
 
             }
         );
-
     }
-
 
     // =====================================================
     // SEARCH
@@ -1444,9 +1080,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "input",
             renderOrders
         );
-
     }
-
 
     // =====================================================
     // FILTER
@@ -1458,9 +1092,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "change",
             renderOrders
         );
-
     }
-
 
     // =====================================================
     // ACCOUNT MENU
@@ -1468,102 +1100,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const menuItems =
         document.querySelectorAll(
-            ".account-menu-item[data-section]"
+            ".account-menu-item"
         );
-
 
     const ordersSection =
         document.getElementById(
             "ordersSection"
         );
 
-
     const profileSection =
         document.getElementById(
             "profileSection"
         );
 
-
     menuItems.forEach(
-        function (item) {
+        function (button) {
 
-            item.addEventListener(
+            button.addEventListener(
                 "click",
-                function (event) {
-
-                    event.preventDefault();
-
+                function () {
 
                     menuItems.forEach(
-                        menu =>
-                            menu.classList.remove(
+                        item =>
+                            item.classList.remove(
                                 "active"
                             )
                     );
 
-
-                    item.classList.add(
+                    this.classList.add(
                         "active"
                     );
 
-
                     const section =
-                        item.dataset.section;
-
-
-                    if (
-                        section === "orders"
-                    ) {
-
-                        if (ordersSection) {
-
-                            ordersSection.classList.add(
-                                "active"
-                            );
-
-                        }
-
-
-                        if (profileSection) {
-
-                            profileSection.classList.remove(
-                                "active"
-                            );
-
-                        }
-
-                    }
-
+                        this.dataset.section;
 
                     if (
                         section === "profile"
                     ) {
 
-                        if (profileSection) {
-
-                            profileSection.classList.add(
-                                "active"
-                            );
-
-                        }
-
-
                         if (ordersSection) {
-
                             ordersSection.classList.remove(
                                 "active"
                             );
-
                         }
 
-                    }
+                        if (profileSection) {
+                            profileSection.classList.add(
+                                "active"
+                            );
+                        }
 
+                    } else {
+
+                        if (profileSection) {
+                            profileSection.classList.remove(
+                                "active"
+                            );
+                        }
+
+                        if (ordersSection) {
+                            ordersSection.classList.add(
+                                "active"
+                            );
+                        }
+                    }
                 }
             );
-
         }
     );
-
 
     // =====================================================
     // LOGOUT
@@ -1573,40 +1177,59 @@ document.addEventListener("DOMContentLoaded", function () {
 
         accountLogout.addEventListener(
             "click",
-            function () {
+            async function () {
 
-                localStorage.removeItem(
-                    "fashionLoggedIn"
-                );
+                accountLogout.disabled =
+                    true;
 
+                accountLogout.textContent =
+                    "LOGGING OUT...";
 
-                localStorage.removeItem(
-                    "selectedOrder"
-                );
+                try {
 
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .auth
+                            .signOut();
 
-                localStorage.removeItem(
-                    "openReview"
-                );
+                    if (error) {
+                        throw error;
+                    }
 
+                } catch (error) {
 
-                window.location.href =
-                    "index.html";
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
 
+                } finally {
+
+                    localStorage.removeItem(
+                        "fashionLoggedIn"
+                    );
+
+                    localStorage.removeItem(
+                        "fashionUser"
+                    );
+
+                    window.location.href =
+                        "login.html";
+                }
             }
         );
-
     }
 
-
     // =====================================================
-    // INITIAL LOAD
+    // INITIALIZE
     // =====================================================
 
     displayUser();
 
-    updateOrderCounts();
+    loadProfileForm();
 
-    renderOrders();
+    await loadOrders();
 
-});hgxgfgfzvfzfxbfxbfxbfx
+});
