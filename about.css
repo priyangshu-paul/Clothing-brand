@@ -1,0 +1,301 @@
+/* =====================================================
+   ABOUT PAGE STYLES
+===================================================== */
+
+:root {
+    --brand-primary: #171717;
+    --brand-bg: #f5f4f1;
+    --brand-card-bg: #f8f6f2;
+    --brand-border: #eeeeee;
+}
+
+.about-hero {
+    min-height: 50vh;
+    padding: 140px 6% 60px;
+    background: var(--brand-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.about-hero-content {
+    max-width: 700px;
+}
+
+.about-hero .subtitle {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: #777;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.about-hero h1 {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0 0 16px;
+    color: var(--brand-primary);
+}
+
+.about-hero .tagline {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.about-story {
+    padding: 90px 6%;
+}
+
+.about-story .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.story-image img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    background: #e5e5e5;
+}
+
+.story-text h2 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--brand-primary);
+}
+
+.story-text p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.about-values {
+    padding: 80px 6%;
+    background: var(--brand-card-bg);
+    border-top: 1px solid var(--brand-border);
+}
+
+.values-grid {
+    max-width: 1100px;
+    margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.value-card {
+    padding: 30px;
+    background: #fff;
+    border: 1px solid var(--brand-border);
+}
+
+.value-card h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: var(--brand-primary);
+}
+
+.value-card p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.footer {
+    padding: 30px;
+    text-align: center;
+    border-top: 1px solid var(--brand-border);
+    font-size: 11px;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .about-story .container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .story-image img {
+        height: 350px;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero h1 {
+        font-size: 34px;
+    }
+}
+
+/* =====================================================
+   CONVERSION-FOCUSED NEWSLETTER
+===================================================== */
+.newsletter-section {
+    padding: 80px 6%;
+    background: #171717;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+}
+
+.newsletter-container {
+    width: 100%;
+    max-width: 680px;
+    text-align: center;
+}
+
+.newsletter-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #a5a5a5;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 14px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+}
+
+.newsletter-content h2 {
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 12px;
+    color: #ffffff;
+}
+
+.newsletter-content p {
+    font-size: 14px;
+    color: #b0b0b0;
+    line-height: 1.6;
+    margin: 0 0 30px;
+}
+
+/* Form & Input Group UX */
+.newsletter-form {
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+
+.input-group input[type="email"] {
+    flex: 1;
+    height: 54px;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: none;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.input-group input[type="email"]::placeholder {
+    color: #888888;
+}
+
+/* Hover & Focus state UX */
+.input-group input[type="email"]:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+}
+
+.input-group input[type="email"].error {
+    border-color: #ff5252;
+    background: rgba(255, 82, 82, 0.08);
+}
+
+/* Conversion Button UX */
+.input-group button {
+    height: 54px;
+    padding: 0 32px;
+    background: #ffffff;
+    color: #171717;
+    border: 1px solid #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+}
+
+.input-group button:hover {
+    background: #e2e2e2;
+    border-color: #e2e2e2;
+}
+
+.input-group button:active {
+    transform: scale(0.98);
+}
+
+/* Loader Micro-interaction */
+.input-group button.loading .btn-text {
+    display: none;
+}
+
+.input-group button.loading .btn-loader {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #171717;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Feedback & Trust indicators */
+.newsletter-feedback {
+    margin-top: 12px;
+    font-size: 12px;
+    min-height: 18px;
+    text-align: left;
+}
+
+.newsletter-feedback.error { color: #ff5252; }
+.newsletter-feedback.success { color: #4caf50; }
+.newsletter-feedback.info { color: #64b5f6; }
+
+.privacy-note {
+    font-size: 11px;
+    color: #777777;
+    margin-top: 15px !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .newsletter-section { padding: 60px 5%; }
+    .newsletter-content h2 { font-size: 26px; }
+    .input-group { flex-direction: column; }
+    
+    .input-group input[type="email"] {
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 10px;
+    }
+    
+    .input-group button { width: 100%; }
+    .newsletter-feedback { text-align: center; }
+}

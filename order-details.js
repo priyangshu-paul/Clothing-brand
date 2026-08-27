@@ -640,7 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <img
                                 src="${
                                     product.image ||
-                                    "images/product1.jpg"
+                                    "product1.jpg"
                                 }"
                                 alt="${
                                     product.name ||
@@ -1276,7 +1276,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <img
                             src="${
                                 product.image ||
-                                "images/product1.jpg"
+                                "product1.jpg"
                             }"
                             alt="${
                                 product.name ||

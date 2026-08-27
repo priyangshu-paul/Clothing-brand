@@ -23,18 +23,29 @@
         .menu-btn {
             width: 42px;
             height: 42px;
-            border: none;
-            background: transparent;
+            border: 1px solid #dddddd;
+            background: #ffffff;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.25s ease;
         }
 
 
         .menu-btn:hover {
-            background: #f3f3f3;
+            border-color: #222222;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .menu-btn:active {
+            transform: translateY(0);
         }
 
 
@@ -182,20 +193,40 @@
     <!-- =====================================================
          NAVBAR
     ====================================================== -->
+    <div class="announcement-bar">
+        <div class="announcement-track">
+
+    <span>FREE SHIPPING ON ORDERS OVER ₹1,999</span>
+    <span>•</span>
+    <span>NEW SEASON — 2026 COLLECTION</span>
+    <span>•</span>
+    <span>EASY 7-DAY RETURNS</span>
+    <span>•</span>
+
+    <span>FREE SHIPPING ON ORDERS OVER ₹1,999</span>
+    <span>•</span>
+    <span>NEW SEASON — 2026 COLLECTION</span>
+    <span>•</span>
+    <span>EASY 7-DAY RETURNS</span>
+    <span>•</span>
+
+</div>
+    </div>
 
     <header class="navbar">
 
 
         <!-- LOGO -->
 
-        <div class="logo">
-            FASHION
-        </div>
+        <a href="#home" class="logo" aria-label="Fashion — Home">
+            <span class="logo-mark">FASH<span class="logo-accent">ion</span></span>
+            <span class="logo-tagline">Ready-to-Wear</span>
+        </a>
 
 
         <!-- NAV LINKS -->
 
-        <nav class="nav-links">
+        <nav class="nav-links" id="navLinks">
 
 
             <a href="#home">
@@ -251,6 +282,22 @@
         ====================================================== -->
 
         <div class="nav-icons">
+
+
+            <!-- MOBILE NAV TOGGLE -->
+
+            <button
+                id="navToggle"
+                class="nav-toggle"
+                type="button"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="navLinks"
+            >
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
 
 
             <!-- SEARCH -->
@@ -839,68 +886,72 @@
         >
 
 
-            <div class="hero-content">
+<div class="hero-content">
 
+    <span class="hero-eyebrow">
+        THE NEW COLLECTION · 2026
+    </span>
 
-                <p class="hero-small-text">
-                    NEW COLLECTION 2026
-                </p>
+    <h1>
+        STYLE
+        <span>WITHOUT</span>
+        LIMITS.
+    </h1>
 
+    <p class="hero-description">
+        Contemporary essentials designed for
+        everyday confidence. Discover pieces
+        made to become part of your signature style.
+    </p>
 
-                <h1>
+    <div class="hero-buttons">
 
-                    WEAR YOUR
+        <a href="#shop" class="btn primary-btn">
+            SHOP COLLECTION
+            <span>→</span>
+        </a>
 
-                    <span>
-                        CONFIDENCE.
-                    </span>
+        <a href="#collections" class="btn secondary-btn">
+            EXPLORE CATEGORIES
+        </a>
 
-                </h1>
+    </div>
 
+    <div class="hero-meta">
 
-                <p class="hero-description">
+        <div>
+            <strong>01</strong>
+            <span>NEW SEASON</span>
+        </div>
 
-                    Discover timeless fashion designed for people
-                    who want to stand out.
+        <div>
+            <strong>02</strong>
+            <span>MODERN ESSENTIALS</span>
+        </div>
 
-                </p>
+        <div>
+            <strong>03</strong>
+            <span>EVERYDAY STYLE</span>
+        </div>
 
+    </div>
 
-                <div class="hero-buttons">
+</div>
+<div class="hero-image">
 
+    <div class="hero-image-frame">
+        <img
+            src="hero.jpg"
+            alt="Fashion collection"
+        >
+    </div>
 
-                    <a
-                        href="#shop"
-                        class="btn primary-btn"
-                    >
+    <div class="hero-badge">
+        <strong>26</strong>
+        <span>New Season</span>
+    </div>
 
-                        SHOP NOW
-
-                    </a>
-
-
-                    <a
-                        href="#collections"
-                        class="btn secondary-btn"
-                    >
-
-                        EXPLORE
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="hero-image">
-
-                <img
-                    src="images/hero.jpg"
-                    alt="Fashion Collection"
-                >
-
-            </div>
+</div>
 
         </section>
 
@@ -942,7 +993,7 @@
                     <div class="category-image">
 
                         <img
-                            src="images/men.jpg"
+                            src="men.jpg"
                             alt="Men's Collection"
                         >
 
@@ -965,7 +1016,7 @@
                     <div class="category-image">
 
                         <img
-                            src="images/women.jpg"
+                            src="women.jpg"
                             alt="Women's Collection"
                         >
 
@@ -988,7 +1039,7 @@
                     <div class="category-image">
 
                         <img
-                            src="images/new-arrivals.jpg"
+                            src="new-arrivals.jpg"
                             alt="New Arrivals"
                         >
 
@@ -1355,6 +1406,87 @@
 
             const menuLogout =
                 document.getElementById("menuLogout");
+
+            const navToggle =
+                document.getElementById("navToggle");
+
+            const navLinks =
+                document.getElementById("navLinks");
+
+
+            if (navToggle && navLinks) {
+
+                navToggle.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.stopPropagation();
+
+                        const isOpen =
+                            navLinks.classList.contains("active");
+
+                        navLinks.classList.toggle("active", !isOpen);
+                        navToggle.classList.toggle("active", !isOpen);
+
+                        navToggle.setAttribute(
+                            "aria-expanded",
+                            String(!isOpen)
+                        );
+
+                        navToggle.setAttribute(
+                            "aria-label",
+                            isOpen ? "Open menu" : "Close menu"
+                        );
+
+                    }
+                );
+
+
+                document.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            !navLinks.contains(event.target) &&
+                            !navToggle.contains(event.target)
+                        ) {
+
+                            navLinks.classList.remove("active");
+                            navToggle.classList.remove("active");
+
+                            navToggle.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                navLinks
+                    .querySelectorAll("a")
+                    .forEach(function (link) {
+
+                        link.addEventListener(
+                            "click",
+                            function () {
+
+                                navLinks.classList.remove("active");
+                                navToggle.classList.remove("active");
+
+                                navToggle.setAttribute(
+                                    "aria-expanded",
+                                    "false"
+                                );
+
+                            }
+                        );
+
+                    });
+
+            }
 
 
             if (menuBtn && moreMenu) {

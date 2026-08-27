@@ -2,1047 +2,426 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Product Details | FASHION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | BRAND_NAME</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="product.css">
     <style>
-    .menu-wrapper {
-        position: relative;
-    }
-
-    .menu-btn {
-        width: 42px;
-        height: 42px;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        font-size: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .menu-btn:hover {
-        background: #f3f3f3;
-    }
-
-    .more-menu {
-        position: absolute;
-        top: 52px;
-        right: 0;
-        width: 270px;
-        background: #fff;
-        border: 1px solid #e5e5e5;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-        z-index: 10000;
-        display: none;
-        overflow: hidden;
-    }
-
-    .more-menu.active {
-        display: block;
-    }
-
-    .more-menu-header {
-        padding: 18px 20px;
-        border-bottom: 1px solid #eee;
-        background: #fafafa;
-    }
-
-    .more-menu-header p {
-        margin: 0;
-        font-size: 10px;
-        letter-spacing: 2px;
-        color: #888;
-    }
-
-    .more-menu-header h3 {
-        margin: 5px 0 0;
-        font-size: 17px;
-        font-weight: 600;
-    }
-
-    .more-menu-list {
-        padding: 8px 0;
-    }
-
-    .more-menu-item {
-        width: 100%;
-        min-height: 46px;
-        padding: 12px 18px;
-        border: none;
-        background: transparent;
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        text-align: left;
-        cursor: pointer;
-        text-decoration: none;
-        color: #222;
-        font-size: 13px;
-        box-sizing: border-box;
-    }
-
-    .more-menu-item:hover {
-        background: #f6f6f6;
-    }
-
-    .more-menu-icon {
-        width: 25px;
-        text-align: center;
-        font-size: 17px;
-    }
-
-    .more-menu-text {
-        flex: 1;
-    }
-
-    .more-menu-arrow {
-        font-size: 15px;
-        color: #999;
-    }
-
-    .more-menu-divider {
-        height: 1px;
-        background: #eee;
-        margin: 7px 0;
-    }
-
-    .more-menu-footer {
-        padding: 14px 18px;
-        border-top: 1px solid #eee;
-        font-size: 10px;
-        color: #999;
-        text-align: center;
-        letter-spacing: 1px;
-    }
-
-    .more-menu-logout {
-        color: #222;
-    }
-
-    .more-menu-logout:hover {
-        background: #f6f6f6;
-    }
-
-    @media (max-width: 768px) {
-
-        .more-menu {
-            position: fixed;
-            top: 70px;
-            right: 15px;
-            width: min(300px, calc(100vw - 30px));
+        .menu-wrapper {
+            position: relative;
         }
 
-    }
-</style>
+        .menu-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .menu-btn:hover {
+            background: #f3f3f3;
+        }
+
+        .more-menu {
+            position: absolute;
+            top: 52px;
+            right: 0;
+            width: 270px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            z-index: 10000;
+            display: none;
+            overflow: hidden;
+        }
+
+        .more-menu.active {
+            display: block;
+        }
+
+        .more-menu-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        .more-menu-header p {
+            margin: 0;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #888;
+        }
+
+        .more-menu-header h3 {
+            margin: 5px 0 0;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .more-menu-list {
+            padding: 8px 0;
+        }
+
+        .more-menu-item {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 18px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-align: left;
+            cursor: pointer;
+            text-decoration: none;
+            color: #222;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+
+        .more-menu-item:hover {
+            background: #f6f6f6;
+        }
+
+        .more-menu-icon {
+            width: 25px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .more-menu-text {
+            flex: 1;
+        }
+
+        .more-menu-arrow {
+            font-size: 15px;
+            color: #999;
+        }
+
+        .more-menu-divider {
+            height: 1px;
+            background: #eee;
+            margin: 7px 0;
+        }
+
+        .more-menu-footer {
+            padding: 14px 18px;
+            border-top: 1px solid #eee;
+            font-size: 10px;
+            color: #999;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .more-menu-logout {
+            color: #222;
+        }
+
+        .more-menu-logout:hover {
+            background: #f6f6f6;
+        }
+
+        @media (max-width: 768px) {
+            .more-menu {
+                position: fixed;
+                top: 70px;
+                right: 15px;
+                width: min(300px, calc(100vw - 30px));
+            }
+        }
+    </style>
 </head>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuBtn = document.getElementById("menuBtn");
+        const moreMenu = document.getElementById("moreMenu");
+        const menuLogout = document.getElementById("menuLogout");
 
-    const menuBtn =
-        document.getElementById("menuBtn");
-
-    const moreMenu =
-        document.getElementById("moreMenu");
-
-    const menuLogout =
-        document.getElementById("menuLogout");
-
-
-    if (menuBtn && moreMenu) {
-
-        menuBtn.addEventListener(
-            "click",
-            function (event) {
-
+        if (menuBtn && moreMenu) {
+            menuBtn.addEventListener("click", function (event) {
                 event.stopPropagation();
-
-                const isOpen =
-                    moreMenu.classList.contains("active");
-
-
+                const isOpen = moreMenu.classList.contains("active");
                 if (isOpen) {
-
                     moreMenu.classList.remove("active");
-
-                    menuBtn.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
+                    menuBtn.setAttribute("aria-expanded", "false");
                 } else {
-
                     moreMenu.classList.add("active");
-
-                    menuBtn.setAttribute(
-                        "aria-expanded",
-                        "true"
-                    );
-
+                    menuBtn.setAttribute("aria-expanded", "true");
                 }
-
-            }
-        );
-
-
-        document.addEventListener(
-            "click",
-            function (event) {
-
-                if (
-                    !moreMenu.contains(event.target) &&
-                    !menuBtn.contains(event.target)
-                ) {
-
-                    moreMenu.classList.remove("active");
-
-                    menuBtn.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                }
-
-            }
-        );
-
-
-        moreMenu
-            .querySelectorAll("a")
-            .forEach(function (link) {
-
-                link.addEventListener(
-                    "click",
-                    function () {
-
-                        moreMenu.classList.remove(
-                            "active"
-                        );
-
-                        menuBtn.setAttribute(
-                            "aria-expanded",
-                            "false"
-                        );
-
-                    }
-                );
-
             });
 
-    }
+            document.addEventListener("click", function (event) {
+                if (!moreMenu.contains(event.target) && !menuBtn.contains(event.target)) {
+                    moreMenu.classList.remove("active");
+                    menuBtn.setAttribute("aria-expanded", "false");
+                }
+            });
 
+            moreMenu.querySelectorAll("a").forEach(function (link) {
+                link.addEventListener("click", function () {
+                    moreMenu.classList.remove("active");
+                    menuBtn.setAttribute("aria-expanded", "false");
+                });
+            });
+        }
 
-    if (menuLogout) {
-
-        menuLogout.addEventListener(
-            "click",
-            function () {
-
+        if (menuLogout) {
+            menuLogout.addEventListener("click", function () {
                 const authKeys = [
-                    "fashionUser",
+                    "brandUser",
                     "currentUser",
                     "loggedInUser",
-                    "fashionLoggedInUser",
+                    "brandLoggedInUser",
                     "user"
                 ];
 
-
                 authKeys.forEach(function (key) {
-
                     localStorage.removeItem(key);
-
                 });
 
-
-                sessionStorage.removeItem(
-                    "fashionUser"
-                );
-
-                sessionStorage.removeItem(
-                    "currentUser"
-                );
-
+                sessionStorage.removeItem("brandUser");
+                sessionStorage.removeItem("currentUser");
 
                 if (moreMenu) {
-
-                    moreMenu.classList.remove(
-                        "active"
-                    );
-
+                    moreMenu.classList.remove("active");
                 }
-
 
                 if (menuBtn) {
-
-                    menuBtn.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
+                    menuBtn.setAttribute("aria-expanded", "false");
                 }
 
-
-                if (
-                    typeof showNotification ===
-                    "function"
-                ) {
-
-                    showNotification(
-                        "You have been logged out.",
-                        "success"
-                    );
-
+                if (typeof showNotification === "function") {
+                    showNotification("You have been logged out.", "success");
                 }
-
 
                 setTimeout(function () {
-
                     window.location.reload();
-
                 }, 700);
-
-            }
-        );
-
-    }
-
-});
+            });
+        }
+    });
 </script>
-
 
 <body>
 
-
-    <!-- =====================================================
-         NAVBAR
-    ====================================================== -->
-
+    <!-- NAVBAR -->
     <header class="navbar">
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-            FASHION
+        <a href="index.html" class="logo">
+            BRAND_NAME
         </a>
 
-
         <nav class="nav-links">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="index.html#shop">
-                Shop
-            </a>
-
-            <a href="index.html#collections">
-                Collections
-            </a>
-
-            <a href="index.html#about">
-                About
-            </a>
-
-            <a href="index.html#contact">
-                Contact
-            </a>
-
+            <a href="index.html">Home</a>
+            <a href="index.html#shop">Shop</a>
+            <a href="index.html#collections">Collections</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
         </nav>
 
-
         <div class="nav-icons">
+            <button id="searchBtn" type="button" aria-label="Search">⌕</button>
 
-            <button
-                id="searchBtn"
-                type="button"
-                aria-label="Search"
-            >
-                ⌕
-            </button>
-
-
-            <button
-                id="cartBtn"
-                type="button"
-                aria-label="Shopping cart"
-            >
-
+            <button id="cartBtn" type="button" aria-label="Shopping cart">
                 🛒
-
                 <span id="cartCount"></span>
-
             </button>
 
-
-           <div class="menu-wrapper">
-
-    <button
-        id="menuBtn"
-        class="menu-btn"
-        type="button"
-        aria-label="More Menu"
-        aria-expanded="false"
-    >
-        ⋮
-    </button>
-
-    <div
-        id="moreMenu"
-        class="more-menu"
-    >
-
-        <div class="more-menu-header">
-
-            <p>FASHION</p>
-
-            <h3>
-                Quick Menu
-            </h3>
-
-        </div>
-
-
-        <div class="more-menu-list">
-
-            <a
-                href="account.html"
-                class="more-menu-item"
-            >
-
-                <span class="more-menu-icon">
-                    👤
-                </span>
-
-                <span class="more-menu-text">
-                    My Account
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </a>
-
-
-            <a
-                href="orders.html"
-                class="more-menu-item"
-            >
-
-                <span class="more-menu-icon">
-                    📦
-                </span>
-
-                <span class="more-menu-text">
-                    My Orders
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </a>
-
-
-            <a
-                href="wishlist.html"
-                class="more-menu-item"
-            >
-
-                <span class="more-menu-icon">
-                    ♡
-                </span>
-
-                <span class="more-menu-text">
-                    Wishlist
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </a>
-
-
-            <a
-                href="index.html#contact"
-                class="more-menu-item"
-            >
-
-                <span class="more-menu-icon">
-                    ❓
-                </span>
-
-                <span class="more-menu-text">
-                    Help Centre
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </a>
-
-
-            <div class="more-menu-divider"></div>
-
-
-            <a
-                href="login.html"
-                class="more-menu-item"
-            >
-
-                <span class="more-menu-icon">
-                    ↪
-                </span>
-
-                <span class="more-menu-text">
-                    Login
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </a>
-
-
-            <a
-                href="register.html"
-                class="more-menu-item"
-            >
-
-                <span class="more-menu-icon">
-                    ✚
-                </span>
-
-                <span class="more-menu-text">
-                    Register
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </a>
-
-
-            <button
-                type="button"
-                id="menuLogout"
-                class="more-menu-item more-menu-logout"
-            >
-
-                <span class="more-menu-icon">
-                    ↩
-                </span>
-
-                <span class="more-menu-text">
-                    Logout
-                </span>
-
-                <span class="more-menu-arrow">
-                    ›
-                </span>
-
-            </button>
-
-        </div>
-
-
-        <div class="more-menu-footer">
-            MODERN FASHION · 2026
-        </div>
-
-    </div>
-
-</div>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- =====================================================
-         SEARCH OVERLAY
-    ====================================================== -->
-
-    <div
-        id="searchOverlay"
-        class="search-overlay"
-    >
-
-        <div class="search-box">
-
-            <div class="search-header">
-
-                <h2>
-                    Search FASHION
-                </h2>
-
-                <button
-                    id="closeSearch"
-                    type="button"
-                    aria-label="Close search"
-                >
-                    ✕
+            <div class="menu-wrapper">
+                <button id="menuBtn" class="menu-btn" type="button" aria-label="More Menu" aria-expanded="false">
+                    ⋮
                 </button>
 
-            </div>
-
-
-            <div class="search-input-wrapper">
-
-                <span class="search-input-icon">
-                    ⌕
-                </span>
-
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search products, categories..."
-                    autocomplete="off"
-                >
-
-
-                <button
-                    id="clearSearch"
-                    type="button"
-                    aria-label="Clear search"
-                >
-                    ✕
-                </button>
-
-            </div>
-
-
-            <div
-                id="searchResults"
-                class="search-results"
-            >
-
-                <div class="search-empty">
-
-                    <div class="search-empty-icon">
-                        ⌕
+                <div id="moreMenu" class="more-menu">
+                    <div class="more-menu-header">
+                        <p>BRAND_NAME</p>
+                        <h3>Quick Menu</h3>
                     </div>
 
-                    <p>
-                        Try searching for a product or category.
-                    </p>
+                    <div class="more-menu-list">
+                        <a href="account.html" class="more-menu-item">
+                            <span class="more-menu-icon">👤</span>
+                            <span class="more-menu-text">My Account</span>
+                            <span class="more-menu-arrow">›</span>
+                        </a>
 
+                        <a href="orders.html" class="more-menu-item">
+                            <span class="more-menu-icon">📦</span>
+                            <span class="more-menu-text">My Orders</span>
+                            <span class="more-menu-arrow">›</span>
+                        </a>
+
+                        <a href="wishlist.html" class="more-menu-item">
+                            <span class="more-menu-icon">♡</span>
+                            <span class="more-menu-text">Wishlist</span>
+                            <span class="more-menu-arrow">›</span>
+                        </a>
+
+                        <a href="index.html#contact" class="more-menu-item">
+                            <span class="more-menu-icon">❓</span>
+                            <span class="more-menu-text">Help Centre</span>
+                            <span class="more-menu-arrow">›</span>
+                        </a>
+
+                        <div class="more-menu-divider"></div>
+
+                        <a href="login.html" class="more-menu-item">
+                            <span class="more-menu-icon">↪</span>
+                            <span class="more-menu-text">Login</span>
+                            <span class="more-menu-arrow">›</span>
+                        </a>
+
+                        <a href="register.html" class="more-menu-item">
+                            <span class="more-menu-icon">✚</span>
+                            <span class="more-menu-text">Register</span>
+                            <span class="more-menu-arrow">›</span>
+                        </a>
+
+                        <button type="button" id="menuLogout" class="more-menu-item more-menu-logout">
+                            <span class="more-menu-icon">↩</span>
+                            <span class="more-menu-text">Logout</span>
+                            <span class="more-menu-arrow">›</span>
+                        </button>
+                    </div>
+
+                    <div class="more-menu-footer">
+                        BRAND_NAME · 2026
+                    </div>
                 </div>
-
             </div>
-
-
-            <div
-                id="relatedSearch"
-                class="popular-searches"
-            >
-
-                <h4>
-                    POPULAR SEARCHES
-                </h4>
-
-
-                <div class="popular-search-list">
-
-                    <button type="button" data-search="Shirts">
-                        Shirts
-                    </button>
-
-                    <button type="button" data-search="T-Shirts">
-                        T-Shirts
-                    </button>
-
-                    <button type="button" data-search="Hoodies">
-                        Hoodies
-                    </button>
-
-                    <button type="button" data-search="Pants">
-                        Pants
-                    </button>
-
-                    <button type="button" data-search="Cargo">
-                        Cargo
-                    </button>
-
-                    <button type="button" data-search="Jackets">
-                        Jackets
-                    </button>
-
-                    <button type="button" data-search="Women">
-                        Women
-                    </button>
-
-                    <button type="button" data-search="Men">
-                        Men
-                    </button>
-
-                </div>
-
-            </div>
-
         </div>
+    </header>
 
+    <!-- SEARCH OVERLAY -->
+    <div id="searchOverlay" class="search-overlay">
+        <div class="search-box">
+            <div class="search-header">
+                <h2>Search BRAND_NAME</h2>
+                <button id="closeSearch" type="button" aria-label="Close search">✕</button>
+            </div>
+
+            <div class="search-input-wrapper">
+                <span class="search-input-icon">⌕</span>
+                <input type="text" id="searchInput" placeholder="Search products, categories..." autocomplete="off">
+                <button id="clearSearch" type="button" aria-label="Clear search">✕</button>
+            </div>
+
+            <div id="searchResults" class="search-results">
+                <div class="search-empty">
+                    <div class="search-empty-icon">⌕</div>
+                    <p>Try searching for a product or category.</p>
+                </div>
+            </div>
+
+            <div id="relatedSearch" class="popular-searches">
+                <h4>POPULAR SEARCHES</h4>
+                <div class="popular-search-list">
+                    <button type="button" data-search="Shirts">Shirts</button>
+                    <button type="button" data-search="T-Shirts">T-Shirts</button>
+                    <button type="button" data-search="Hoodies">Hoodies</button>
+                    <button type="button" data-search="Pants">Pants</button>
+                    <button type="button" data-search="Cargo">Cargo</button>
+                    <button type="button" data-search="Jackets">Jackets</button>
+                    <button type="button" data-search="Women">Women</button>
+                    <button type="button" data-search="Men">Men</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-
-
-    <!-- =====================================================
-         PRODUCT DETAILS
-    ====================================================== -->
-
+    <!-- PRODUCT DETAILS -->
     <main class="product-details">
-
-
-        <!-- =================================================
-             PRODUCT IMAGE
-        ================================================== -->
-
         <div class="product-detail-image">
-
-            <img
-                id="productImage"
-                src="images/product1.jpg"
-                alt="Product"
-            >
-
+            <img id="productImage" src="placeholder.jpg" alt="Product">
         </div>
-
-
-        <!-- =================================================
-             PRODUCT INFORMATION
-        ================================================== -->
 
         <div class="product-detail-info">
+            <p class="product-category" id="productCategory">NEW COLLECTION</p>
+            <h1 id="productName">Loading product...</h1>
+            <h2 id="productPrice">₹0</h2>
+            <p class="product-description" id="productDescription">Loading product description...</p>
 
-
-            <p
-                class="product-category"
-                id="productCategory"
-            >
-                NEW COLLECTION
-            </p>
-
-
-            <h1 id="productName">
-                Loading product...
-            </h1>
-
-
-            <h2 id="productPrice">
-                ₹0
-            </h2>
-
-
-            <p
-                class="product-description"
-                id="productDescription"
-            >
-                Loading product description...
-            </p>
-
-
-
-            <!-- =================================================
-                 WISHLIST
-            ================================================== -->
-
-            <button
-                id="productWishlistBtn"
-                class="product-wishlist-btn"
-                type="button"
-                aria-label="Add to Wishlist"
-            >
-                ♡
-                <span>ADD TO WISHLIST</span>
+            <button id="productWishlistBtn" class="product-wishlist-btn" type="button" aria-label="Add to Wishlist">
+                ♡ <span>ADD TO WISHLIST</span>
             </button>
-
-
-
-            <!-- =================================================
-                 SIZE
-            ================================================== -->
 
             <div class="size-section">
-
                 <div class="size-title">
-
-                    <span>
-                        SELECT SIZE
-                    </span>
-
+                    <span>SELECT SIZE</span>
                 </div>
-
-
-                <div
-                    class="sizes"
-                    id="sizes"
-                >
-
-                    <!-- Sizes generated by JavaScript -->
-
-                </div>
-
+                <div class="sizes" id="sizes"></div>
             </div>
-
-
-
-            <!-- =================================================
-                 QUANTITY
-            ================================================== -->
 
             <div class="quantity-section">
-
-                <span>
-                    QUANTITY
-                </span>
-
-
+                <span>QUANTITY</span>
                 <div class="quantity-control">
-
-                    <button
-                        id="minusBtn"
-                        type="button"
-                    >
-                        −
-                    </button>
-
-
-                    <span id="quantity">
-                        1
-                    </span>
-
-
-                    <button
-                        id="plusBtn"
-                        type="button"
-                    >
-                        +
-                    </button>
-
+                    <button id="minusBtn" type="button">−</button>
+                    <span id="quantity">1</span>
+                    <button id="plusBtn" type="button">+</button>
                 </div>
-
             </div>
-
-
-
-            <!-- =================================================
-                 PRODUCT BUTTONS
-            ================================================== -->
 
             <div class="product-buttons">
-
-                <button
-                    id="addProductCart"
-                    type="button"
-                >
-                    ADD TO CART
-                </button>
-
-
-                <button
-                    id="buyNow"
-                    type="button"
-                >
-                    BUY NOW
-                </button>
-
+                <button id="addProductCart" type="button">ADD TO CART</button>
+                <button id="buyNow" type="button">BUY NOW</button>
             </div>
-
-
-
-            <!-- =================================================
-                 EXTRA INFORMATION
-            ================================================== -->
 
             <div class="product-extra">
-
-                <div>
-                    🚚 Free shipping on orders above ₹1,999
-                </div>
-
-                <div>
-                    ↩ Easy 7-day returns
-                </div>
-
-                <div>
-                    🔒 Secure payment
-                </div>
-
+                <div>🚚 Free shipping on orders above ₹1,999</div>
+                <div>↩ Easy 7-day returns</div>
+                <div>🔒 Secure payment</div>
             </div>
-
         </div>
-
     </main>
 
-
-
-    <!-- =====================================================
-         CART OVERLAY
-    ====================================================== -->
-
-    <div
-        id="cartOverlay"
-        class="cart-overlay"
-    ></div>
-
-
-
-    <!-- =====================================================
-         CART SIDEBAR
-    ====================================================== -->
-
-    <aside
-        id="cartSidebar"
-        class="cart-sidebar"
-    >
-
+    <!-- CART SIDEBAR -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <aside id="cartSidebar" class="cart-sidebar">
         <div class="cart-header">
-
-            <h2>
-                Your Cart
-            </h2>
-
-
-            <button
-                id="closeCart"
-                type="button"
-                aria-label="Close cart"
-            >
-                ✕
-            </button>
-
+            <h2>Your Cart</h2>
+            <button id="closeCart" type="button" aria-label="Close cart">✕</button>
         </div>
-
-
-        <div
-            id="cartItems"
-            class="cart-items"
-        ></div>
-
-
+        <div id="cartItems" class="cart-items"></div>
         <div class="cart-footer">
-
             <div class="cart-total">
-
-                <span>
-                    Total
-                </span>
-
-                <strong id="cartTotal">
-                    ₹0
-                </strong>
-
+                <span>Total</span>
+                <strong id="cartTotal">₹0</strong>
             </div>
-
-
-            <button
-                id="homeCheckoutBtn"
-                class="checkout-btn"
-                type="button"
-            >
-                CHECKOUT
-            </button>
-
+            <button id="homeCheckoutBtn" class="checkout-btn" type="button">CHECKOUT</button>
         </div>
-
     </aside>
 
-
-
-    <!-- =====================================================
-         PRODUCT REVIEWS
-    ====================================================== -->
-
+    <!-- REVIEWS -->
     <section class="product-reviews-section">
-
         <div class="section-heading">
-
-            <p>
-                CUSTOMER REVIEWS
-            </p>
-
-            <h2>
-                Reviews
-            </h2>
-
+            <p>CUSTOMER REVIEWS</p>
+            <h2>Reviews</h2>
         </div>
-
-
-        <div
-            id="productReviewSummary"
-            class="product-review-summary"
-        ></div>
-
-
-        <div
-            id="productReviews"
-            class="product-reviews"
-        ></div>
-
+        <div id="productReviewSummary" class="product-review-summary"></div>
+        <div id="productReviews" class="product-reviews"></div>
     </section>
 
-
-
-    <!-- =====================================================
-         RELATED PRODUCTS
-    ====================================================== -->
-
+    <!-- RELATED PRODUCTS -->
     <section class="related-products">
-
         <div class="section-heading">
-
-            <p>
-                YOU MAY ALSO LIKE
-            </p>
-
-            <h2>
-                Related Products
-            </h2>
-
+            <p>YOU MAY ALSO LIKE</p>
+            <h2>Related Products</h2>
         </div>
-
-
-        <div
-            class="related-container"
-            id="relatedProducts"
-        ></div>
-
+        <div class="related-container" id="relatedProducts"></div>
     </section>
 
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
-
-   <script src="notification.js"></script>
-<script src="cart.js"></script>
-<script src="product.js"></script>
-<script src="search.js"></script>
-
-<script>
-    // upar wala 3-dot menu JavaScript
-</script>
-
+    <!-- SCRIPTS -->
+    <script src="notification.js"></script>
+    <script src="cart.js"></script>
+    <script src="product.js"></script>
+    <script src="search.js"></script>
 </body>
+
 </html>

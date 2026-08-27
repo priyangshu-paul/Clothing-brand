@@ -792,7 +792,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <img
                                 src="${escapeHTML(
                                     product.image ||
-                                    "images/product1.jpg"
+                                    "product1.jpg"
                                 )}"
                                 alt="${escapeHTML(
                                     product.name ||
@@ -955,7 +955,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <img
                                 src="${escapeHTML(
                                     product.image ||
-                                    "images/product1.jpg"
+                                    "product1.jpg"
                                 )}"
                                 alt="${escapeHTML(
                                     product.name ||

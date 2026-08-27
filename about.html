@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | BRAND_NAME</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="about.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <a href="index.html" class="logo">BRAND_NAME</a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#shop">Shop</a>
+            <a href="index.html#collections">Collections</a>
+            <a href="about.html" class="active">About</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+        <div class="nav-icons">
+            <button id="cartBtn" type="button" aria-label="Shopping cart">
+                🛒 <span id="cartCount"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ABOUT HERO SECTION -->
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <p class="subtitle">OUR STORY</p>
+            <h1>Redefining Modern Essentials</h1>
+            <p class="tagline">Crafted with intentional design, premium fabrics, and timeless quality for everyday living.</p>
+        </div>
+    </section>
+
+    <!-- BRAND STORY SECTION -->
+    <section class="about-story">
+        <div class="container">
+            <div class="story-image">
+                <img src="brand-story.jpg" alt="Brand Craftsmanship" onerror="this.src='placeholder.jpg'">
+            </div>
+            <div class="story-text">
+                <h2>Designed for Purpose</h2>
+                <p>Founded in 2026, BRAND_NAME was created to bridge the gap between architectural aesthetic and functional daily wardrobe staples.</p>
+                <p>We reject fast-fashion trends in favor of conscious design, durable materials, and tailored cuts that stand the test of time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE VALUES -->
+    <section class="about-values">
+        <div class="section-heading">
+            <p>WHAT DRIVES US</p>
+            <h2>Our Core Values</h2>
+        </div>
+        <div class="values-grid">
+            <div class="value-card">
+                <h3>01. Quality First</h3>
+                <p>Every garment undergoes rigorous quality checks to guarantee longevity, comfort, and shape retention.</p>
+            </div>
+            <div class="value-card">
+                <h3>02. Sustainable Mindset</h3>
+                <p>We source ethically produced fabrics and focus on low-waste manufacturing processes.</p>
+            </div>
+            <div class="value-card">
+                <h3>03. Minimal Design</h3>
+                <p>Clean silhouettes engineered to fit seamlessly into any personal style or setting.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>BRAND_NAME · 2026</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script src="about.js"></script>
+</body>
+
+</html>

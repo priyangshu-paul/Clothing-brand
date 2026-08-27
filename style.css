@@ -3,6 +3,8 @@
    PROFESSIONAL MASTER STYLESHEET
 ===================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap');
+
 
 /* =====================================================
    01. RESET & GLOBAL
@@ -102,13 +104,14 @@ input:focus-visible {
 
 .navbar {
     width: 100%;
-    height: 80px;
+    height: 84px;
 
-    padding: 0 6%;
+    padding: 0 clamp(20px, 5.7vw, 80px);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 24px;
 
     position: fixed;
     top: 0;
@@ -125,10 +128,13 @@ input:focus-visible {
 
     transition:
         background 0.3s ease,
-        box-shadow 0.3s ease;
+        box-shadow 0.3s ease,
+        height 0.3s ease;
 }
 
 .navbar.scrolled {
+    height: 68px;
+
     background: rgba(248, 246, 242, 0.98);
 
     box-shadow:
@@ -142,20 +148,49 @@ input:focus-visible {
 
 .logo {
     display: inline-flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 
-    font-size: 24px;
-    font-weight: 800;
-
-    letter-spacing: 4px;
+    line-height: 1;
 
     white-space: nowrap;
 
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.logo-mark {
+    display: flex;
+    align-items: baseline;
+
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 27px;
+    font-weight: 600;
+
+    letter-spacing: 3.5px;
+}
+
+.logo-mark .logo-accent {
+    font-style: italic;
+    font-weight: 500;
+    color: #77736d;
+    margin-left: 1px;
+}
+
+.logo-tagline {
+    margin-top: 3px;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 3px;
+    text-transform: uppercase;
+
+    color: #a4a09a;
 }
 
 .logo:hover {
-    opacity: 0.65;
+    opacity: 0.75;
+    transform: translateY(-1px);
 }
 
 
@@ -184,9 +219,7 @@ input:focus-visible {
 
     padding: 8px 0;
 
-    transition:
-        color 0.3s ease,
-        opacity 0.3s ease;
+    transition: color 0.35s ease;
 }
 
 .nav-links a::after {
@@ -194,7 +227,7 @@ input:focus-visible {
 
     position: absolute;
 
-    left: 0;
+    left: 50%;
     bottom: 0;
 
     width: 0;
@@ -202,14 +235,24 @@ input:focus-visible {
 
     background: #171717;
 
-    transition: width 0.3s ease;
+    transform: translateX(-50%);
+
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nav-links a:hover {
-    color: #777777;
+    color: #171717;
 }
 
 .nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a.active {
+    color: #171717;
+}
+
+.nav-links a.active::after {
     width: 100%;
 }
 
@@ -222,12 +265,12 @@ input:focus-visible {
     display: flex;
     align-items: center;
 
-    gap: 14px;
+    gap: 10px;
 }
 
 .nav-icons button {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
 
     display: flex;
     align-items: center;
@@ -235,29 +278,87 @@ input:focus-visible {
 
     position: relative;
 
-    border: none;
+    border: 1px solid #dddddd;
 
-    background: transparent;
+    background: #ffffff;
 
     color: #171717;
 
-    font-size: 19px;
+    font-size: 17px;
 
     border-radius: 50%;
 
     transition:
-        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
         transform 0.25s ease;
 }
 
 .nav-icons button:hover {
-    background: #eceae5;
+    border-color: #222222;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
     transform: translateY(-1px);
 }
 
+.nav-icons button:active {
+    transform: translateY(0);
+}
+
 .menu-btn {
     display: none;
+}
+
+.nav-toggle {
+    display: none;
+
+    width: 42px;
+    height: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+    gap: 5px;
+
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.nav-toggle:hover {
+    border-color: #222222;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.nav-toggle-bar {
+    width: 17px;
+    height: 1.5px;
+
+    background: #171717;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+}
+
+.nav-toggle.active .nav-toggle-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+}
+
+.nav-toggle.active .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
 }
 
 
@@ -384,67 +485,76 @@ input:focus-visible {
 
 /* =====================================================
    09. HERO
+   All hero rules — base + responsive — live in this
+   section so nothing conflicts with duplicates elsewhere.
 ===================================================== */
 
 .hero {
-    min-height: 100vh;
+    min-height: calc(100vh - var(--header-offset) + 40px);
 
-    padding:
-        120px
-        6%
-        70px;
+    padding: var(--header-offset) 6% 80px;
 
     display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(0, 1fr);
-
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
-
     gap: 70px;
 
-    background: #f8f6f2;
+    background: linear-gradient(
+        90deg,
+        #f7f5f0 0%,
+        #f7f5f0 48%,
+        #eeeae2 48%,
+        #eeeae2 100%
+    );
 }
 
 .hero-content {
-    max-width: 620px;
-
+    max-width: 600px;
     position: relative;
-
     z-index: 2;
 }
 
-.hero-small-text {
-    display: inline-block;
+/* -----------------------------------------------------
+   EYEBROW — small rule line + tracked-out label
+----------------------------------------------------- */
 
-    margin-bottom: 24px;
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
 
-    color: #77736d;
+    margin-bottom: 28px;
 
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
 
-    letter-spacing: 4px;
-
+    letter-spacing: 3px;
     text-transform: uppercase;
+
+    color: var(--fashion-muted);
 }
 
+.hero-eyebrow::before {
+    content: "";
+
+    width: 30px;
+    height: 1px;
+
+    background: var(--fashion-muted);
+}
+
+/* -----------------------------------------------------
+   HEADLINE — serif display type for editorial weight
+----------------------------------------------------- */
+
 .hero h1 {
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 
-    font-size:
-        clamp(
-            52px,
-            7vw,
-            96px
-        );
-
-    line-height: 0.92;
-
-    font-weight: 800;
-
-    letter-spacing: -5px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(56px, 6.4vw, 108px);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -1px;
 
     color: #171717;
 }
@@ -452,60 +562,57 @@ input:focus-visible {
 .hero h1 span {
     display: block;
 
-    color: #77736d;
-
-    font-weight: 700;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--fashion-muted);
 }
 
 .hero-description {
-    max-width: 470px;
+    max-width: 460px;
 
-    margin-bottom: 36px;
+    margin-bottom: 38px;
 
     color: #66615b;
 
     font-size: 15px;
-
     line-height: 1.8;
 }
+
+/* -----------------------------------------------------
+   CTA BUTTONS — sweep-fill hover on primary
+----------------------------------------------------- */
 
 .hero-buttons {
     display: flex;
     align-items: center;
-
-    gap: 13px;
+    gap: 14px;
 
     flex-wrap: wrap;
+
+    margin-bottom: 52px;
 }
-
-
-/* =====================================================
-   10. BUTTON SYSTEM
-===================================================== */
 
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 12px;
 
-    min-height: 48px;
+    min-height: 52px;
 
-    padding:
-        0 27px;
+    padding: 0 30px;
 
     border: 1px solid transparent;
+    border-radius: 2px;
 
     font-size: 11px;
     font-weight: 600;
-
     letter-spacing: 2px;
-
     text-transform: uppercase;
 
     transition:
-        background 0.3s ease,
-        color 0.3s ease,
-        border-color 0.3s ease,
+        color 0.35s ease,
+        border-color 0.35s ease,
         transform 0.3s ease,
         box-shadow 0.3s ease;
 }
@@ -515,18 +622,46 @@ input:focus-visible {
 }
 
 .primary-btn {
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+
     background: #171717;
     color: #ffffff;
 
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.primary-btn::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: #333333;
+
+    transform: translateX(-100%);
+
+    transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+
+    z-index: -1;
+}
+
+.primary-btn:hover::before {
+    transform: translateX(0);
 }
 
 .primary-btn:hover {
-    background: #333333;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.16);
+}
 
-    box-shadow:
-        0 12px 25px rgba(0, 0, 0, 0.16);
+.primary-btn span {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.primary-btn:hover span {
+    transform: translateX(5px);
 }
 
 .secondary-btn {
@@ -541,37 +676,96 @@ input:focus-visible {
     color: #ffffff;
 }
 
+/* -----------------------------------------------------
+   META — numbered feature strip beneath the CTAs
+----------------------------------------------------- */
+
+.hero-meta {
+    display: flex;
+    gap: 40px;
+
+    padding-top: 26px;
+
+    border-top: 1px solid var(--fashion-border);
+}
+
+.hero-meta div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.hero-meta strong {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    color: #171717;
+}
+
+.hero-meta span {
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+
+    color: var(--fashion-muted);
+}
+
 
 /* =====================================================
-   11. HERO IMAGE
+   10. HERO IMAGE — editorial frame + floating badge
 ===================================================== */
 
 .hero-image {
     width: 100%;
-    height: 650px;
+    height: min(76vh, 720px);
+
+    position: relative;
+
+    padding: 18px 18px 18px 0;
+}
+
+.hero-image::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 18px;
+    right: 0;
+    bottom: 0;
+
+    border: 1px solid #171717;
+
+    opacity: 0.18;
+
+    pointer-events: none;
+}
+
+.hero-image-frame {
+    width: 100%;
+    height: 100%;
 
     overflow: hidden;
-
     position: relative;
 
     background: #d4d0c9;
 
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
 }
 
-.hero-image::after {
+.hero-image-frame::after {
     content: "";
 
     position: absolute;
     inset: 0;
 
-    background:
-        linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.08),
-            transparent 35%
-        );
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.1),
+        transparent 35%
+    );
 
     pointer-events: none;
 }
@@ -583,18 +777,165 @@ input:focus-visible {
     display: block;
 
     object-fit: cover;
+    object-position: center 20%;
 
-    transition:
-        transform 0.8s cubic-bezier(
-            0.2,
-            0.7,
-            0.2,
-            1
-        );
+    transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .hero-image:hover img {
     transform: scale(1.035);
+}
+
+.hero-badge {
+    position: absolute;
+    left: 0;
+    bottom: 34px;
+    z-index: 3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 92px;
+    height: 92px;
+
+    background: rgba(248, 246, 242, 0.92);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    border-radius: 50%;
+
+    text-align: center;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.hero-badge strong {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    font-style: italic;
+
+    line-height: 1;
+}
+
+.hero-badge span {
+    margin-top: 4px;
+
+    font-size: 7px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    color: var(--fashion-muted);
+}
+
+
+/* =====================================================
+   11. HERO — RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .hero {
+        gap: 45px;
+    }
+
+    .hero-image {
+        height: min(65vh, 600px);
+    }
+}
+
+@media (max-width: 900px) {
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding-bottom: 60px;
+    }
+
+    .hero-image {
+        order: -1;
+        height: 60vh;
+
+        padding: 0 0 0 0;
+    }
+
+    .hero-image::before {
+        left: 12px;
+        top: 12px;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-buttons {
+        margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .hero {
+        gap: 36px;
+        padding-bottom: 50px;
+    }
+
+    .hero h1 {
+        letter-spacing: -0.5px;
+    }
+
+    .hero-description {
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    .hero-buttons {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .hero-buttons .btn {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .hero-meta {
+        gap: 26px;
+    }
+
+    .hero-badge {
+        width: 76px;
+        height: 76px;
+        bottom: 20px;
+    }
+
+    .hero-badge strong {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .hero h1 {
+        font-size: clamp(42px, 13vw, 60px);
+        letter-spacing: 0;
+    }
+
+    .hero-meta {
+        gap: 18px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
 }
 
 .image-placeholder {
@@ -2405,19 +2746,18 @@ footer {
 
 .search-btn {
     height: 42px;
-    min-width: 145px;
+    min-width: 132px;
 
-    padding:
-        0 17px;
+    padding: 0 16px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    gap: 9px;
+    gap: 8px;
 
     border: 1px solid #dddddd;
-    border-radius: 7px;
+    border-radius: 21px;
 
     background: #ffffff;
 
@@ -2428,7 +2768,6 @@ footer {
 
     transition:
         border-color 0.25s ease,
-        background 0.25s ease,
         box-shadow 0.25s ease,
         transform 0.25s ease;
 }
@@ -2436,15 +2775,7 @@ footer {
 .search-btn:hover {
     border-color: #222222;
 
-    background: #ffffff;
-
-    box-shadow:
-        0 5px 15px rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
     transform: translateY(-1px);
 }
@@ -2886,17 +3217,6 @@ footer {
         padding: 0 4%;
     }
 
-    .hero {
-        padding-left: 4%;
-        padding-right: 4%;
-
-        gap: 45px;
-    }
-
-    .hero-image {
-        height: 580px;
-    }
-
     .categories,
     .products,
     .about,
@@ -2931,7 +3251,7 @@ footer {
 @media (max-width: 900px) {
 
     .nav-links {
-        gap: 20px;
+        gap: 18px;
     }
 
     .nav-links a {
@@ -3047,59 +3367,27 @@ footer {
         display: flex;
     }
 
+    .nav-toggle {
+        display: flex;
+        order: -1;
+    }
+
     .auth-links {
-        display: none;
+        width: 100%;
+
+        margin-left: 0;
+        margin-top: 10px;
+        padding-top: 15px;
+
+        border-top: 1px solid #e5e2db;
+
+        gap: 18px;
     }
 
 
     /* ---------------------------------------------
-       HERO
+       HERO — see consolidated section 09/11 above
     --------------------------------------------- */
-
-    .hero {
-        min-height: auto;
-
-        padding:
-            110px
-            5%
-            60px;
-
-        grid-template-columns: 1fr;
-
-        gap: 40px;
-    }
-
-    .hero-content {
-        max-width: 100%;
-    }
-
-    .hero-small-text {
-        margin-bottom: 20px;
-
-        font-size: 10px;
-
-        letter-spacing: 3px;
-    }
-
-    .hero h1 {
-        margin-bottom: 25px;
-
-        font-size: 55px;
-
-        letter-spacing: -3px;
-    }
-
-    .hero-description {
-        max-width: 100%;
-
-        margin-bottom: 28px;
-
-        font-size: 14px;
-    }
-
-    .hero-buttons {
-        gap: 10px;
-    }
 
     .btn {
         min-height: 46px;
@@ -3109,10 +3397,6 @@ footer {
             21px;
 
         font-size: 10px;
-    }
-
-    .hero-image {
-        height: 500px;
     }
 
 
@@ -3411,34 +3695,7 @@ footer {
 
 @media (max-width: 480px) {
 
-    /* HERO */
-
-    .hero {
-        padding:
-            100px
-            5%
-            50px;
-    }
-
-    .hero h1 {
-        font-size: 48px;
-
-        letter-spacing: -2.5px;
-    }
-
-    .hero-image {
-        height: 430px;
-    }
-
-    .hero-buttons {
-        width: 100%;
-    }
-
-    .hero-buttons .btn {
-        flex: 1;
-
-        min-width: 0;
-    }
+    /* HERO — see consolidated section 09/11 above */
 
 
     /* CATEGORIES */
@@ -3549,10 +3806,6 @@ footer {
     .nav-icons button {
         width: 34px;
         height: 34px;
-    }
-
-    .hero h1 {
-        font-size: 43px;
     }
 
     .hero-buttons {
@@ -4398,3 +4651,373 @@ footer {
     background: #111;
     color: #fff;
 }
+
+/* =========================================================
+   HOME PAGE — PREMIUM FASHION UI
+   ========================================================= */
+
+:root {
+    --fashion-black: #111111;
+    --fashion-white: #ffffff;
+    --fashion-cream: #f7f5f0;
+    --fashion-muted: #77736d;
+    --fashion-border: #dedbd5;
+
+    --header-offset: 156px;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-offset: 128px;
+    }
+}
+
+
+/* =========================================================
+   ANNOUNCEMENT BAR
+   ========================================================= */
+/* =========================================================
+   SLOW ANNOUNCEMENT BAR ANIMATION
+   ========================================================= */
+
+.announcement-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+
+    background: #000000 !important;
+    color: #ffffff !important;
+
+    z-index: 2000;
+    overflow: hidden;
+}
+
+.announcement-track {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    width: max-content;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    animation: announcementMove 22s linear infinite;
+}
+
+/* Slow right → left movement */
+@keyframes announcementMove {
+    from {
+        transform: translateX(100vw);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+
+
+/* =========================================================
+   NAVBAR POSITION
+   ========================================================= */
+
+.navbar {
+    top: 32px;
+}
+
+
+/* Hero rules now consolidated in section "09. HERO" above. */
+
+
+/* =========================================================
+   CATEGORY CARDS
+   ========================================================= */
+
+.category-card {
+    position: relative;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    background: #ece8e0;
+}
+
+.category-image {
+    overflow: hidden;
+}
+
+.category-image img {
+    width: 100%;
+
+    display: block;
+
+    transition:
+        transform 0.7s cubic-bezier(.2,.7,.2,1);
+}
+
+.category-card:hover .category-image img {
+    transform: scale(1.06);
+}
+
+.category-card h3 {
+    position: absolute;
+
+    left: 25px;
+    bottom: 22px;
+
+    z-index: 2;
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 22px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 3px 15px rgba(0,0,0,.35);
+}
+
+.category-card::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.48),
+            transparent 55%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+   ========================================================= */
+
+.section-heading p {
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    color: var(--fashion-muted);
+
+    text-transform: uppercase;
+}
+
+.section-heading h2 {
+    margin-top: 7px;
+
+    font-size: clamp(32px, 4vw, 52px);
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+}
+
+
+/* =========================================================
+   PRODUCT CARDS
+   ========================================================= */
+
+.product-card {
+    position: relative;
+
+    background: transparent;
+
+    transition:
+        transform 0.35s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image {
+    display: block;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #efede8;
+
+    aspect-ratio: 3 / 4;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition:
+        transform 0.65s cubic-bezier(.2,.7,.2,1);
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.045);
+}
+
+.product-info {
+    padding-top: 17px;
+}
+
+.product-category {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 9px;
+
+    color: #88837c;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+.product-info h3 {
+    margin-bottom: 7px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    letter-spacing: .2px;
+}
+
+.product-info > p {
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ADD TO CART
+   ========================================================= */
+
+.add-cart {
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding: 13px 15px;
+
+    border: 1px solid #171717;
+
+    background: transparent;
+
+    color: #171717;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
+}
+
+.add-cart:hover {
+    background: #171717;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .announcement-bar {
+        height: 28px;
+    }
+
+    .announcement-track {
+        font-size: 7px;
+        gap: 12px;
+    }
+
+    .navbar {
+        top: 28px;
+    }
+
+    .category-container {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .category-card h3 {
+        font-size: 19px;
+    }
+
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        animation-duration: 0.01ms !important;
+
+        transition-duration: 0.01ms !important;
+    }
+
+}
+
+/* =========================================================
+   NAVBAR POLISH
+   (spacing now lives in the main .navbar / .nav-links rules
+   above — see section 03/05 — to avoid conflicting overrides)
+   ========================================================= */
+
+@media (max-width: 1000px) {
+    .nav-links {
+        gap: 24px;
+    }
+}
+
+/* Hero rules now consolidated in section "09. HERO" above —
+   see the base rules and the "11. HERO — RESPONSIVE" media
+   queries directly beneath it. */

@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             product.image ||
             product.image_url ||
             product.product_image ||
-            "images/product1.jpg"
+            "product1.jpg"
         );
     }
 
@@ -839,7 +839,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                                     getProductName(product)
                                 )}"
                                 loading="lazy"
-                                onerror="this.src='images/product1.jpg'"
+                                onerror="this.src='product1.jpg'"
                             >
 
                         </div>
@@ -1289,7 +1289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             $("adminProductImage")
                 ?.value
                 ?.trim() ||
-            "images/product1.jpg";
+            "product1.jpg";
 
         const description =
             $("adminProductDescription")

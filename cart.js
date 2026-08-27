@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             image.src =
                 item.image ||
-                "images/product1.jpg";
+                "product1.jpg";
 
             image.alt =
                 item.name ||
@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 function () {
 
                     this.src =
-                        "images/product1.jpg";
+                        "product1.jpg";
 
                 };
 
